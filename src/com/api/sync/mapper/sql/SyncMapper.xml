@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.api.sync.mapper.SyncMapper">
+	<select id="checkAccountIdAndPhone" parameterType="com.api.account.entity.Account" resultType="int">
+		select count(*) from account where state = 1 and account_userphone = #{account_userphone} and account_id = #{account_id} 
+	</select>
+	
+	<select id="queryBrand" parameterType="Integer" resultType="com.api.sync.entity.Brand">
+		select * from brand where state = 1 and account_id = #{account_id} 
+	</select>
+	
+	<select id="queryBrandImages" parameterType="Integer" resultType="com.api.sync.entity.BrandImages">
+		select * from brandimages where state = 1 and account_id = #{account_id} 
+	</select>
+	
+	<select id="queryAgentLevel" parameterType="Integer" resultType="com.api.sync.entity.AgentLevel">
+		select * from agentlevel where state = 1 and account_id = #{account_id} 
+	</select>
+	
+	<select id="queryGoods" parameterType="Integer" resultType="com.api.sync.entity.Goods">
+		select * from goods where state = 1 and account_id = #{account_id} 
+	</select>
+	
+	<select id="queryGoodsPrice" parameterType="Integer" resultType="com.api.sync.entity.GoodsPrice">
+		select * from goodsprice where state = 1 and account_id = #{account_id} 
+	</select>
+	
+	<select id="queryCustomer" parameterType="Integer" resultType="com.api.sync.entity.Customer">
+		select * from customer where state = 1 and account_id = #{account_id} 
+	</select>
+	
+	<select id="queryDetail" parameterType="Integer" resultType="com.api.sync.entity.Detail">
+		select * from detail where state = 1 and account_id = #{account_id} 
+	</select>
+	
+	<select id="queryOrder" parameterType="Integer" resultType="com.api.sync.entity.Order">
+		select * from accountorder where state in (0,1) and account_id = #{account_id} 
+	</select>
+	
+	<select id="queryOrderGoods" parameterType="Integer" resultType="com.api.sync.entity.OrderGoods">
+		select * from ordergoods where state = 1 and account_id = #{account_id} 
+	</select>
+	
+	<select id="queryProfitTotal" parameterType="Integer" resultType="com.api.sync.entity.ProfitTotal">
+		select 
+		(select sum(order_sales) from accountorder where order_type = 1 and account_id = #{account_id} and state in (0,1) and date_format(create_time, '%Y%m%d') = date_format(now(), '%Y%m%d')) today_sales, 
+		(select sum(order_profit) from accountorder where order_type = 1 and account_id = #{account_id} and state in (0,1) and date_format(create_time, '%Y%m%d') = date_format(now(), '%Y%m%d')) today_profit, 
+		(select sum(order_sales) from accountorder where order_type = 1 and account_id = #{account_id} and state in (0,1)) total_sales, 
+		(select sum(order_profit) from accountorder where order_type = 1 and account_id = #{account_id} and state in (0,1)) total_profit 
+		from dual 
+	</select>
+	
+	<select id="querySevenDay" resultType="com.api.sync.entity.SevenDay">
+		select date_format(date_sub(now(),interval 6 day), '%m-%d') today6,date_format(date_sub(now(),interval 5 day), '%m-%d') today5,
+		date_format(date_sub(now(),interval 4 day), '%m-%d') today4,date_format(date_sub(now(),interval 3 day), '%m-%d') today3,
+		date_format(date_sub(now(),interval 2 day), '%m-%d') today2,date_format(date_sub(now(),interval 1 day), '%m-%d') today1,
+		date_format(now(), '%m-%d') today from dual 
+	</select>
+	
+	<select id="queryProfitSevenDay" parameterType="Integer" resultType="com.api.sync.entity.Profit">
+		select sum(order_sales) total_sales,sum(order_profit) total_profit,date_format(create_time, '%m-%d') total_time  
+	    from accountorder where order_type = 1 and account_id = #{account_id} and state in (0,1) and date_format(create_time, '%Y%m%d') &gt; date_format(date_sub(now(),interval 7 day), '%Y%m%d')
+	    group by date_format(create_time, '%m-%d') 
+	</select>
+	
+	<select id="queryProfitMonth" parameterType="com.api.sync.entity.AccountDay" resultType="com.api.sync.entity.Profit">
+		select sum(order_sales) total_sales,sum(order_profit) total_profit,date_format(create_time, '%m') total_time  
+	    from accountorder where order_type = 1 and account_id = #{account_id} and state in (0,1) and date_format(create_time, '%Y') = #{time} 
+	    group by date_format(create_time, '%m') order by total_time desc 
+	</select>
+	
+	<select id="queryProfitDay" parameterType="com.api.sync.entity.AccountDay" resultType="com.api.sync.entity.Profit">
+		select sum(order_sales) total_sales,sum(order_profit) total_profit,date_format(create_time, '%m/%d') total_time  
+	    from accountorder where order_type = 1 and account_id = #{account_id} and state in (0,1) and date_format(create_time, '%Y%m') = #{time} 
+	    group by date_format(create_time, '%m/%d') order by total_time desc 
+	</select>
+	
+	<select id="queryProfitLastMonth" parameterType="Integer" resultType="Float">
+		select sum(order_sales) total_sales from accountorder where order_type = 1 and account_id = #{account_id} and state in (0,1) and date_format(create_time, '%Y%m%d') &gt; date_format(date_sub(now(),interval 1 month), '%Y%m%d')
+	</select>
+	
+	<select id="queryProfitLastTwoMonth" parameterType="Integer" resultType="Float">
+		select sum(order_sales) total_sales from accountorder where order_type = 1 and account_id = #{account_id} and state in (0,1) and date_format(create_time, '%Y%m%d') &gt; date_format(date_sub(now(),interval 2 month), '%Y%m%d') and date_format(create_time, '%Y%m%d') &lt;= date_format(date_sub(now(),interval 1 month), '%Y%m%d')
+	</select>
+	
+	<select id="checkProfitDay" parameterType="Integer" resultType="int">
+		select count(*) from accountorder where order_type = 1 and account_id = #{account_id} and state in (0,1) and date_format(create_time, '%Y%m%d') = date_format(now(), '%Y%m%d') 
+	</select>
+	
+	<select id="queryCustomerTop" parameterType="com.api.sync.entity.CustomerOrGoodsTop" resultType="com.api.sync.entity.CustomerTotal">
+		select c.customer_id,c.customer_username,c.customer_icon,aog.total,aog.profittotal from customer c,(
+		select ao.customer_id,sum(order_sales) total,sum(order_profit) profittotal from accountorder ao where ao.state = 1 and ao.order_type = 1 and ao.account_id = #{account_id} 
+		and date_format(ao.create_time, '%Y%m') = #{time} 
+		group by ao.customer_id) aog where c.customer_id = aog.customer_id order by aog.total desc,aog.profittotal desc
+	</select>
+	
+	<select id="queryGoodsTop" parameterType="com.api.sync.entity.CustomerOrGoodsTop" resultType="com.api.sync.entity.GoodsTotal">
+		select goa.goods_id,goa.goods_name,goa.brand_id,b.brand_name,goa.total,goa.salestotal from brand b,(
+		select g.goods_id,g.goods_name,g.brand_id,aog.total,aog.salestotal from goods g,(
+		select og.goods_id,sum(goods_num) total,sum(order_goodssales) salestotal from accountorder ao,ordergoods og where ao.order_id = og.order_id and ao.order_type = 1 and ao.state in (0,1) and og.state = 1 and ao.account_id = #{account_id} 
+		and date_format(ao.create_time, '%Y%m') = #{time} 
+		group by og.goods_id) aog where g.goods_id = aog.goods_id 
+		) goa where b.brand_id = goa.brand_id order by goa.total desc,goa.salestotal desc
+	</select>
+	
+	<select id="queryCustomerLimitTop" parameterType="com.api.sync.entity.CustomerOrGoodsTop" resultType="com.api.sync.entity.CustomerTotal">
+		select c.customer_id,c.customer_username,c.customer_icon,aog.total,aog.profittotal from customer c,(
+		select ao.customer_id,sum(order_sales) total,sum(order_profit) profittotal from accountorder ao where ao.state = 1 and ao.order_type = 1 and ao.account_id = #{account_id} 
+		and date_format(ao.create_time, '%Y%m') = #{time} 
+		group by ao.customer_id) aog where c.customer_id = aog.customer_id order by aog.total desc,aog.profittotal desc limit 0,#{showcount}
+	</select>
+	
+	<select id="queryGoodsLimitTop" parameterType="com.api.sync.entity.CustomerOrGoodsTop" resultType="com.api.sync.entity.GoodsTotal">
+		select goa.goods_id,goa.goods_name,goa.brand_id,b.brand_name,goa.total,goa.salestotal from brand b,(
+		select g.goods_id,g.goods_name,g.brand_id,aog.total,aog.salestotal from goods g,(
+		select og.goods_id,sum(goods_num) total,sum(order_goodssales) salestotal from accountorder ao,ordergoods og where ao.order_id = og.order_id and ao.order_type = 1 and ao.state in (0,1) and og.state = 1 and ao.account_id = #{account_id} 
+		and date_format(ao.create_time, '%Y%m') = #{time} 
+		group by og.goods_id) aog where g.goods_id = aog.goods_id 
+		) goa where b.brand_id = goa.brand_id order by goa.total desc,goa.salestotal desc limit 0,#{showcount}
+	</select>
+	
+	<select id="queryNowtime" resultType="String">
+		select date_format(now(), '%Y%m') as nowtime 
+	</select>
+	
+	<select id="queryCreatetime" parameterType="Integer" resultType="String">
+		select date_format(create_time, '%Y%m') as nowtime from account where state = 1 and account_id = #{account_id} 
+	</select>
+	
+	<select id="queryNotice" parameterType="Integer" resultType="com.api.sync.entity.Notice">
+		select notice_id,notice_name from notice where state = 1 and notice_type = #{notice_type} order by notice_id 
+	</select>
+
+	<select id="queryAppVersion" parameterType="Integer" resultType="com.api.sync.entity.AppVersion">
+		select * from appversion where app_type = #{app_type} order by create_time desc limit 0,1
+	</select>
+</mapper>

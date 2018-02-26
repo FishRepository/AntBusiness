@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.api.customer.mapper.CustomerMapper">
+	<insert id="insertCustomer" useGeneratedKeys="true" keyProperty="customer_id" parameterType="com.api.customer.entity.Customer">
+	    insert into customer(customer_username,customer_icon,account_id,create_time,update_time) values (#{customer_username},#{customer_icon},#{account_id},now(),now());
+	</insert>
+	
+	<update id="updateCustomer" parameterType="com.api.customer.entity.Customer">
+		update customer set 
+		<trim  suffixOverrides=",">
+	    <if test="customer_username != null and customer_username !=''">
+	 	    customer_username = #{customer_username},
+	    </if>
+	    <if test="customer_icon != null and customer_icon !=''">
+	 	    customer_icon = #{customer_icon},
+	    </if>
+	    update_time = now() 
+		</trim>
+		where state = 1 and customer_id = #{customer_id} and account_id = #{account_id} 
+	</update>
+	
+	<select id="queryCustomerById" parameterType="com.api.customer.entity.Customer" resultType="com.api.customer.entity.Customer">
+		select customer_id,customer_username,customer_icon from customer where state = 1 and customer_id = #{customer_id} and account_id = #{account_id} 
+	</select>
+	
+	<select id="queryCustomerResultById" parameterType="com.api.customer.entity.Customer" resultType="com.api.customer.entity.CustomerResult">
+		select customer_id,customer_username,customer_icon from customer where state = 1 and customer_id = #{customer_id} and account_id = #{account_id} 
+	</select>
+	
+	<select id="queryCustomer" parameterType="Integer" resultType="com.api.customer.entity.CustomerDetailResult">
+		select customer_id,customer_username,customer_icon from customer where state = 1 and account_id = #{account_id} 
+	</select>
+	
+	<select id="queryCustomerProfit" parameterType="com.api.customer.entity.Customer" resultType="com.api.customer.entity.CustomerProfit">
+		select 
+		(select sum(order_sales) from accountorder where order_type = 1 and customer_id = #{customer_id} and account_id = #{account_id} and state in (0,1)) customer_sales, 
+		(select sum(order_profit) from accountorder where order_type = 1 and customer_id = #{customer_id} and account_id = #{account_id} and state in (0,1)) customer_profit 
+		from dual 
+	</select>
+	
+	<update id="deleteCustomer" parameterType="com.api.customer.entity.Customer">
+		update customer set state = 0,update_time = now() where state = 1 and customer_id = #{customer_id} and account_id = #{account_id} 
+	</update>
+	
+	<insert id="insertDetail" useGeneratedKeys="true" keyProperty="detail_id" parameterType="com.api.customer.entity.Detail">
+	    insert into detail(detail_name,detail_type,customer_id,account_id,create_time,update_time) values (#{detail_name},#{detail_type},#{customer_id},#{account_id},now(),now());
+	</insert>
+	
+	<update id="cancelDetailDefault" parameterType="com.api.customer.entity.Detail">
+		update detail set detail_default = 0,update_time = now() where detail_default = 1 and state = 1 and detail_type = #{detail_type} and customer_id = #{customer_id} and account_id = #{account_id} 
+	</update>
+	
+	<update id="updateDetailDefault" parameterType="com.api.customer.entity.Detail">
+		update detail set detail_default = 1,update_time = now() where detail_default = 0 and state = 1 and detail_id = #{detail_id} and detail_type = #{detail_type} and customer_id = #{customer_id} and account_id = #{account_id} 
+	</update>
+	
+	<update id="updateDetail" parameterType="com.api.customer.entity.Detail">
+		update detail set detail_name = #{detail_name},update_time = now() where state = 1 and detail_id = #{detail_id} and detail_type = #{detail_type} and customer_id = #{customer_id} and account_id = #{account_id} 
+	</update>
+	
+	<select id="selectLastDetailId" parameterType="com.api.customer.entity.Detail" resultType="Integer">
+		select detail_id from detail where detail_default = 0 and state = 1 and detail_type = #{detail_type} and customer_id = #{customer_id} and account_id = #{account_id} order by create_time desc limit 1
+	</select>
+	
+	<select id="queryDetailById" parameterType="com.api.customer.entity.Detail" resultType="string">
+		select detail_name from detail where state = 1 and detail_id = #{detail_id} and detail_type = #{detail_type} and customer_id = #{customer_id} and account_id = #{account_id} 
+	</select>
+	
+	<select id="queryDetailDefaultById" parameterType="com.api.customer.entity.Detail" resultType="com.api.customer.entity.Detail">
+		select detail_type,detail_default from detail where state = 1 and detail_id = #{detail_id} and customer_id = #{customer_id} and account_id = #{account_id} 
+	</select>
+	
+	<select id="queryDetail" parameterType="com.api.customer.entity.Detail" resultType="com.api.customer.entity.DetailResult">
+		select detail_id,detail_name,detail_default from detail where state = 1 and detail_type = #{detail_type} and customer_id = #{customer_id} and account_id = #{account_id} 
+	</select>
+	
+	<select id="queryDetailDefault" parameterType="com.api.customer.entity.Detail" resultType="com.api.customer.entity.DetailResult">
+		select detail_id,detail_name,detail_default from detail where state = 1 and detail_default = 1 and detail_type = #{detail_type} and customer_id = #{customer_id} and account_id = #{account_id} 
+	</select>
+	
+	<update id="deleteDetail" parameterType="com.api.customer.entity.Detail">
+		update detail set state = 0,update_time = now() where state = 1 and customer_id = #{customer_id} and account_id = #{account_id} 
+		<if test="detail_id != null">
+			and detail_id = #{detail_id} 
+		</if>
+	</update>
+	
+	<select id="queryCustomerGoodsTop" parameterType="com.api.customer.entity.CustomerGoodsTop" resultType="com.api.customer.entity.GoodsNumTotal">
+		select g.goods_id,g.goods_name,aog.total from goods g,(
+		select og.goods_id,sum(goods_num) total from accountorder ao,ordergoods og where ao.order_id = og.order_id and ao.state = 1 and og.state = 1 and ao.customer_id = #{customer_id} and ao.account_id = #{account_id} 
+		and date_format(ao.create_time, '%Y%m') = #{time} 
+		group by og.goods_id) aog where g.goods_id = aog.goods_id order by aog.total desc 
+	</select>
+	
+	<select id="queryMonthTime" resultType="String">
+		select date_format(now(), '%Y%m') as nowtime 
+	</select>
+</mapper>

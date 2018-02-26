@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.api.order.mapper.OrderMapper">
+	<insert id="insertOrder" useGeneratedKeys="true" keyProperty="order_id" parameterType="com.api.order.entity.Order">
+	    insert into accountorder(order_type,goods_count,order_sales,order_cost,order_profit,order_premium,premium_id,premium_name,
+	    order_goodssales,order_goodscost,order_goodsprofit,customer_id,customer_username,customer_icon,customer_phone,customer_phoneid,customer_address,
+	    customer_addressid,order_remark,brand_names,account_id,create_time,update_time,state) values 
+	    (#{order_type},#{goods_count},#{order_sales},#{order_cost},#{order_profit},#{order_premium},#{premium_id},#{premium_name},
+	    #{order_goodssales},#{order_goodscost},#{order_goodsprofit},#{customer_id},#{customer_username},#{customer_icon},#{customer_phone},#{customer_phoneid},#{customer_address},
+	    #{customer_addressid},#{order_remark},#{brand_names},#{account_id},#{create_time},#{update_time},#{state});
+	</insert>
+	
+	<update id="updateOrder" parameterType="com.api.order.entity.Order">
+		update accountorder set 
+		<trim suffixOverrides=",">
+		<if test="goods_count != null">
+			goods_count = #{goods_count},
+		</if>
+		<if test="order_sales != null">
+			order_sales = #{order_sales},
+		</if>
+		<if test="order_cost != null">
+			order_cost = #{order_cost},
+		</if>	
+		<if test="order_profit != null">
+			order_profit = #{order_profit},
+		</if>	
+		<if test="order_premium != null">
+			order_premium = #{order_premium},
+		</if>
+		<if test="premium_id != null">
+			premium_id = #{premium_id},
+		</if>	
+		<if test="premium_name != null">
+			premium_name = #{premium_name},
+		</if>	
+		<if test="order_goodssales != null">
+			order_goodssales = #{order_goodssales},
+		</if>	
+		<if test="order_goodscost != null">
+			order_goodscost = #{order_goodscost},
+		</if>	
+		<if test="order_goodsprofit != null">
+			order_goodsprofit = #{order_goodsprofit},
+		</if>	
+		<if test="customer_id != null">
+			customer_id = #{customer_id},
+		</if>	
+		<if test="customer_username != null and customer_username !=''">
+			customer_username = #{customer_username},
+		</if>	
+		<if test="customer_icon != null and customer_icon !=''">
+			customer_icon = #{customer_icon},
+		</if>	
+		<if test="customer_phone != null and customer_phone !=''">
+			customer_phone = #{customer_phone},
+		</if> 
+		<if test="customer_phoneid != null">
+			customer_phoneid = #{customer_phoneid},
+		</if>	
+		<if test="customer_address != null and customer_address !=''">
+			customer_address = #{customer_address},
+		</if>	
+		<if test="customer_addressid != null">
+			customer_addressid = #{customer_addressid},
+		</if>
+		<if test="order_remark != null">
+			order_remark = #{order_remark},
+		</if>
+		<if test="state != null">
+			state = #{state},
+		</if>	
+		update_time = now() 
+		</trim>
+		where order_id = #{order_id} 
+	</update>
+	
+	<select id="queryOrderByIdAndType" parameterType="com.api.order.entity.Order" resultType="com.api.order.entity.Order">
+		select order_id,order_type,account_id,goods_count,order_sales,order_cost,order_profit,order_premium,order_goodssales,order_goodscost,order_goodsprofit from accountorder where order_id = #{order_id} and order_type = #{order_type} and account_id = #{account_id} 
+	</select>
+	
+	<select id="queryOrderById" parameterType="com.api.order.entity.Order" resultType="com.api.order.entity.OrderDetail">
+		select order_id,order_type,goods_count,order_sales,order_profit,order_premium,premium_id,premium_name,
+		customer_id,customer_username,customer_icon,customer_phone,customer_phoneid,customer_address,customer_addressid,brand_names,order_remark,create_time,state 
+		from accountorder where order_id = #{order_id} and account_id = #{account_id} 
+	</select>
+	
+	<select id="queryOrderType" parameterType="Integer" resultType="int">
+		select order_type from accountorder where order_id = #{order_id} 
+	</select>
+	
+	<select id="listPageOrder" parameterType="com.api.order.entity.ListPageOrder" resultType="com.api.order.entity.OrderList">
+		select order_id,order_type,goods_count,order_sales,customer_id,customer_username,customer_icon,brand_names,create_time,state 
+		from accountorder where account_id = #{account_id} 
+		<if test="customer_id != null">
+			and customer_id = #{customer_id} 
+		</if>
+		<if test="type != null and type == 1">
+			and order_type = 1 and state = 0
+		</if>
+		<if test="type != null and type == 2">
+			and order_type = 1 and state = 1
+		</if>
+		<if test="type != null and type == 3">
+			and order_type = 1 and state in (0,1) 
+		</if>
+		<if test="type != null and type == 4">
+			and order_type = 2 and state = 1
+		</if>
+		<if test="type != null and type == 0">
+			and state in (0,1) 
+		</if>
+		order by order_id desc 
+	</select>
+	
+	<update id="deleteOrder" parameterType="com.api.order.entity.Order">
+		update accountorder set state = -1,update_time = now() where order_id = #{order_id} and account_id = #{account_id} 
+	</update>
+	
+	<insert id="insertOrderGoods" useGeneratedKeys="true" keyProperty="ordergoods_id" parameterType="com.api.order.entity.OrderGoods">
+	    insert into ordergoods(order_id,brand_name,brand_id,agentlevel_name,agentlevel_id,goods_id,goods_name,goodsprice_id,goods_price,goods_costprice,goods_num,ordergoods_sales,
+	    ordergoods_cost,ordergoods_profit,account_id,create_time,update_time,state) values 
+	    (#{order_id},#{brand_name},#{brand_id},#{agentlevel_name},#{agentlevel_id},#{goods_id},#{goods_name},#{goodsprice_id},#{goods_price},#{goods_costprice},#{goods_num},#{ordergoods_sales},
+	    #{ordergoods_cost},#{ordergoods_profit},#{account_id},#{create_time},#{update_time},#{state});
+	</insert>
+	
+	<update id="updateOrderGoods" parameterType="com.api.order.entity.OrderGoods">
+		update ordergoods set 
+		<trim  suffixOverrides=",">
+		<if test="goods_num != null">
+			goods_num = #{goods_num},
+		</if>
+		<if test="ordergoods_sales != null">
+			ordergoods_sales = #{ordergoods_sales},
+		</if>	
+		<if test="ordergoods_cost != null">
+			ordergoods_cost = #{ordergoods_cost},
+		</if>	
+		<if test="ordergoods_profit != null">
+			ordergoods_profit = #{ordergoods_profit},
+		</if>
+		update_time = now() 
+		</trim>
+		where state = 1 and ordergoods_id = #{ordergoods_id} and order_id = #{order_id} and account_id = #{account_id} 
+	</update>
+	
+	<select id="queryOrderGoodsById" parameterType="com.api.order.entity.OrderGoods" resultType="com.api.order.entity.OrderGoods">
+		select ordergoods_id,order_id,account_id,goods_price,goods_costprice,goods_num from ordergoods where state = 1 and ordergoods_id = #{ordergoods_id} and order_id = #{order_id} and account_id = #{account_id}  
+	</select>
+	
+	<select id="checkOrderGoods" parameterType="com.api.order.entity.OrderGoods" resultType="int">
+		select count(*) from ordergoods where state = 1 and goods_id = #{goods_id} and order_id = #{order_id} and account_id = #{account_id}  
+	</select>
+	
+	<select id="queryOrderGoods" parameterType="com.api.order.entity.Order" resultType="com.api.order.entity.OrderGoods">
+		select ordergoods_id,brand_name,brand_id,agentlevel_name,agentlevel_id,goods_id,goods_name,goodsprice_id,goods_price,goods_costprice,goods_num from ordergoods where state = 1 and order_id = #{order_id} and account_id = #{account_id} order by brand_id,agentlevel_id,ordergoods_id 
+	</select>
+	
+	<select id="queryDeleteOrderGoods" parameterType="com.api.order.entity.Order" resultType="com.api.order.entity.OrderGoods">
+		select goods_id,goods_name,brand_id,brand_name,goods_num as goods_cnum,account_id from ordergoods where state = 1 and order_id = #{order_id} and account_id = #{account_id} order by brand_id,agentlevel_id,ordergoods_id 
+	</select>
+	
+	<update id="deleteOrderGoodsById" parameterType="com.api.order.entity.OrderGoods">
+		update ordergoods set 
+		<trim  suffixOverrides=",">
+		<if test="goods_num != null">
+			goods_num = #{goods_num},
+		</if>
+		<if test="ordergoods_sales != null">
+			ordergoods_sales = #{ordergoods_sales},
+		</if>	
+		<if test="ordergoods_cost != null">
+			ordergoods_cost = #{ordergoods_cost},
+		</if>	
+		<if test="ordergoods_profit != null">
+			ordergoods_profit = #{ordergoods_profit},
+		</if> 
+		state = 0,update_time = now() 
+		</trim> 
+		where state = 1 and ordergoods_id = #{ordergoods_id} and order_id = #{order_id} and account_id = #{account_id} 
+	</update>
+	
+	<update id="deleteOrderGoods" parameterType="com.api.order.entity.Order">
+		update ordergoods set state = 0,update_time = now() where state = 1 and order_id = #{order_id} and account_id = #{account_id} 
+	</update>
+</mapper>
