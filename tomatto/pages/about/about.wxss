@@ -71,4 +71,5 @@
   justify-content: center;
   padding: 10px 20px;
   font-size: 9pt;
+  text-indent: 2em;
 }
