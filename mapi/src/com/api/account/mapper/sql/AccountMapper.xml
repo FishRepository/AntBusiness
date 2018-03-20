@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.api.account.mapper.AccountMapper">
+	<insert id="insertAccount" useGeneratedKeys="true" keyProperty="account_id" parameterType="com.api.account.entity.Account">
+	    insert into account(account_userphone,account_password,account_qq,account_wechat,account_imei,account_guideid,create_time,update_time) values (#{account_userphone},#{account_password},#{account_qq},#{account_wechat},#{account_imei},#{account_guideid},now(),now());
+	</insert>
+		
+	<update id="updateAccount" parameterType="com.api.account.entity.Account">
+		update account set 
+		<trim  suffixOverrides=",">
+	    <if test="account_username != null and account_username !=''">
+	 	    account_username = #{account_username},
+	    </if>
+	    <if test="account_address != null and account_address !=''">
+	 	    account_address = #{account_address},
+	    </if>
+	    <if test="account_icon != null and account_icon !=''">
+	 	    account_icon = #{account_icon},
+	    </if>
+	    <if test="account_qq != null and account_qq !=''">
+	 	    account_qq = #{account_qq},
+	    </if>
+	    <if test="account_wechat != null and account_wechat !=''">
+	 	    account_wechat = #{account_wechat},
+	    </if>
+	    <if test="account_password != null and account_password !=''">
+	 	    account_password = #{account_password},
+	    </if>
+	    <if test="account_userphone != null and account_userphone !=''">
+	 	    account_userphone = #{account_userphone},
+	    </if>
+	    <if test="account_imei != null and account_imei !=''">
+	 	    account_imei = #{account_imei},
+	    </if>
+	    update_time = now() 
+		</trim>
+		where state = 1 and account_id = #{account_id}
+	</update>
+	
+	<update id="updateAccountByPhone" parameterType="com.api.account.entity.Account">
+		update account set 
+		<trim  suffixOverrides=",">
+	    <if test="account_qq != null and account_qq !=''">
+	 	    account_qq = #{account_qq},
+	    </if>
+	    <if test="account_wechat != null and account_wechat !=''">
+	 	    account_wechat = #{account_wechat},
+	    </if>
+	    <if test="account_imei != null and account_imei !=''">
+	 	    account_imei = #{account_imei},
+	    </if>
+	    <if test="account_password != null and account_password !=''">
+	 	    account_password = #{account_password},
+	    </if>
+	    update_time = now() 
+		</trim>
+		where state = 1 and account_userphone = #{account_userphone}
+	</update>
+	
+	<update id="updateLastLoginTime" parameterType="Integer">
+		update account set last_time = now() where state = 1 and account_id = #{account_id} 
+	</update>
+	
+	<update id="updateAccountIntegral" parameterType="com.api.account.entity.Account">
+		update account set account_integral = account_integral + #{account_integral},update_time = now() where state = 1 and account_id = #{account_id}
+	</update>
+	
+	<select id="queryAccountIntegral" parameterType="Integer" resultType="Integer">
+		select account_integral from account where state = 1 and account_id = #{account_id} 
+	</select>
+	
+	<select id="queryPwdById" parameterType="Integer" resultType="string">
+		select account_password from account where state = 1 and account_id = #{account_id} 
+	</select>
+	
+	<select id="queryPwdByPhone" parameterType="string" resultType="string">
+		select account_password from account where state = 1 and account_userphone = #{account_userphone}
+	</select>
+	
+	<select id="queryIdByPhone" parameterType="string" resultType="Integer">
+		select account_id from account where state = 1 and account_userphone = #{account_userphone}
+	</select>
+	
+	<select id="queryAccountById" parameterType="Integer" resultType="com.api.account.entity.Account">
+		select account_id,account_userphone,account_username,account_icon from account where state = 1 and account_id = #{account_id}
+	</select>
+	
+	<select id="queryAccountByPhone" parameterType="string" resultType="com.api.account.entity.AccountLoginResult">
+		select account_id,account_userphone,account_username,account_address,account_icon,account_qq,account_wechat,account_imei,account_integral,last_time,create_time from account where state = 1 and account_userphone = #{account_userphone}
+	</select>
+		
+	<select id="queryAccountByWechat" parameterType="string" resultType="com.api.account.entity.AccountLoginResult">
+		select account_id,account_userphone,account_username,account_address,account_icon,account_qq,account_wechat,account_imei,account_integral,last_time,create_time from account where state = 1 and account_wechat = #{account_wechat} 
+	</select>
+	
+	<select id="queryAccountByQQ" parameterType="string" resultType="com.api.account.entity.AccountLoginResult">
+		select account_id,account_userphone,account_username,account_address,account_icon,account_qq,account_wechat,account_imei,account_integral,last_time,create_time from account where state = 1 and account_qq = #{account_qq} 
+	</select>
+	
+	<select id="queryAccountWechatById" parameterType="Integer" resultType="com.api.account.entity.Account">
+		select account_id,account_wechat,account_imei from account where state = 1 and account_id = #{account_id} 
+	</select>
+	
+	<select id="queryAccountQQById" parameterType="Integer" resultType="com.api.account.entity.Account">
+		select account_id,account_qq,account_imei from account where state = 1 and account_id = #{account_id} 
+	</select>
+	
+	<select id="queryAccountWechat" parameterType="string" resultType="com.api.account.entity.Account">
+		select account_id,account_wechat,account_imei from account where state = 1 and account_userphone = #{account_userphone} 
+	</select>
+	
+	<select id="queryAccountQQ" parameterType="string" resultType="com.api.account.entity.Account">
+		select account_id,account_qq,account_imei from account where state = 1 and account_userphone = #{account_userphone} 
+	</select>
+	
+	<select id="checkAccountPhone" parameterType="com.api.account.entity.Account" resultType="int">
+		select count(*) from account where state = 1 and account_userphone = #{account_userphone} 
+		<if test="account_id != null and account_id !=''">
+	 	    and account_id != #{account_id} 
+	    </if>
+	</select>
+	
+	<select id="checkAccountWechat" parameterType="com.api.account.entity.Account" resultType="int">
+		select count(*) from account where state = 1 and account_wechat = #{account_wechat} 
+		<if test="account_id != null and account_id !=''">
+	 	    and account_id != #{account_id} 
+	    </if>
+	</select>
+	
+	<select id="checkAccountQQ" parameterType="com.api.account.entity.Account" resultType="int">
+		select count(*) from account where state = 1 and account_qq = #{account_qq} 
+		<if test="account_id != null and account_id !=''">
+	 	    and account_id != #{account_id} 
+	    </if> 
+	</select>
+	
+	<select id="checkAccountIdAndPhone" parameterType="com.api.account.entity.Account" resultType="int">
+		select count(*) from account where state = 1 and account_userphone = #{account_userphone} and account_id = #{account_id} 
+	</select>
+	
+	<insert id="insertAccountCode" parameterType="com.api.account.entity.AccountCode">
+	    insert into accountcode(account_userphone,account_code,create_time,update_time) values (#{account_userphone},#{account_code},now(),now());
+	</insert>
+	
+	<update id="deleteAccountCode" parameterType="string">
+		update accountcode set state = 0,update_time = now() where state = 1 and account_userphone = #{account_userphone}
+	</update>
+	
+	<select id="checkAccountCode" parameterType="com.api.account.entity.AccountCode" resultType="int">
+		select count(*) from accountcode where state = 1 and account_userphone = #{account_userphone} and account_code = #{account_code}
+	</select>
+	
+	<select id="queryIntegralRule" parameterType="Integer" resultType="com.api.account.entity.IntegralRule">
+		select rule_id,integral_value from integralrule where state = 1 and rule_type = #{rule_type} 
+	</select>
+	
+	<insert id="insertIntegral" parameterType="com.api.account.entity.Integral">
+	    insert into integral(ext_type,ext_id,integral_value,old_value,new_value,account_id,create_time,update_time) values (#{ext_type},#{ext_id},#{integral_value},#{old_value},#{new_value},#{account_id},now(),now());
+	</insert>
+	
+	<select id="listPageIntegral" parameterType="com.api.account.entity.ListPageIntegral" resultType="com.api.account.entity.Integral">
+		select ext_type,ext_id,integral_value,old_value,new_value,create_time from integral where state = 1 and account_id = #{account_id} order by create_time desc 
+	</select>
+	
+	<insert id="insertAdvise" useGeneratedKeys="true" keyProperty="advise_id" parameterType="com.api.account.entity.Advise">
+	    insert into advise(advise_content,account_id,create_time,update_time) values (#{advise_content},#{account_id},now(),now());
+	</insert>
+	
+	<select id="listPageAdvise" parameterType="com.api.account.entity.ListPageAdvise" resultType="com.api.account.entity.AdviseResult">
+		select ad.advise_id,ad.advise_content,ad.account_id,a.account_username,a.account_icon,ad.create_time from advise ad join account a on ad.account_id = a.account_id where ad.state = 1 and a.state = 1 order by create_time desc 
+	</select>
+	
+	<insert id="insertMemorandum" useGeneratedKeys="true" keyProperty="memorandum_id" parameterType="com.api.account.entity.Memorandum">
+	    insert into memorandum(memorandum_content,memorandum_type,account_id,create_time,update_time) values (#{memorandum_content},#{memorandum_type},#{account_id},now(),now());
+	</insert>
+	
+	<update id="updateMemorandum" parameterType="com.api.account.entity.Memorandum">
+		update memorandum set memorandum_content = #{memorandum_content},update_time = now() where state = 1 and memorandum_id = #{memorandum_id} and account_id = #{account_id} 
+	</update>
+	
+	<update id="deleteMemorandum" parameterType="com.api.account.entity.Memorandum">
+		update memorandum set state = 0,update_time = now() where state = 1 and memorandum_id = #{memorandum_id} and account_id = #{account_id} 
+	</update>
+	
+	<select id="listPageMemorandum" parameterType="com.api.account.entity.ListPageMemorandum" resultType="com.api.account.entity.Memorandum">
+		select memorandum_id,memorandum_content,create_time from memorandum where state = 1 and account_id = #{account_id} and memorandum_type = #{type} order by update_time desc 
+	</select>
+	
+	<select id="queryMemorandumList" parameterType="com.api.account.entity.Memorandum" resultType="Integer">
+		select memorandum_id from memorandum where state = 1 and account_id = #{account_id} and memorandum_type = #{memorandum_type} and memorandum_content = #{memorandum_content} order by memorandum_id  
+	</select>
+	
+	<select id="queryMemorandum" parameterType="Integer" resultType="com.api.account.entity.Memorandum">
+		select memorandum_id,memorandum_content,memorandum_type,create_time from memorandum where state = 1 and memorandum_id = #{memorandum_id} 
+	</select>
+	
+	<select id="checkMemorandum" parameterType="com.api.account.entity.Memorandum" resultType="int">
+		select count(*) from memorandum where state = 1 and account_id = #{account_id} and memorandum_type = #{memorandum_type} and memorandum_content = #{memorandum_content} 
+		<if test="memorandum_id != null and memorandum_id !=''">
+	 	    and memorandum_id != #{memorandum_id} 
+	    </if>
+	</select>
+	
+	<insert id="insertShareAccount" useGeneratedKeys="true" keyProperty="shareaccount_id" parameterType="com.api.account.entity.ShareAccount">
+	    insert into share_account(account_id,account_userphone,create_time,update_time) values (#{account_id},#{account_userphone},now(),now());
+	</insert>
+	
+	<select id="queryShareAccount" parameterType="String" resultType="Integer">
+		select account_id from share_account where state = 0 and account_userphone = #{account_userphone} 
+	</select>
+	
+	<update id="deleteShareAccount" parameterType="String">
+		update share_account set state = 1,update_time = now() where state = 0 and account_userphone = #{account_userphone} 
+	</update>
+	
+	<select id="queryTotalAccount" resultType="int">
+		select count(*) from account where state = 1 
+	</select>
+	
+	<select id="queryTotalTimeAccount" resultType="int">
+		select count(*) from account where state = 1 and date_format(create_time,'%Y%m%d') &gt;= #{startdate} and date_format(create_time,'%Y%m%d') &lt;= #{enddate} 
+	</select>
+	
+	<select id="queryTotalTimeNoLoginAccount" resultType="int">
+		select count(*) from account where state = 1 and last_time is null and date_format(create_time,'%Y%m%d') &gt;= #{startdate} and date_format(create_time,'%Y%m%d') &lt;= #{enddate} 
+	</select>
+	
+	<select id="queryTimeAccount" resultType="String">
+		select account_userphone from account where state = 1 and date_format(create_time,'%Y%m%d') &gt;= #{startdate} and date_format(create_time,'%Y%m%d') &lt;= #{enddate} 
+	</select>
+	
+	<select id="queryTimeNoLoginAccount" resultType="String">
+		select account_userphone from account where state = 1 and last_time is null and date_format(create_time,'%Y%m%d') &gt;= #{startdate} and date_format(create_time,'%Y%m%d') &lt;= #{enddate} 
+	</select>
+</mapper>
