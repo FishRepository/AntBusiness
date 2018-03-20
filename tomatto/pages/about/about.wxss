@@ -1,4 +1,4 @@
-/**index.wxss**/
+/* pages/about/about.wxss */
 
 .container {
   position: fixed;
@@ -23,7 +23,7 @@
   background-color: #4b4b4b;
 }
 
-.top-logo {
+.top-img {
   width: 40px;
   height: 40px;
 }
@@ -31,48 +31,44 @@
 .top-text {
   display: flex;
   font-size: 10pt;
+  font-weight: bold;
+  color: #c0c0c0;
   line-height: 20px;
+  padding: 10px 0px;
 }
 
-.view-bottom {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  margin-top: 100px;
+.view-body {
   padding: 20px 0px;
 }
 
-.itro-title {
-  display: flex;
-}
-
-.itro-title-text {
-  width: 100%;
-  font-size: 11pt;
-  font-weight: bold;
+.view-body-text {
+  font-size: 9pt;
   color: white;
-  margin-left: 20px;
-  border-left: 2px solid white;
-  padding-left: 10px;
-}
-
-.itro-item {
   display: flex;
   text-align: center;
-  justify-content: space-between;
-  background-color: white;
-  margin: 10px 30px;
-  height: 40px;
   align-items: center;
-  padding: 0px 10px;
-  border-radius: 3px;
+  padding: 5px 60px;
+  justify-content: center;
 }
 
-.itro-item-text {
+.view-bottom {
+  margin-top: 20px;
+  color: white;
+}
+
+.view-bottom-title {
+  font-size: 10pt;
+  font-weight: bold;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.view-bottom-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
   font-size: 9pt;
-}
-
-.itro-item-img {
-  width: 20px;
-  height: 20px;
 }

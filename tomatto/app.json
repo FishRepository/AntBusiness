@@ -1,12 +1,34 @@
 {
-  "pages":[
+  "pages": [
     "pages/index/index",
-    "pages/logs/logs"
+    "pages/logs/logs",
+    "pages/about/about",
+    "pages/introDetail/introDetail"
   ],
-  "window":{
-    "backgroundTextStyle":"light",
-    "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "WeChat",
-    "navigationBarTextStyle":"black"
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#4B4B4B",
+    "navigationBarTitleText": "番茄管家",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "white",
+    "borderStyle": "white",
+    "backgroundColor": "#4B4B4B",
+    "selectedColor": "#e14568",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "功能介绍",
+        "iconPath": "/images/home/icon_introduce_off.png",
+        "selectedIconPath": "/images/home/icon_introduce_on.png"
+      },
+      {
+        "pagePath": "pages/about/about",
+        "text": "关于我们",
+        "iconPath": "/images/home/icon_about_off.png",
+        "selectedIconPath": "/images/home/icon_about_on.png"
+      }
+    ]
   }
 }

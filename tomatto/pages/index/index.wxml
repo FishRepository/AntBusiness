@@ -1,13 +1,22 @@
 <!--index.wxml-->
 <view class="container">
-  <view class="userinfo">
-    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
-    <block wx:else>
-      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
-      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+  <view class='view-top'>
+    <image class='top-logo' src='/images/home/logo.png'></image>
+    <text class='top-text'>{{infomation}}</text>
+  </view>
+  <scroll-view scroll-y='true' class='view-bottom'>
+    <block wx:for="{{intros}}" wx:key="{{title}}">
+      <view class='itro-title'>
+        <text class='itro-title-text'>{{item.title}}</text>
+      </view>
+      <block wx:for="{{item.items}}" wx:for-item="child" wx:key="{{memo}}">
+        <navigator url='/pages/introDetail/introDetail'>
+          <view class='itro-item'>
+            <text class='itro-item-text'>{{child.memo}}</text>
+            <image class='itro-item-img' src='/images/home/icon_right_go.png'></image>
+          </view>
+        </navigator>
+      </block>
     </block>
-  </view>
-  <view class="usermotto">
-    <text class="user-motto">{{motto}}</text>
-  </view>
+  </scroll-view>
 </view>

@@ -1,0 +1,16 @@
+<!--pages/about/about.wxml-->
+<view class="container">
+  <view class='view-top'>
+    <image class='top-img' src='/images/about/compLogo.png'></image>
+    <text class='top-text'>{{compName}}</text>
+  </view>
+  <view class='view-body'>
+    <text class='view-body-text'>{{compMemos[0]}}</text>
+    <text class='view-body-text'>{{compMemos[1]}}</text>
+    <text class='view-body-text'>{{compMemos[2]}}</text>
+  </view>
+  <view class='view-bottom'>
+    <text class='view-bottom-title'>{{compEnDesp.title}}</text>
+    <text class='view-bottom-text'>{{compEnDesp.desp}}</text>
+  </view>
+</view>
