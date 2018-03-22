@@ -1,2 +1,25 @@
 <!--pages/introDetail/introDetail.wxml-->
-<text>pages/introDetail/introDetail.wxml</text>
+<view class="container">
+  <view class='main-top'>
+    <text class='main-title'>{{title}}</text>
+  </view>
+  <scroll-view scroll-y='true' class='main-scroll'>
+    <!--功能说明-->
+    <view class='main-function'>
+      <text class='main-item-title'>功能说明</text>
+      <block wx:for="{{functions}}" wx:key="{{desp}}">
+        <text class='main-item-desp-text'>{{index+1}}、{{item.desp}}</text>
+      </block>
+    </view>
+    <!--操作介绍-->
+    <view class='main-operate'>
+      <text class='main-item-title'>操作介绍</text>
+      <block wx:for="{{operates}}" wx:key="{{desp}}">
+        <view class='main-ope-view'>
+          <text class='main-ope-text'>{{index+1}}、{{item.desp}}</text>
+          <image mode='aspectFit' class='main-ope-img' src='{{item.img}}' bindtap='prePhotos' data-index='{{index}}'></image>
+        </view>
+      </block>
+    </view>
+  </scroll-view>
+</view>
