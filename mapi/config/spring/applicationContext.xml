@@ -42,7 +42,7 @@
     </bean>
 
     <!-- enable component scanning (beware that this does not enable mapper scanning!) -->
-    <context:component-scan base-package="com.api.*.service"/>
+    <context:component-scan base-package="com.*.*.service"/>
 
     <!-- 以 @Transactional 标注来定义事务 -->
     <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
@@ -52,7 +52,7 @@
         <property name="dataSource" ref="dataSource"/>
         <property name="mapperLocations">
             <list>
-                <value>classpath:com/api/*/mapper/sql/*.xml</value>
+                <value>classpath:com/*/*/mapper/sql/*.xml</value>
             </list>
         </property>
         <property name="configLocation" value="classpath:mybatis/mybatis-configuration.xml"/>

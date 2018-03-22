@@ -27,6 +27,11 @@
 		<servlet-name>springMVC</servlet-name>
 		<url-pattern>*.do</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>springMVC</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+
 	
 	<filter>		<!-- 编码转换过滤器 -->
 		<filter-name>encodingFilter</filter-name>

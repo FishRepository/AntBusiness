@@ -1,4 +1,4 @@
-package com.web.conf;
+package com.backend.conf;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
