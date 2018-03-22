@@ -1,1 +1,91 @@
 /* pages/introDetail/introDetail.wxss */
+
+.container {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /*垂直居中*/
+  justify-content: center; /*水平居中*/
+  background-color: #4b4b4b;
+}
+
+.main-top {
+  display: block;
+  text-align: center;
+  align-items: center;
+  color: white;
+  /* padding: 5px 50px; *//* position: fixed; *//* top: 0; *//* z-index: 10; */
+  background-color: #4b4b4b;
+  width: 100%;
+  /* height: 30px; */
+}
+
+.main-title {
+  font-size: 11pt;
+  font-weight: bold;
+}
+
+.main-scroll {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  padding: 10px 0px 0px;
+  /* margin-top: 30px; */
+}
+
+.main-function {
+  padding: 10px 20px;
+}
+
+.main-item-title {
+  color: white;
+  font-size: 10pt;
+  font-weight: bold;
+  border-left: 2px solid white;
+  padding-left: 10px;
+  display: flex;
+}
+
+.main-item-desp-text {
+  display: flex;
+  color: #c0c0c0;
+  font-size: 9pt;
+  text-align: left;
+  padding-left: 10px;
+  line-height: 20px;
+  /* text-indent:2em; */
+  padding: 5px 15px;
+}
+
+.main-operate {
+  padding: 10px 20px;
+  margin-bottom: 10px;
+}
+
+.main-ope-view {
+  padding: 5px 15px;
+  border-bottom: 1px solid #c0c0c0;
+}
+
+.main-ope-text {
+  display: flex;
+  color: #c0c0c0;
+  font-size: 9pt;
+  text-align: left;
+  padding-left: 10px;
+  line-height: 20px;
+  /* text-indent:2em; */
+  padding: 5px 0px;
+}
+
+.main-ope-img {
+  display: flex;
+  width: 100%;
+  /* height: 240px; */
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 0px;
+}

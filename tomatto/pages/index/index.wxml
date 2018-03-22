@@ -10,11 +10,9 @@
         <text class='itro-title-text'>{{item.title}}</text>
       </view>
       <block wx:for="{{item.items}}" wx:for-item="child" wx:key="{{memo}}">
-        <navigator url='/pages/introDetail/introDetail'>
-          <view class='itro-item'>
-            <text class='itro-item-text'>{{child.memo}}</text>
-            <image class='itro-item-img' src='/images/home/icon_right_go.png'></image>
-          </view>
+        <navigator class='itro-item' url='/pages/introDetail/introDetail?title={{child.memo}}'>
+          <text class='itro-item-text'>{{child.memo}}</text>
+          <image class='itro-item-img' src='/images/home/icon_right_go.png'></image>
         </navigator>
       </block>
     </block>
