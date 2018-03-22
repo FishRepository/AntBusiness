@@ -1,7 +1,7 @@
 <!--pages/about/about.wxml-->
 <view class="container">
   <view class='view-top'>
-    <image class='top-img' src='/images/about/compLogo.png'></image>
+    <image class='top-img' src='/images/home/logo.png'></image>
     <text class='top-text'>{{compName}}</text>
   </view>
   <view class='view-body'>
