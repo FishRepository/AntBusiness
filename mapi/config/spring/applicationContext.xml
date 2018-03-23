@@ -60,6 +60,6 @@
 
     <!-- scan for mappers and let them be autowired ，扫描注入mapper对象-->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.api.*.mapper"/>
+        <property name="basePackage" value="com.*.*.mapper"/>
     </bean>
 </beans>

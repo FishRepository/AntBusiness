@@ -61,6 +61,6 @@
 	</listener>
 
 	<welcome-file-list>
-		<welcome-file>/pages/index.html</welcome-file>
+		<welcome-file>/login</welcome-file>
 	</welcome-file-list>
 </web-app>

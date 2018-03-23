@@ -8,7 +8,7 @@ public class RequestResultVO<T> implements Serializable {
 	private boolean success=false;
 	private String errorCode;
 	private String errorMessage;
-	private T result;
+	private T data;
 	
 	public void error(ErrorEnums error){
 		this.success=false;
@@ -22,9 +22,9 @@ public class RequestResultVO<T> implements Serializable {
 		this.errorMessage=message;
 	}
 	
-	public void success(T result){
+	public void success(T data){
 		this.success=true;
-		this.result=result;
+		this.data=data;
 	}
 
 	public boolean isSuccess() {
@@ -51,11 +51,11 @@ public class RequestResultVO<T> implements Serializable {
 		this.errorMessage = errorMessage;
 	}
 
-	public T getResult() {
-		return result;
+	public T getData() {
+		return data;
 	}
 
-	public void setResult(T result) {
-		this.result = result;
+	public void setData(T data) {
+		this.data = data;
 	}
 }

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.backend.admin.mapper.GuideMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.backend.admin.entity.Guide">
+        <id column="id" property="id" />
+        <result column="title" property="title" />
+        <result column="type" property="type" />
+        <result column="function_des" property="functionDes" />
+        <result column="op_introduce_txt1" property="opIntroduceTxt1" />
+        <result column="op_introduce_img1" property="opIntroduceImg1" />
+        <result column="op_introduce_txt2" property="opIntroduceTxt2" />
+        <result column="op_introduce_img2" property="opIntroduceImg2" />
+        <result column="op_introduce_txt3" property="opIntroduceTxt3" />
+        <result column="op_introduce_img3" property="opIntroduceImg3" />
+        <result column="op_introduce_txt4" property="opIntroduceTxt4" />
+        <result column="op_introduce_img4" property="opIntroduceImg4" />
+        <result column="op_introduce_txt5" property="opIntroduceTxt5" />
+        <result column="op_introduce_img5" property="opIntroduceImg5" />
+        <result column="create_time" property="createTime"/>
+        <result column="status" property="status"/>
+        <result column="is_delete" property="isDelete"/>
+    </resultMap>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT * FROM guide
+          WHERE is_delete = 0
+    </select>
+
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT * FROM guide
+          WHERE id = #{id}
+    </select>
+    
+    <select id="saveGuide" parameterType="com.backend.admin.entity.Guide">
+        INSERT INTO guide(
+          title,
+          type,
+          function_des,
+          op_introduce_txt1,
+          op_introduce_img1,
+          op_introduce_txt2,
+          op_introduce_img2,
+          op_introduce_txt3,
+          op_introduce_img3,
+          op_introduce_txt4,
+          op_introduce_img4,
+          op_introduce_txt5,
+          op_introduce_img5,
+          create_time,
+          status,
+          is_delete
+        )VALUES(
+          #{title},
+          #{type},
+          #{functionDes},
+          #{opIntroduceTxt1,typeHandler=strHdl},
+          #{opIntroduceImg1,typeHandler=strHdl},
+          #{opIntroduceTxt2,typeHandler=strHdl},
+          #{opIntroduceImg2,typeHandler=strHdl},
+          #{opIntroduceTxt3,typeHandler=strHdl},
+          #{opIntroduceImg3,typeHandler=strHdl},
+          #{opIntroduceTxt4,typeHandler=strHdl},
+          #{opIntroduceImg4,typeHandler=strHdl},
+          #{opIntroduceTxt5,typeHandler=strHdl},
+          #{opIntroduceImg5,typeHandler=strHdl},
+          now(),
+          0,
+          0
+        )
+    </select>
+
+    <select id="updateGuide" parameterType="com.backend.admin.entity.Guide">
+        UPDATE guide
+        <trim prefix="SET" suffixOverrides="," suffix="WHERE id = #{id}">
+            <if test="title!=null">title = #{title},</if>
+            <if test="type!=null">type = #{type},</if>
+            <if test="functionDes!=null">function_des = #{functionDes},</if>
+            <if test="opIntroduceTxt1!=null">op_introduce_txt1 = #{opIntroduceTxt1},</if>
+            <if test="opIntroduceImg1!=null">op_introduce_img1 = #{opIntroduceImg1},</if>
+            <if test="opIntroduceTxt2!=null">op_introduce_txt2 = #{opIntroduceTxt2},</if>
+            <if test="opIntroduceImg2!=null">op_introduce_img2 = #{opIntroduceImg2},</if>
+            <if test="opIntroduceTxt3!=null">op_introduce_txt3 = #{opIntroduceTxt3},</if>
+            <if test="opIntroduceImg3!=null">op_introduce_img3 = #{opIntroduceImg3},</if>
+            <if test="opIntroduceTxt4!=null">op_introduce_txt4 = #{opIntroduceTxt4},</if>
+            <if test="opIntroduceImg4!=null">op_introduce_img4 = #{opIntroduceImg4},</if>
+            <if test="opIntroduceTxt5!=null">op_introduce_txt5 = #{opIntroduceTxt5},</if>
+            <if test="opIntroduceImg5!=null">op_introduce_img5 = #{opIntroduceImg5},</if>
+            <if test="status!=null">status = #{status},</if>
+            <if test="isDelete!=null">is_delete = #{isDelete},</if>
+        </trim>
+    </select>
+</mapper>

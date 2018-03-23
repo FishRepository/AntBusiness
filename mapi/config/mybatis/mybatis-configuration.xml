@@ -11,11 +11,17 @@
        <setting name="lazyLoadingEnabled" value="true"/>  
         <setting name="aggressiveLazyLoading" value="false"/>    
     </settings>
-    
+
+	<typeAliases>
+		<typeAlias type="com.backend.common.IntegerHandler" alias="intHdl"/>
+		<typeAlias type="com.backend.common.StringHandler" alias="strHdl"/>
+	</typeAliases>
+
     <plugins>
 		<plugin interceptor="com.api.common.page.PaginationInterceptor" >
 			<property name="dialect" value="mysql"/>
 			<property name="pageSqlId" value=".*listPage.*"/>
 		</plugin>    
-	</plugins>   
+	</plugins>
+
 </configuration>
