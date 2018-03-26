@@ -191,7 +191,7 @@
         <div class="col-md-12">
             <div class="tile">
                 <div class="tile-body">
-                    <button class="btn btn-primary" type="button"><i class="fa fa-fw fa-lg fa-check-circle"></i>新增</button>
+                    <button id="addNew" class="btn btn-primary" type="button"><i class="fa fa-fw fa-lg fa-check-circle"></i>新增</button>
                 </div>
             </div>
         </div>
@@ -218,9 +218,81 @@
         </div>
     </div>
 
+    <div class="modal fade"
+         <#--style="position: relative; top: auto; right: auto; left: auto; bottom: auto; z-index: 1; display: block;"-->
+         tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+        <div class="modal-dialog" role="document" >
+            <div class="modal-content" style="width:900px;">
+                <div class="modal-header">
+                    <h5 class="modal-title">新增条目</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">标题&nbsp;：</label>
+                            <div class="col-md-8">
+                                <input class="form-control" type="text" placeholder="Enter full name">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">等级&nbsp;：</label>
+                            <div class="col-md-8">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="radio" name="gender">初级
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="radio" name="gender">高级
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">功能说明&nbsp;：</label>
+                            <div class="col-md-8">
+                                <textarea class="form-control" rows="4" placeholder="Enter your address"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">操作介绍&nbsp;：</label>
+                            <div class="col-md-8">
+                                <button id="addNew" class="btn btn-sm btn-success" type="button"><i class="fa fa-plus-circle"></i>增加</button>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button id="addNew" class="btn btn-danger btn-sm" type="button"><i class="fa fa-minus-circle"></i>删除</button>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">操作介绍一&nbsp;：</label>
+                            <div class="col-md-8">
+                                <textarea class="form-control" rows="4" placeholder="Enter your address"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">图片一&nbsp;：</label>
+                            <div class="col-md-8">
+                                <input class="form-control" type="file">
+                            </div>
+                        </div>
 
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="button">保存</button>
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </main>
+
+
+
+
 <!-- Essential javascripts for application to work-->
 <script src="${ctx}/js/jquery-3.2.1.min.js"></script>
 <script src="${ctx}/js/popper.min.js"></script>
@@ -297,9 +369,11 @@
                 }
             ]
         });
-    })
+    });
 
-
+    $('#addNew').click(function(){
+        $('.modal').modal('show');
+    });
 </script>
 
 </body>

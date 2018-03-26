@@ -24,7 +24,7 @@ public class AdminController {
         return model;
     }
 
-    @RequestMapping("listGuide")
+    @RequestMapping("/listGuide")
     @ResponseBody
     public RequestResultVO listGuide(){
         RequestResultVO vo = new RequestResultVO();
@@ -38,5 +38,12 @@ public class AdminController {
         return  vo;
     }
 
+    @RequestMapping("/saveGuide")
+    @ResponseBody
+    public RequestResultVO saveGuide(){
+        RequestResultVO vo = new RequestResultVO();
+
+        return vo;
+    }
 
 }
