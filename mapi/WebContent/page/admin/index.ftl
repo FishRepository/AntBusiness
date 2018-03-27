@@ -219,7 +219,6 @@
     </div>
 
     <div class="modal fade"
-         <#--style="position: relative; top: auto; right: auto; left: auto; bottom: auto; z-index: 1; display: block;"-->
          tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
         <div class="modal-dialog" role="document" >
             <div class="modal-content" style="width:900px;">
@@ -232,7 +231,7 @@
                         <div class="form-group row">
                             <label class="control-label col-md-3">标题&nbsp;：</label>
                             <div class="col-md-8">
-                                <input class="form-control" type="text" placeholder="Enter full name">
+                                <input id="title" name="title" class="form-control" type="text" placeholder="Enter full name">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -240,12 +239,12 @@
                             <div class="col-md-8">
                                 <div class="form-check">
                                     <label class="form-check-label">
-                                        <input class="form-check-input" type="radio" name="gender">初级
+                                        <input class="form-check-input" type="radio" value="1" name="type">初级
                                     </label>
                                 </div>
                                 <div class="form-check">
                                     <label class="form-check-label">
-                                        <input class="form-check-input" type="radio" name="gender">高级
+                                        <input class="form-check-input" type="radio" value="2" name="type">高级
                                     </label>
                                 </div>
                             </div>
@@ -253,30 +252,35 @@
                         <div class="form-group row">
                             <label class="control-label col-md-3">功能说明&nbsp;：</label>
                             <div class="col-md-8">
-                                <textarea class="form-control" rows="4" placeholder="Enter your address"></textarea>
+                                <textarea id="functionDes" name="functionDes" class="form-control" rows="4" placeholder="Enter your address"></textarea>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="control-label col-md-3">操作介绍&nbsp;：</label>
                             <div class="col-md-8">
-                                <button id="addNew" class="btn btn-sm btn-success" type="button"><i class="fa fa-plus-circle"></i>增加</button>
+                                <button id="addOne" class="btn btn-sm btn-success" type="button"><i class="fa fa-plus-circle"></i>增加</button>
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <button id="addNew" class="btn btn-danger btn-sm" type="button"><i class="fa fa-minus-circle"></i>删除</button>
+                                <button id="minusOne" class="btn btn-danger btn-sm" type="button"><i class="fa fa-minus-circle"></i>删除</button>
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <div class="form-group row" id="div-opIntroduceTxt1">
                             <label class="control-label col-md-3">操作介绍一&nbsp;：</label>
                             <div class="col-md-8">
-                                <textarea class="form-control" rows="4" placeholder="Enter your address"></textarea>
+                                <textarea id="opIntroduceTxt1" name="opIntroduceTxt1" class="form-control" rows="4" placeholder="Enter your address"></textarea>
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <div class="form-group row" id="div-opIntroduceImg1">
                             <label class="control-label col-md-3">图片一&nbsp;：</label>
                             <div class="col-md-8">
-                                <input class="form-control" type="file">
+                                <input id="opIntroduceImg1" name="opIntroduceImg1" class="form-control" type="file">
                             </div>
                         </div>
-
+                        <div class="form-group row" id="preview-Img1" style="display: none">
+                            <label class="control-label col-md-3">图片一预览&nbsp;：</label>
+                            <div class="col-md-8">
+                                <img style="height: 200px; width: 100%; display: block;" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22318%22%20height%3D%22180%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20318%20180%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_158bd1d28ef%20text%20%7B%20fill%3Argba(255%2C255%2C255%2C.75)%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C%20monospace%3Bfont-size%3A16pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_158bd1d28ef%22%3E%3Crect%20width%3D%22318%22%20height%3D%22180%22%20fill%3D%22%23777%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22129.359375%22%20y%3D%2297.35%22%3EImage%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="Card image">
+                            </div>
+                        </div>
                     </form>
 
                 </div>
@@ -307,6 +311,7 @@
 <!-- Data table plugin-->
 <script type="text/javascript" src="${ctx}/js/plugins/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="${ctx}/js/plugins/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript" src="${ctx}/js/plugins/bootstrap-notify.min.js"></script>
 <script type="text/javascript">
 
 
@@ -374,6 +379,62 @@
     $('#addNew').click(function(){
         $('.modal').modal('show');
     });
+
+    $('#addOne').click(function(){
+        //获取当前操作说明数组长度
+        var index = $("div[id^='div-opIntroduceTxt']").length;
+        if(index<5){
+            var indexCh = index===1?'二':index===2?'三':index===3?'四':index===4?'五':'';
+            var htmlVar = buildOpIntroduceDiv(index+1,indexCh);
+            $('.form-horizontal').append(htmlVar);
+        }else{
+            alert("最多只能添加五条操作介绍!");
+        }
+    });
+
+    $('#minusOne').click(function(){
+        //获取当前操作说明数组长度
+        var index = $("div[id^='div-opIntroduceTxt']").length;
+        if(index>1){
+            $('#div-opIntroduceTxt'+index).remove();
+            $('#div-opIntroduceImg'+index).remove();
+        }else{
+            alert("至少保留一条操作介绍!");
+        }
+    });
+    
+    function buildOpIntroduceDiv(index, indexCh) {
+        var htmlVar = '';
+        htmlVar+='<div class="form-group row" id="div-opIntroduceTxt'+index+'">';
+        htmlVar+='    <label class="control-label col-md-3">操作介绍'+indexCh+'&nbsp;：</label>';
+        htmlVar+='   <div class="col-md-8">';
+        htmlVar+='       <textarea id="opIntroduceTxt'+index+'" name="opIntroduceTxt'+index+'" class="form-control" rows="4" placeholder="Enter your address"></textarea>';
+        htmlVar+='    </div>';
+        htmlVar+='</div>';
+        htmlVar+='<div class="form-group row" id="div-opIntroduceImg'+index+'">';
+        htmlVar+='    <label class="control-label col-md-3">图片'+indexCh+'&nbsp;：</label>';
+        htmlVar+='   <div class="col-md-8">';
+        htmlVar+='       <input id="opIntroduceImg'+index+'" name="opIntroduceImg'+index+'" class="form-control" type="file">';
+        htmlVar+='   </div>';
+        htmlVar+='</div>';
+        htmlVar+='<div class="form-group row" id="preview-Img'+index+'" style="display: none">';
+        htmlVar+='    <label class="control-label col-md-3">图片'+indexCh+'预览&nbsp;：</label>';
+        htmlVar+='    <div class="col-md-8">';
+        htmlVar+='        <img style="height: 200px; width: 100%; display: block;" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22318%22%20height%3D%22180%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20318%20180%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_158bd1d28ef%20text%20%7B%20fill%3Argba(255%2C255%2C255%2C.75)%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C%20monospace%3Bfont-size%3A16pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_158bd1d28ef%22%3E%3Crect%20width%3D%22318%22%20height%3D%22180%22%20fill%3D%22%23777%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22129.359375%22%20y%3D%2297.35%22%3EImage%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="Card image">';
+        htmlVar+='    </div>';
+        htmlVar+='</div>';
+        return htmlVar;
+    }
+    
+    function notify(title, msg){
+        $.notify({
+            title: title+" : ",
+            message: msg,
+            icon: 'fa fa-close'
+        },{
+            type: "danger"
+        });
+    }
 </script>
 
 </body>

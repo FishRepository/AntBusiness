@@ -6,6 +6,7 @@ import com.backend.common.RequestResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -40,7 +41,7 @@ public class AdminController {
 
     @RequestMapping("/saveGuide")
     @ResponseBody
-    public RequestResultVO saveGuide(){
+    public RequestResultVO saveGuide(@RequestParam(value = "guide")Guide guide){
         RequestResultVO vo = new RequestResultVO();
 
         return vo;
