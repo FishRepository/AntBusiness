@@ -1,2 +1,29 @@
-<!--pages/mine/mine.wxml-->
-<text>pages/mine/mine.wxml</text>
+ <view class='userinfo'>
+    <image class='userinfo-avatar' src='/images/logo.png'></image>
+    <text class='userinfo-nickname'>曹建涛</text>
+  </view>
+
+  <view class='userinfo-contact'>
+    <view class='divider'></view>
+    <view class='input-row'>
+      <text>手机号</text>
+      <text>13437104137</text>
+    </view>
+    <view class='divider'></view>
+    <view class='input-row'>
+      <text>微信号</text>
+      <text>已绑定</text>
+    </view>
+    <view class='divider'></view>
+  </view>
+
+  <button class='btn-logout'>退出登录</button>
+
+  <view class='download'>
+    <image src='/images/logo.png' class='download-logo'></image>
+    <view class='download-info'>
+      <text class='download-emphasize'>下载番茄管家APP，管理更方便!</text>
+      <text>微商必备神器</text>
+    </view>
+    <button class='btn-download'>下载</button>
+  </view>

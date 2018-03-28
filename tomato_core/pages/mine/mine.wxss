@@ -1,1 +1,82 @@
-/* pages/mine/mine.wxss */
+page {
+  background-color: #f2f2f2;
+}
+
+.userinfo {
+  padding-top: 10rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #e64663;
+}
+
+.userinfo-avatar {
+  width: 130rpx;
+  height: 130rpx;
+  border-radius: 50%;
+  margin-bottom: 10rpx;
+}
+
+.userinfo-nickname {
+  color: white;
+  margin-bottom: 20rpx;
+}
+
+.divider {
+  height: 2rpx;
+  background-color: #d8d6d6;
+}
+
+.userinfo-contact {
+  color: #4f494b;
+  background-color: white;
+}
+
+.userinfo-contact text {
+  padding: 30rpx;
+  display: inline-block;
+}
+
+.btn-logout {
+  margin-top: 80rpx;
+  padding: 15rpx 0;
+  background-color: white;
+  color: #e14566;
+  border-radius: 0;
+}
+
+.download {
+  position:fixed;
+  bottom:0;
+  width: 100%;
+  padding: 20rpx;
+  display: flex;
+  align-items: center;
+  font-size: 11pt;
+  background-color: white;
+}
+
+.download-logo {
+  width: 90rpx;
+  height: 90rpx;
+}
+
+.download-info {
+  margin-left: 20rpx;
+}
+
+.download-emphasize {
+  margin-bottom: 5rpx;
+  display: block;
+  font-weight: bold;
+}
+
+.btn-download {
+  background-color: white;
+  font-size: inherit;
+  box-sizing: content-box;
+  color: #e44865;
+}
+.btn-download::after {
+  border: 1px solid #e44865;
+}

@@ -9,7 +9,8 @@
     "pages/shop/shopDetail/shopDetail",
     "pages/shop/shopProductOperate/shopProductOperate",
     "pages/shop/shopProductDetail/shopProductDetail",
-    "pages/mine/mine"
+    "pages/mine/mine",
+    "pages/login/login"
   ],
   "window":{
     "backgroundTextStyle":"light",
