@@ -87,7 +87,7 @@ Page({
      
     wx.request({
       url: WebService.HOST+WebService.LOGIN_PHONE_URL,
-      method: 'POST',
+      // method: 'POST',
       data: {
         account_userphone: Base64.encode(phone),
         account_password: Base64.encode(password),
@@ -95,12 +95,15 @@ Page({
       },
       success: function(data){
         wx.hideLoading();
-        if(data&&data.code==0){
+        if(data&&data.data.code==0){
           wx.showToast({
             title: '登录成功',
             icon: 'none',
             duration: 2000
           });
+          wx.redirectTo({
+            url: '/pages/index/index',
+          })
         }
       },
       fail: function(){
