@@ -43,7 +43,7 @@ Page({
     }, {
       name: 'YSL星辰口红【J】'
     }, {
-      name: 'YSL星辰口红【J】'
+      name: 'YSL星辰口红【JJJJ】'
     }],
     startX: 0,
     startY: 0

@@ -178,18 +178,46 @@ Page({
   /**
    * 切换页签
    */
-  tabSwitch: function (e) {
+  tabSwitchOut: function (e) {
     var _that = this
-    var nowType = _that.data.tabType;
-    if (nowType == 1) {
-      _that.setData({
-        tabType: 2
-      })
-    } else {
-      _that.setData({
-        tabType: 1
-      })
+    _that.setData({
+      tabType: 1
+    })
+    //重置所有滑块
+    var list_out = this.data.outOrders
+    for (var i = 0, i_len = list_out.length; i < i_len; ++i) {
+      var chile_list_out = list_out[i].items;
+      for (var j = 0, j_len = chile_list_out.length; j < j_len; ++j) {
+        if (chile_list_out[j].isTouchMove) {
+          chile_list_out[j].isTouchMove = false;
+        }
+      }
     }
+    var list_in = this.data.inOrders
+    for (var i = 0, i_len = list_in.length; i < i_len; ++i) {
+      var chile_list_in = list_in[i].items;
+      for (var j = 0, j_len = chile_list_in.length; j < j_len; ++j) {
+        if (chile_list_in[j].isTouchMove) {
+          chile_list_in[j].isTouchMove = false
+        }
+      }
+    }
+    this.setData({
+      startX: e.changedTouches[0].clientX,
+      startY: e.changedTouches[0].clientY,
+      outOrders: list_out,
+      inOrders: list_in
+    })
+  },
+
+  /**
+     * 切换页签
+     */
+  tabSwitchIn: function (e) {
+    var _that = this
+    _that.setData({
+      tabType: 2
+    })
     //重置所有滑块
     var list_out = this.data.outOrders
     for (var i = 0, i_len = list_out.length; i < i_len; ++i) {

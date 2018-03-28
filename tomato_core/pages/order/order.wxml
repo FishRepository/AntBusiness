@@ -1,10 +1,10 @@
 <!--pages/order/order.wxml-->
 <view class='container'>
   <view class='top-tab'>
-    <view class="tab_item" bindtap='tabSwitch'>
+    <view class="tab_item" bindtap='tabSwitchOut'>
       <text class="tab_item_text {{tabType==1 ? 'tab_on' : ''}}">出货订单</text>
     </view>
-    <view class="tab_item" bindtap='tabSwitch'>
+    <view class="tab_item" bindtap='tabSwitchIn'>
       <text class="tab_item_text {{tabType==2 ? 'tab_on' : ''}}">进货订单</text>
     </view>
   </view>

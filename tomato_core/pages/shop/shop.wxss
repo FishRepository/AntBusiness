@@ -11,21 +11,12 @@
   padding-bottom: 50px;
 }
 
-.view-add {
-  width: 40px;
-  height: 40px;
-  position: fixed;
-  z-index: 5;
-  bottom: 5px;
-  /* background-color: #f0f0f0; */
-  border-radius: 50%;
-  right: 5px;
-}
-
 .main-scroll {
   width: 100%;
   height: 100%;
-   background-color: #f3f3f3; 
+  background-color: #f3f3f3;
+  display: flex;
+  margin-bottom: 50px;
   /* padding-bottom: 120px; */
 }
 
@@ -39,10 +30,11 @@
   text-align: center;
   align-items: center;
   justify-content: space-between;
-   margin: 20px; 
+  margin: 20px;
   background-color: white;
-   box-shadow: 0 0 10px 2px #e5e5e5; 
-  /* border-bottom: 1px solid #f0f0f0; */
+  /* box-shadow: 0 0 10px 2px #e5e5e5;   */
+  box-shadow: 2px 2px 2px 0px #e5e5e5;
+  /* border: 1px solid #FCE4EC; *//* border-bottom: 1px solid #f0f0f0; */
   overflow: hidden;
 }
 
@@ -121,4 +113,29 @@
 .touch-move-active .item-opt {
   -webkit-transform: translateX(0px);
   transform: translateX(0px);
+}
+
+.view-add {
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 50px;
+  position: fixed;
+  z-index: 5;
+  bottom: 0;
+  background-color: #e64663;
+  /* right: 5px; */
+}
+
+.view-add image {
+  width: 25px;
+  height: 25px;
+  margin-right: 10px;
+}
+
+.view-add text {
+  font-size: 10pt;
+  color: white;
 }
