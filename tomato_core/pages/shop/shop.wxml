@@ -1,6 +1,6 @@
 <!--pages/shop/shop.wxml-->
 <view class='container'>
-  <image class='view-add' src='/images/shop/icon_add.png' catchtap='addShop'></image>
+
   <scroll-view scroll-y='true' class='main-scroll'>
     <block wx:for="{{items}}" wx:key="{{name}}">
       <view class="item-view {{item.isTouchMove?'touch-move-active':''}}" data-index="{{index}}" bindtouchstart="touchstart" bindtouchmove="touchmove" catchtap='gotoGetail'>
@@ -15,4 +15,8 @@
       </view>
     </block>
   </scroll-view>
+  <view class='view-add' catchtap='addShop'>
+    <image src='/images/shop/icon_add.png'></image>
+    <text>添加</text>
+  </view>
 </view>
