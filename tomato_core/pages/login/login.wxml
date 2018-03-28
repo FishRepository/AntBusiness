@@ -4,13 +4,13 @@
 
 <view class='form-login'>
   <view class='divider'></view>
-  <input class='input-login' type='text' placeholder='手机号'/>
+  <input id='userid' class='input-login' type='text' placeholder='手机号' bindfocus="inputFocus" bindblur="inputBlur" bindinput="useridInput" value="{{userid}}"/>
   <view class='divider'></view>
-  <input class='input-login' type='text' password='true' placeholder='密码'/>
+  <input id='passwd' class='input-login' type='text' password='true' placeholder='密码' bindfocus="inputFocus" bindblur="inputBlur" bindinput="passwdInput" value="{{passwd}}"/>
   <view class='divider'></view>
   <navigator class='nav-forget'>忘记密码</navigator>
   <view class='v-operate'>
-    <button class='btn btn-login'>登录</button>
+    <button class='btn btn-login' bindtap="loginUser">登录</button>
     <button class='btn btn-register'>注册</button>
   </view>
 </view>

@@ -1,11 +1,12 @@
 // pages/mine/mine.js
+var WebService = require('../../utils/webService.js');
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-  
+    url:''
   },
 
   /**
@@ -62,5 +63,13 @@ Page({
    */
   onShareAppMessage: function () {
   
+  },
+
+  showUrl: function () {
+    var that = this;
+    var sendUrl = WebService.HOST + WebService.SEND_CODE_URL;
+    that.setData({
+      url: sendUrl
+    })
   }
 })
