@@ -4,9 +4,15 @@
 
 <view class='form-login'>
   <view class='divider'></view>
-  <input id='userid' class='input-login' type='text' placeholder='手机号' bindfocus="inputFocus" bindblur="inputBlur" bindinput="useridInput" value="{{userid}}"/>
+  <view class='v-input'>
+    <image src='/images/login/icon_phone.png'></image>
+    <input id='userid' class='input-login' type='text' placeholder='手机号' bindfocus="inputFocus" bindblur="inputBlur" bindinput="useridInput" value="{{userid}}"/>
+  </view>
   <view class='divider'></view>
-  <input id='passwd' class='input-login' type='text' password='true' placeholder='密码' bindfocus="inputFocus" bindblur="inputBlur" bindinput="passwdInput" value="{{passwd}}"/>
+  <view class='v-input'>
+    <image src='/images/login/icon_password.png'></image>
+    <input id='passwd' class='input-login' type='text' password='true' placeholder='密码' bindfocus="inputFocus" bindblur="inputBlur" bindinput="passwdInput" value="{{passwd}}"/>
+  </view>
   <view class='divider'></view>
   <navigator class='nav-forget'>忘记密码</navigator>
   <view class='v-operate'>

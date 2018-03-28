@@ -5,14 +5,16 @@
 
   <view class='userinfo-contact'>
     <view class='divider'></view>
-    <view class='input-row'>
+    <view class='v-text'>
+      <image src='/images/login/icon_phone.png'></image>
       <text>手机号</text>
-      <text>13437104137</text>
+      <text class='text-right'>13437104137</text>
     </view>
     <view class='divider'></view>
-    <view class='input-row'>
+    <view class='v-text'>
+      <image src='/images/login/icon_weixin.png'></image>
       <text>微信号</text>
-      <text>已绑定</text>
+      <text class='text-right'>已绑定</text>
     </view>
     <view class='divider'></view>
   </view>

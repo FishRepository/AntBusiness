@@ -14,10 +14,22 @@ page {
   height: 130rpx;
 }
 
-.input-login {
-  font-size: 12pt;
-  height: 100rpx;
+.v-input {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
   background-color: white;
+}
+
+.v-input input {
+  display: inline-block;
+  width: calc(100% - 75rpx);
+}
+
+.v-input image {
+  width: 60rpx;
+  height: 60rpx;
+  margin-right: 15rpx;
 }
 
 .divider {
@@ -26,11 +38,11 @@ page {
 }
 
 .nav-forget {
-  padding-top: 20rpx;
-  padding-right: 60rpx;
+  margin-top: 20rpx;
+  margin-right: 60rpx;
   color: #e44865;
-  font-size: 10pt;
-  text-align: right;
+  font-size: 12pt;
+  float: right;
 }
 
 .v-operate {

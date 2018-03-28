@@ -32,9 +32,22 @@ page {
   background-color: white;
 }
 
-.userinfo-contact text {
+.v-text {
+  display: flex;
+  align-items: center;
   padding: 30rpx;
-  display: inline-block;
+  background-color: white;
+}
+
+.text-right {
+  position: absolute;
+  right: 30rpx;
+}
+
+.v-text image {
+  width: 60rpx;
+  height: 60rpx;
+  margin-right: 15rpx;
 }
 
 .btn-logout {
