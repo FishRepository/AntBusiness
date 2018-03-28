@@ -1,0 +1,7 @@
+/* pages/order/orderDetail/orderDetail.wxss */
+
+.container{
+  width: 100%;
+  height: 100%;
+}
+

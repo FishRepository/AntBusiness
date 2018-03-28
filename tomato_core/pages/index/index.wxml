@@ -1,13 +1,70 @@
 <!--index.wxml-->
 <view class="container">
-  <view class="userinfo">
-    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
-    <block wx:else>
-      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
-      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-    </block>
+  <!--头部-->
+  <view class='main-top'>
+    <view class='top-left'>
+      <text class='top-left-button'>进货订单</text>
+    </view>
+    <view class='top-right'>
+      <navigator class='top-navigator' url='/pages/shop/shop'>
+        <image class='top-right-img' src='/images/index/icon_top_1.png'></image>
+      </navigator>
+      <navigator class='top-navigator' url='/pages/order/order'>
+        <image class='top-right-img' src='/images/index/icon_top_2.png'></image>
+      </navigator>
+      <navigator class='top-navigator' url='/pages/mine/mine'>
+        <image class='top-right-img' src='/images/index/icon_top_3.png'></image>
+      </navigator>
+    </view>
   </view>
-  <view class="usermotto">
-    <text class="user-motto">{{motto}}</text>
+  <!-- 中间部分 -->
+  <view class='body-top'>
+    <text>{{totalPrice}}</text>
+  </view>
+  <view class='body-table-title'>
+    <view class='table-title-left'>
+      <text>品牌</text>
+    </view>
+    <view class='table-title-right'>
+      <text>代理层级：我要进货></text>
+      <text>额外费用></text>
+    </view>
+  </view>
+  <view class='body-table'>
+    <scroll-view scroll-y='true' class='table-left'>
+      <block wx:for="{{brands}}" wx:key="{{name}}">
+        <text class="table-left-text {{selIdx==index?'child-show':''}}" catchtap='swapTabTable' id='{{index}}'>{{item.name}}</text>
+      </block>
+    </scroll-view>
+    <scroll-view scroll-y='true' class='table-right'>
+      <block wx:for="{{brands[selIdx].items}}" wx:for-item="child" wx:key="{{proName}}">
+        <view class='table-right-item'>
+          <text class='left-child-text'>{{child.proName}}</text>
+          <view class='bottom-child-view'>
+            <text class='price-text'>￥{{child.price}}</text>
+            <view class='child-right-view'>
+              <image wx:if="{{child.num>0}}" src='/images/index/icon_del.png' id='{{index}}' catchtap='subProNum'></image>
+              <text class='opt-num-text' wx:if="{{child.num>0}}">{{child.num}}</text>
+              <image src='/images/index/icon_add.png' id='{{index}}' catchtap='addProNum'></image>
+            </view>
+          </view>
+        </view>
+      </block>
+    </scroll-view>
+  </view>
+  <!-- </view> -->
+  <!--底部-->
+  <view class='main-bottom'>
+    <view class='bottom-left'>
+      <image class='bottom-left-img' src='/images/index/icon_shop_on.png'></image>
+      <view class='bottom-left-num'>{{totalNum}}</view>
+      <view class='bottom-left-view'>
+        <text class='opt-xuanzhe'>已选择{{selBandNum}}个品牌商品</text>
+        <text class='opt-qingkong'>清空</text>
+      </view>
+    </view>
+    <view class='bottom-right'>
+      <button>立即下单</button>
+    </view>
   </view>
 </view>

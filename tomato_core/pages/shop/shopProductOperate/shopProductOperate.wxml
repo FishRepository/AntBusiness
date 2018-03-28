@@ -1,0 +1,30 @@
+<!--pages/shop/shopProductOperate/shopProductOperate.wxml-->
+<view class='container'>
+  <input class='pro-name' value='{{item.name}}'></input>
+  <view class='pro-parent-name'>{{item.parentName}}</view>
+  <view class='pro-my-price'>
+    <view class='pro-my-price-left'>
+      <text>{{item.itemPrice[0].name}}</text>
+      <text class='valduate'>*</text>
+    </view>
+    ￥
+    <input value='{{item.itemPrice[0].price}}'></input>
+  </view>
+  <view class='pro-out-title'>对外销售价格</view>
+  <view class='pro-out-item'>
+    <text class='pro-out-item-left'>{{item.itemPrice[1].name}}</text> ￥
+    <input value='{{item.itemPrice[1].price}}'></input>
+  </view>
+  <view class='pro-out-item'>
+    <text class='pro-out-item-left'>{{item.itemPrice[2].name}}</text> ￥
+    <input value='{{item.itemPrice[2].price}}'></input>
+  </view>
+  <view class='pro-out-item'>
+    <view class='pro-out-item-left'>
+      <text>{{item.itemPrice[3].name}}</text>
+      <text class='valduate'>*</text>
+    </view> ￥
+    <input value='{{item.itemPrice[3].price}}'></input>
+  </view>
+  <button class='view-button'>保存</button>
+</view>

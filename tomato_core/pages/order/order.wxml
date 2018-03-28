@@ -1,0 +1,49 @@
+<!--pages/order/order.wxml-->
+<view class='container'>
+  <view class='top-tab'>
+    <view class="tab_item" bindtap='tabSwitch'>
+      <text class="tab_item_text {{tabType==1 ? 'tab_on' : ''}}">出货订单</text>
+    </view>
+    <view class="tab_item" bindtap='tabSwitch'>
+      <text class="tab_item_text {{tabType==2 ? 'tab_on' : ''}}">进货订单</text>
+    </view>
+  </view>
+
+  <!-- 出货订单 -->
+  <scroll-view scroll-y='true' wx:if="{{tabType==1}}" class='order-view'>
+    <block wx:for="{{outOrders}}" wx:key="{{date}}" wx:for-index="p_index">
+      <view class='order-date'>{{item.date}}</view>
+      <block wx:for="{{item.items}}" wx:key="{{date}}" wx:for-item="child" wx:for-index="c_index">
+        <view class="order-detail {{child.isTouchMove?'touch-move-active':''}}" data-cindex="{{c_index}}" data-pindex="{{p_index}}" bindtouchstart="touchstart" bindtouchmove="touchmove" catchtap='gotoGetail'>
+          <view class='detail-info'>
+            <view class='detail-date'>{{child.date}}</view>
+            <view class='detail-title'>{{child.brand}}</view>
+            <view class='detail-price'>￥{{child.price}}</view>
+          </view>
+          <view class='detail-opt'>
+            <view class='detail-opt-del' catchtap='delOrder' data-cindex="{{c_index}}" data-pindex="{{p_index}}">删除</view>
+          </view>
+        </view>
+      </block>
+    </block>
+  </scroll-view>
+
+  <!-- 进货订单 -->
+  <scroll-view scroll-y='true' wx:if="{{tabType==2}}" class='order-view'>
+    <block wx:for="{{inOrders}}" wx:key="{{date}}" wx:for-index="p_index">
+      <view class='order-date'>{{item.date}}</view>
+      <block wx:for="{{item.items}}" wx:key="{{date}}" wx:for-item="child" wx:for-index="c_index">
+        <view class="order-detail {{child.isTouchMove?'touch-move-active':''}}" data-cIndex="{{c_index}}" data-pIndex="{{p_index}}" bindtouchstart="touchstart" bindtouchmove="touchmove">
+          <view class='detail-info'>
+            <view class='detail-date'>{{child.date}}</view>
+            <view class='detail-title'>{{child.brand}}</view>
+            <view class='detail-price'>￥{{child.price}}</view>
+          </view>
+          <view class='detail-opt'>
+            <view class='detail-opt-del'>删除</view>
+          </view>
+        </view>
+      </block>
+    </block>
+  </scroll-view>
+</view>

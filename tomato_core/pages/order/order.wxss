@@ -1,0 +1,125 @@
+/* pages/order/order.wxss */
+
+.container {
+  width: 100%;
+  height: 100%;
+}
+
+.top-tab {
+  display: flex;
+  width: 100%;
+  height: 50px;
+  position: fixed;
+  top: 0;
+  z-index: 5;
+  background-color: white;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.tab_item {
+  width: 50%;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.tab_item_text {
+  display: flex;
+  width: 50%;
+  height: 100%;
+  font-size: 10pt;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.tab_on {
+  color: #e64663;
+  /* font-weight: bold; */
+  border-bottom: 2px solid #e64663;
+}
+
+.order-view {
+  width: 100%;
+  height: 100%;
+  margin-top: 50px;
+  /* position: fixed; */
+}
+
+.order-date {
+  width: 100%;
+  height: 20px;
+  display: flex;
+  font-size: 10pt;
+  padding: 5px 10px;
+  text-align: center;
+  align-items: center;
+  background-color: #e6e6e6;
+}
+
+.order-detail {
+  width: 100%;
+  height: 50px;
+  font-size: 10pt;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #f0f0f0;
+  overflow: hidden;
+}
+
+.detail-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  padding: 0px 10px;
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
+  -webkit-transform: translateX(90px);
+  transform: translateX(90px);
+  margin-left: -90px;
+}
+
+.detail-date, .detail-title {
+  color: #8a8a8a;
+}
+
+.detail-price {
+  color: #e64663;
+  font-size: 12pt;
+}
+
+.detail-opt {
+  display: flex;
+  height: 100%;
+  width: 90px;
+  text-align: center;
+  align-items: center;
+  justify-content: space-between;
+  -webkit-transform: translateX(90px);
+  transform: translateX(90px);
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
+}
+
+.detail-opt-del {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  background-color: #e64663;
+  color: white;
+  font-size: 10pt;
+}
+
+.touch-move-active .detail-info, .touch-move-active .detail-opt {
+  -webkit-transform: translateX(0px);
+  transform: translateX(0px);
+}

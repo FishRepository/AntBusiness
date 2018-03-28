@@ -1,0 +1,13 @@
+<!--pages/shop/shopDetail/shopDetail.wxml-->
+<view class='container'>
+  <image class='view-add' src='/images/shop/icon_add.png' catchtap='addShop'></image>
+  <block wx:for="{{items}}" wx:key="{{name}}">
+    <view class="item-view {{item.isTouchMove?'touch-move-active':''}}" data-index="{{index}}" bindtouchstart="touchstart" bindtouchmove="touchmove" catchtap='gotoGetail'>
+      <view class='item-title'>{{item.name}}</view>
+      <view class='item-opt'>
+        <view class='item-opt-edit' catchtap='editShop' data-index="{{index}}">编辑</view>
+        <view class='item-opt-del' catchtap='delShop' data-index="{{index}}">删除</view>
+      </view>
+    </view>
+  </block>
+</view>

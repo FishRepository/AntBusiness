@@ -1,12 +1,20 @@
 {
   "pages":[
     "pages/index/index",
-    "pages/logs/logs"
+    "pages/logs/logs",
+    "pages/order/order",
+    "pages/order/orderDetail/orderDetail",
+    "pages/shop/shop",
+    "pages/shop/shopOperate/shopOperate",
+    "pages/shop/shopDetail/shopDetail",
+    "pages/shop/shopProductOperate/shopProductOperate",
+    "pages/shop/shopProductDetail/shopProductDetail",
+    "pages/mine/mine"
   ],
   "window":{
     "backgroundTextStyle":"light",
-    "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "WeChat",
-    "navigationBarTextStyle":"black"
+    "navigationBarBackgroundColor": "#e64663",
+    "navigationBarTitleText": "番茄管家",
+    "navigationBarTextStyle":"white"
   }
 }
