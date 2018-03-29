@@ -338,7 +338,7 @@
             // // 分页dom结构（搜索框，分页组件）
             // 'dom': 't<"bottom"<"pull-left"i><"pull-left info"l><"pull-right"p>>',
             'ajax': {
-                url:'/admin/listGuide',
+                url:'${ctx}/admin/listGuide',
                 type:"POST"
                 // ,
                 // data:getFormJson($('#queryForm'))
