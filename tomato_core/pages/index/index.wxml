@@ -12,7 +12,7 @@
       <navigator class='top-navigator' url='/pages/order/order'>
         <image class='top-right-img' src='/images/index/icon_top_2.png'></image>
       </navigator>
-      <navigator class='top-navigator' url='/pages/mine/mine'>
+      <navigator class='top-navigator' url='/pages/login/login'>
         <image class='top-right-img' src='/images/index/icon_top_3.png'></image>
       </navigator>
     </view>
@@ -26,8 +26,8 @@
       <text>品牌</text>
     </view>
     <view class='table-title-right'>
-      <text>代理层级：我要进货></text>
-      <text>额外费用></text>
+      <text catchtap='showLevelModalDialog'>代理层级：{{nowLevel}} ></text>
+      <text catchtap='showPriceModalDialog'>额外费用：{{outPrice}} ></text>
     </view>
   </view>
   <view class='body-table'>
@@ -39,13 +39,13 @@
     <scroll-view scroll-y='true' class='table-right'>
       <block wx:for="{{brands[selIdx].items}}" wx:for-item="child" wx:key="{{proName}}">
         <view class='table-right-item'>
-          <text class='left-child-text'>{{child.proName}}</text>
+          <text class='left-child-text' catchtap='showNumModalDialog' data-index="{{index}}">{{child.proName}}</text>
           <view class='bottom-child-view'>
-            <text class='price-text'>￥{{child.price}}</text>
+            <text class='price-text' catchtap='showNumModalDialog' data-index="{{index}}">￥{{child.price}}</text>
             <view class='child-right-view'>
-              <image wx:if="{{child.num>0}}" src='/images/index/icon_del.png' id='{{index}}' catchtap='subProNum'></image>
+              <image wx:if="{{child.num>0}}" src='/images/index/icon_del.png' data-cindex="{{index}}" data-pindex="{{selIdx}}" catchtap='subProNum'></image>
               <text class='opt-num-text' wx:if="{{child.num>0}}">{{child.num}}</text>
-              <image src='/images/index/icon_add.png' id='{{index}}' catchtap='addProNum'></image>
+              <image src='/images/index/icon_add.png' data-cindex="{{index}}" data-pindex="{{selIdx}}" catchtap='addProNum'></image>
             </view>
           </view>
         </view>
@@ -56,15 +56,118 @@
   <!--底部-->
   <view class='main-bottom'>
     <view class='bottom-left'>
-      <image class='bottom-left-img' src='/images/index/icon_shop_on.png'></image>
+      <image class='bottom-left-img' src='/images/index/icon_shop_on.png' catchtap='cascadeToggle'></image>
       <view class='bottom-left-num'>{{totalNum}}</view>
       <view class='bottom-left-view'>
         <text class='opt-xuanzhe'>已选择{{selBandNum}}个品牌商品</text>
-        <text class='opt-qingkong'>清空</text>
+        <text class='opt-qingkong' catchtap='clearEmpty'>清空</text>
       </view>
     </view>
     <view class='bottom-right'>
       <button>立即下单</button>
     </view>
+  </view>
+
+  <!-- 数量输入模态框 -->
+  <view class="modal-mask" catchtouchmove="preventTouchMove" wx:if="{{showNumModal}}"></view>
+  <view class="modal-dialog" wx:if="{{showNumModal}}">
+    <text class='head-top'>{{selBrandItem.proName}}</text>
+    <view class='head-item head-brand'>
+      <text class='head-item-left'>品牌：</text>
+      <text class='head-item-right'>{{selBrand.name}}</text>
+    </view>
+    <view class='head-item'>
+      <text class='head-item-left'>代理层级：</text>
+      <text class='head-item-right'>我要进货</text>
+    </view>
+    <view class='head-item'>
+      <text class='head-item-left'>价格：</text>
+      <text class='head-item-right price-red'>￥{{selBrandItem.price}}</text>
+    </view>
+    <view class='head-item'>
+      <text class='head-item-left'>商品数量：</text>
+      <input type="number" placeholder="请输入数量" value='{{selBrandItem.num}}' data-index="{{selBrandItemIndex}}" bindinput='brandItemNumChange'></input>
+    </view>
+    <view class="modal-footer">
+      <view class="btn-cancel" bindtap="hideNumModalDialog">取消</view>
+      <view class="btn-confirm" bindtap="hideNumModalDialog">确定</view>
+    </view>
+  </view>
+
+
+  <!-- 代理层级模态框 -->
+  <view class="modal-mask" catchtouchmove="preventTouchMove" wx:if="{{showLevelModal}}"></view>
+  <view class="modal-dialog" wx:if="{{showLevelModal}}">
+    <view class='modal-level-top'>请选择代理层级</view>
+    <scroll-view scroll-y='true' class='modal-level-scroll'>
+      <block wx:for="{{levelList}}" wx:key="{{name}}">
+        <view class='level-item' catchtap='switchSelectLevel' data-index="{{index}}">
+          <image src="/images/index/icon_chose_{{item.checked?'on':'off'}}.png"></image>
+          <text class="level-item {{item.checked?'level-text-on':''}}">{{item.name}}</text>
+        </view>
+      </block>
+    </scroll-view>
+    <view class="modal-footer">
+      <view class="btn-cancel" bindtap="hideLevelModalDialog">取消</view>
+      <view class="btn-confirm" bindtap="hideLevelModalDialog">确定</view>
+    </view>
+  </view>
+
+
+  <!-- 额外费用弹出框 -->
+  <view class="modal-mask" catchtouchmove="preventTouchMove" wx:if="{{showPriceModal}}"></view>
+  <view class="modal-dialog" wx:if="{{showPriceModal}}">
+    <view class='modal-price'>
+      <text>额外费用</text>
+      <text class='modal-price-symbol'>{{outPriceSymbol}}</text>
+      <input type="number" value='{{modalOutPrice}}' bindinput='brandOutPriceChange'></input>
+      <image src='/images/index/icon_add_sub.png' catchtap='switchOurPriceSymbol'></image>
+    </view>
+    <view class="modal-footer">
+      <view class="btn-cancel" bindtap="hidePriceModalDialog">取消</view>
+      <view class="btn-confirm" bindtap="hidePriceModalDialog">确定</view>
+    </view>
+  </view>
+
+
+  <!-- 购物车弹出框 -->
+  <view wx:if="{{maskVisual}}" class="modal-cart-poup" catchtap='cascadeDismiss'></view>
+  <view wx:if="{{maskVisual}}" class='modal-cart-view' animation="{{animationData}}">
+    <view class='cart-view-top'>
+      <view class='cart-view-main'>
+        <view class='car-view-main-left'>
+          <view class='cart-view-left'>购物车</view>
+          <view>已选择{{totalNum}}件商品</view>
+        </view>
+        <view>
+          <text>合计：</text>
+          <text class='cart-view-right-price'>￥{{totalPrice}}</text>
+        </view>
+      </view>
+      <view class='cart-view-outprice'>
+        <text class='cart-outprice-left'>额外费用</text>
+        <text class='cart-outprice-right'>{{outPrice}}</text>
+      </view>
+    </view>
+    <scroll-view scroll-y='true' class='cart-main-scroll'>
+      <block wx:for="{{brands}}" wx:key="{{name}}" wx:for-index="p_index">
+        <view class='cart-scroll-item' wx:if="{{item.hasSelectItem}}">
+          <view class='cart-scroll-title'>{{item.name}}</view>
+          <block wx:for="{{item.items}}" wx:for-item="child" wx:key="{{proName}}" wx:for-index="c_index">
+            <view class='cart-scroll-detail' wx:if="{{child.num>0}}">
+              <view class='child-left-view'>
+                <view class='child-left-view-title'>{{child.proName}}</view>
+                <view class='child-left-view-price'>￥{{child.price}}</view>
+              </view>
+              <view class='child-right-view'>
+                <image wx:if="{{child.num>0}}" src='/images/index/icon_del.png' data-cindex="{{c_index}}" data-pindex="{{p_index}}" catchtap='subProNum'></image>
+                <text class='opt-num-text' wx:if="{{child.num>0}}">{{child.num}}</text>
+                <image src='/images/index/icon_add.png' data-cindex="{{c_index}}" data-pindex="{{p_index}}" catchtap='addProNum'></image>
+              </view>
+            </view>
+          </block>
+        </view>
+      </block>
+    </scroll-view>
   </view>
 </view>
