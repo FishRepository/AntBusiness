@@ -96,7 +96,7 @@
 
 
   <!-- 代理层级模态框 -->
-  <view class="modal-mask" catchtouchmove="preventTouchMove" wx:if="{{showLevelModal}}"></view>
+  <view class="modal-mask" catchtap='hideLevelModalDialog' catchtouchmove="preventTouchMove" wx:if="{{showLevelModal}}"></view>
   <view class="modal-dialog" wx:if="{{showLevelModal}}">
     <view class='modal-level-top'>请选择代理层级</view>
     <scroll-view scroll-y='true' class='modal-level-scroll'>
@@ -115,7 +115,7 @@
 
 
   <!-- 额外费用弹出框 -->
-  <view class="modal-mask" catchtouchmove="preventTouchMove" wx:if="{{showPriceModal}}"></view>
+  <view class="modal-mask" catchtap='hidePriceModalDialog' catchtouchmove="preventTouchMove" wx:if="{{showPriceModal}}"></view>
   <view class="modal-dialog" wx:if="{{showPriceModal}}">
     <view class='modal-price'>
       <text>额外费用</text>
