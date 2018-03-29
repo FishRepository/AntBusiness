@@ -1,8 +1,7 @@
 {
-  "pages":[
+  "pages": [
     "pages/index/index",
     "pages/login/login",
-    
     "pages/logs/logs",
     "pages/order/order",
     "pages/order/orderDetail/orderDetail",
@@ -11,12 +10,13 @@
     "pages/shop/shopDetail/shopDetail",
     "pages/shop/shopProductOperate/shopProductOperate",
     "pages/shop/shopProductDetail/shopProductDetail",
-    "pages/mine/mine"
+    "pages/mine/mine",
+    "pages/forget/forget"
   ],
-  "window":{
-    "backgroundTextStyle":"light",
+  "window": {
+    "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#e64663",
     "navigationBarTitleText": "番茄管家",
-    "navigationBarTextStyle":"white"
+    "navigationBarTextStyle": "white"
   }
 }
