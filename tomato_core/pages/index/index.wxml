@@ -64,7 +64,7 @@
       </view>
     </view>
     <view class='bottom-right'>
-      <button>立即下单</button>
+      <button catchtap='showOrderSureDialog'>立即下单</button>
     </view>
   </view>
 
@@ -169,5 +169,43 @@
         </view>
       </block>
     </scroll-view>
+  </view>
+
+
+  <!-- 立即下单 -->
+  <view class="modal-mask" catchtap='hideOrderSureDialog' catchtouchmove="preventTouchMove" wx:if="{{showOrderSure}}"></view>
+  <view class="modal-dialog" wx:if="{{showOrderSure}}">
+
+    <view class='modal-main'>
+
+
+      <view class='order-main-img'>
+        <image src='/images/index/icon_sure_outorder.png'></image>
+      </view>
+      <view class='order-info-static'>
+        <view class='static-top-left'></view>
+        <view class='static-main-middle'>番茄口令已复制成功，粘贴口令给客户</view>
+        <view class='static-top-right'></view>
+      </view>
+      <view class='order-price-static'>
+        <view class='static-bottom-left'></view>
+        <view class='static-main-middle'>
+          <view class='order-price-view'>
+            共计：
+            <text>{{totalNum}}</text>件商品
+          </view>
+          <view class='order-price-view'>
+            总计：
+            <text>￥{{totalPrice}}</text>
+          </view>
+        </view>
+
+        <view class='static-bottom-right'></view>
+      </view>
+    </view>
+    <view class="order-modal-footer">
+      <view class="order-btn-cancel" bindtap="hideOrderSureDialog">修改订单</view>
+      <view class="order-btn-confirm" bindtap="hideOrderSureDialog">下一单</view>
+    </view>
   </view>
 </view>

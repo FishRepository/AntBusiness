@@ -469,16 +469,18 @@ Page({
    * 切换购物车开与关
    */
   cascadeToggle: function () {
+    
     var that = this
-    if (that.data.totalPrice > 0) {
-      if (that.data.maskVisual) {
-        that.cascadeDismiss();
-      } else {
-        that.cascadePopup();
-      }
-    } else {
+    if (that.data.maskVisual) {
       that.cascadeDismiss();
+    } else {
+      that.cascadePopup();
     }
+    // if (that.data.totalPrice > 0) {
+      
+    // } else {
+    //   that.cascadeDismiss();
+    // }
   },
   /**
    * 购物车打开动画
@@ -509,6 +511,33 @@ Page({
     this.setData({
       maskVisual: false
     });
-  }
+  },
 
+
+  /**
+     * 立即下单弹窗
+     */
+  showOrderSureDialog: function (e) {
+    if (this.data.totalNum>0){
+      this.setData({
+        showOrderSure: true,
+        maskVisual: false
+      })
+    }else{
+      wx.showToast({
+        title: '当前订单无商品',
+        icon: 'none',
+        duration: 2000
+      })
+    }
+    
+  },
+  /**
+     * 隐藏立即下单弹窗
+     */
+  hideOrderSureDialog: function () {
+    this.setData({
+      showOrderSure: false
+    });
+  }
 })
