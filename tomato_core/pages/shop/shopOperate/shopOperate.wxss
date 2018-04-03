@@ -4,10 +4,26 @@
   position: fixed;
   height: 100%;
   width: 100%;
-  /* display: flex; */
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.main-top {
+  height: 240px;
+  position: fixed;
+  width: 100%;
+  background-color: white;
+  top: 0;
+  z-index: 999;
+}
+
+.main-scroll {
+  margin-top: 240px;
+  margin-bottom: 50px;
+  height: 100%;
+  display: flex;
 }
 
 .view-top {

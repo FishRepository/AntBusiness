@@ -2,11 +2,11 @@
 <view class='container'>
 
   <scroll-view scroll-y='true' class='main-scroll'>
-    <block wx:for="{{items}}" wx:key="{{name}}">
+    <block wx:for="{{items}}" wx:key="{{brand_id}}">
       <view class="item-view {{item.isTouchMove?'touch-move-active':''}}" data-index="{{index}}" bindtouchstart="touchstart" bindtouchmove="touchmove" catchtap='gotoGetail'>
         <view class='item-title'>
-          <text class='item-title-top'>{{item.name}}</text>
-          <text class='item-title-bottom'>共{{item.proNum}}种商品</text>
+          <text class='item-title-top'>{{item.brand_name}}</text>
+          <text class='item-title-bottom'>共{{item.goods_count}}种商品</text>
         </view>
         <view class='item-opt'>
           <view class='item-opt-edit' catchtap='editShop' data-index="{{index}}">编辑</view>

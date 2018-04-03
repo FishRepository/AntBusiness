@@ -1,4 +1,5 @@
 // pages/order/order.js
+const util = require('../../utils/util.js');
 Page({
 
   /**
@@ -6,98 +7,8 @@ Page({
    */
   data: {
     tabType: 1,
-    outOrders: [{
-      date: '2018年02月',
-      items: [{
-        date: '02-27',
-        brand: 'A.T',
-        price: '999'
-      }, {
-        date: '02-17',
-        brand: 'A.T、DIOR',
-        price: '999'
-      }, {
-        date: '02-07',
-        brand: 'DIOR',
-        price: '999'
-      }]
-    }, {
-      date: '2017年02月',
-      items: [{
-        date: '10-27',
-        brand: 'A.T',
-        price: '999'
-      }, {
-        date: '09-27',
-        brand: 'A.T',
-        price: '999'
-      }, {
-        date: '08-27',
-        brand: 'A.T',
-        price: '999'
-      }]
-    }, {
-      date: '2018年02月',
-      items: [{
-        date: '02-27',
-        brand: 'A.T',
-        price: '999'
-      }, {
-        date: '02-17',
-        brand: 'A.T、DIOR',
-        price: '999'
-      }, {
-        date: '02-07',
-        brand: 'DIOR',
-        price: '999'
-      }]
-    }, {
-      date: '2018年02月',
-      items: [{
-        date: '02-27',
-        brand: 'A.T',
-        price: '999'
-      }, {
-        date: '02-17',
-        brand: 'A.T、DIOR',
-        price: '999'
-      }, {
-        date: '02-07',
-        brand: 'DIOR',
-        price: '999'
-      }]
-    }],
-    inOrders: [{
-      date: '2018年01月',
-      items: [{
-        date: '08-27',
-        brand: '阿斯丹妮',
-        price: '699'
-      }, {
-        date: '07-17',
-        brand: '格莱美',
-        price: '699'
-      }, {
-        date: '06-07',
-        brand: 'DIOR',
-        price: '699'
-      }]
-    }, {
-      date: '2017年01月',
-      items: [{
-        date: '04-17',
-        brand: '丹顿',
-        price: '799'
-      }, {
-        date: '03-20',
-        brand: '阿尼玛',
-        price: '899'
-      }, {
-        date: '02-27',
-        brand: '鳄鱼',
-        price: '899'
-      }]
-    }],
+    outOrders: [],
+    inOrders: [],
     startX: 0,
     startY: 0
   },
@@ -106,23 +17,56 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    var list_out = this.data.outOrders
-    for (var i = 0, i_len = list_out.length; i < i_len; ++i) {
-      var chile_list_out = list_out[i].items;
-      for (var j = 0, j_len = chile_list_out.length; j < j_len; ++j) {
-        chile_list_out[j].isTouchMove = false
+    var _that = this
+    //查询出货订单
+    wx.request({
+      url: 'http://120.24.49.36/mapi/order/listPageAllOrder.do',
+      data: {
+        account_id: 1,
+        type: 3,//出货订单
+        currentPage: 1,
+        showCount: 10
+      },
+      success: function (res) {
+        // console.log(res.data)
+        if (res.data.code == 0) {
+          var list_out = res.data.list;
+          for (var i = 0, i_len = list_out.length; i < i_len; ++i){
+            var chile_list_out = list_out[i].orderlist;
+            for (var j = 0, j_len = chile_list_out.length; j < j_len; ++j) {
+              chile_list_out[j].order_time = util.formatTimeStamp(chile_list_out[j].create_time, 'M-D')
+            }
+          }
+          _that.setData({
+            outOrders: list_out
+          })
+        }
       }
-    }
-    var list_in = this.data.inOrders
-    for (var i = 0, i_len = list_in.length; i < i_len; ++i) {
-      var chile_list_in = list_in[i].items;
-      for (var j = 0, j_len = chile_list_in.length; j < j_len; ++j) {
-        chile_list_in[j].isTouchMove = false
+    })
+    //查询进货订单
+    wx.request({
+      url: 'http://120.24.49.36/mapi/order/listPageAllOrder.do',
+      data: {
+        account_id: 1,
+        type: 4,//进货订单
+        currentPage: 1,
+        showCount: 10
+      },
+      success: function (res) {
+        // console.log(res.data)
+        if (res.data.code == 0) {
+          var list_in = res.data.list;
+          for (var i = 0, i_len = list_in.length; i < i_len; ++i) {
+            var chile_list_in = list_in[i].orderlist;
+            for (var j = 0, j_len = chile_list_in.length; j < j_len; ++j) {
+              chile_list_in[j].order_time = util.formatTimeStamp(chile_list_in[j].create_time, 'M-D')
+            }
+          }
+          _that.setData({
+            inOrders: res.data.list
+          })
+        }
       }
-    }
-    this.setData({
-      outOrders: list_out,
-      inOrders: list_in
     })
   },
 
@@ -186,7 +130,7 @@ Page({
     //重置所有滑块
     var list_out = this.data.outOrders
     for (var i = 0, i_len = list_out.length; i < i_len; ++i) {
-      var chile_list_out = list_out[i].items;
+      var chile_list_out = list_out[i].orderlist;
       for (var j = 0, j_len = chile_list_out.length; j < j_len; ++j) {
         if (chile_list_out[j].isTouchMove) {
           chile_list_out[j].isTouchMove = false;
@@ -195,7 +139,7 @@ Page({
     }
     var list_in = this.data.inOrders
     for (var i = 0, i_len = list_in.length; i < i_len; ++i) {
-      var chile_list_in = list_in[i].items;
+      var chile_list_in = list_in[i].orderlist;
       for (var j = 0, j_len = chile_list_in.length; j < j_len; ++j) {
         if (chile_list_in[j].isTouchMove) {
           chile_list_in[j].isTouchMove = false
@@ -221,7 +165,7 @@ Page({
     //重置所有滑块
     var list_out = this.data.outOrders
     for (var i = 0, i_len = list_out.length; i < i_len; ++i) {
-      var chile_list_out = list_out[i].items;
+      var chile_list_out = list_out[i].orderlist;
       for (var j = 0, j_len = chile_list_out.length; j < j_len; ++j) {
         if (chile_list_out[j].isTouchMove) {
           chile_list_out[j].isTouchMove = false;
@@ -230,7 +174,7 @@ Page({
     }
     var list_in = this.data.inOrders
     for (var i = 0, i_len = list_in.length; i < i_len; ++i) {
-      var chile_list_in = list_in[i].items;
+      var chile_list_in = list_in[i].orderlist;
       for (var j = 0, j_len = chile_list_in.length; j < j_len; ++j) {
         if (chile_list_in[j].isTouchMove) {
           chile_list_in[j].isTouchMove = false
@@ -250,7 +194,7 @@ Page({
     //开始触摸时 重置所有删除
     var list_out = this.data.outOrders
     for (var i = 0, i_len = list_out.length; i < i_len; ++i) {
-      var chile_list_out = list_out[i].items;
+      var chile_list_out = list_out[i].orderlist;
       for (var j = 0, j_len = chile_list_out.length; j < j_len; ++j) {
         if (chile_list_out[j].isTouchMove) {
           chile_list_out[j].isTouchMove = false;
@@ -259,7 +203,7 @@ Page({
     }
     var list_in = this.data.inOrders
     for (var i = 0, i_len = list_in.length; i < i_len; ++i) {
-      var chile_list_in = list_in[i].items;
+      var chile_list_in = list_in[i].orderlist;
       for (var j = 0, j_len = chile_list_in.length; j < j_len; ++j) {
         if (chile_list_in[j].isTouchMove) {
           chile_list_in[j].isTouchMove = false
@@ -288,7 +232,7 @@ Page({
       //获取滑动角度
       angle = that.angle({ X: startX, Y: startY }, { X: touchMoveX, Y: touchMoveY });
     if (1 == nowTab) {
-      var chile_list_out = list_out[p_index].items;
+      var chile_list_out = list_out[p_index].orderlist;
       for (var j = 0, j_len = chile_list_out.length; j < j_len; ++j) {
         chile_list_out[j].isTouchMove = false
         //滑动超过30度角 return
@@ -301,7 +245,7 @@ Page({
         }
       }
     } else {
-      var chile_list_in = list_in[p_index].items;
+      var chile_list_in = list_in[p_index].orderlist;
       for (var j = 0, j_len = chile_list_in.length; j < j_len; ++j) {
         chile_list_in[j].isTouchMove = false
         //滑动超过30度角 return
@@ -332,35 +276,45 @@ Page({
     return 360 * Math.atan(_Y / _X) / (2 * Math.PI);
   },
 
-/**
- * 进入订单详情
- */
-  gotoGetail:function(e){
+  /**
+   * 进入订单详情
+   */
+  gotoGetail: function (e) {
+    var _that=this,
+      nowTab = _that.data.tabType,//当前页签
+      p_index = e.currentTarget.dataset.pindex,//当前父索引
+      c_index = e.currentTarget.dataset.cindex;//当前索引
+      var order_id;
+      if (1==nowTab){
+        order_id = _that.data.outOrders[p_index].orderlist[c_index].order_id
+      }else{
+        order_id = _that.data.inOrders[p_index].orderlist[c_index].order_id
+      }
     wx.navigateTo({
-      url: '/pages/order/orderDetail/orderDetail',
+      url: '/pages/order/orderDetail/orderDetail?order_id=' + order_id
     })
   },
 
   /**
    * 删除订单
    */
-  delOrder:function(e){
+  delOrder: function (e) {
     var that = this,
-        nowTab = that.data.tabType,//当前页签
-        p_index = e.currentTarget.dataset.pindex,//当前父索引
-        c_index = e.currentTarget.dataset.cindex;//当前索引
+      nowTab = that.data.tabType,//当前页签
+      p_index = e.currentTarget.dataset.pindex,//当前父索引
+      c_index = e.currentTarget.dataset.cindex;//当前索引
     wx.showModal({
       title: '提示',
       content: '确认删除该订单？',
       success: function (res) {
         if (res.confirm) {
-          if (1 == nowTab){
-            that.data.outOrders[p_index].items.splice(c_index, 1)
+          if (1 == nowTab) {
+            that.data.outOrders[p_index].orderlist.splice(c_index, 1)
             that.setData({
               outOrders: that.data.outOrders
             })
-          }else{
-            that.data.inOrders[p_index].items.splice(c_index, 1)
+          } else {
+            that.data.inOrders[p_index].orderlist.splice(c_index, 1)
             that.setData({
               inOrders: that.data.inOrders
             })

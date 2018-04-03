@@ -6,23 +6,9 @@ Page({
    */
   data: {
     item: {
-      name: 'YSL星辰口红【小】',
-      parentName: 'A.T',
-      itemPrice: [
-        {
-          name: '我的进货价',
-          price: 999.00
-        }, {
-          name: '零售价',
-          price: 999.00
-        }, {
-          name: '一级代理',
-          price: 999.00
-        }, {
-          name: '进货价出售',
-          price: 999.00
-        }
-      ]
+      brand: 'YSL星辰口红【小】',
+      goods: 'A.T',
+      items: []
     }
   },
 
@@ -30,7 +16,27 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    var brandId = options.brand_id,
+      goodsId = options.goods_id,
+      _that = this;
+    wx.request({
+      url: 'http://120.24.49.36/mapi/goods/queryOneGoods.do',
+      data: {
+        account_id: 1,
+        brand_id: brandId,
+        goods_id: goodsId
+      },
+      success: function (res) {
+        console.log(res.data)
+        if (res.data.code == 0) {
+          _that.setData({
+            brand: res.data.brand,
+            goods: res.data.goods,
+            items: res.data.list
+          })
+        }
+      }
+    })
   },
 
   /**

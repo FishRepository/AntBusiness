@@ -5,68 +5,32 @@ Page({
    * 页面的初始数据
    */
   data: {
-    orderDetail: {
-      userinfo: {
-        head: '/images/order/icon_user.jpg',
-        name: '钟宇光',
-        phone: '15972934871',
-        address: '湖北省武汉市武昌区中南路9号中南花园酒店22座3001',
-        memo: '快递给点力，不可以退货'
-      },
-      date: '2018年03月12日',
-      totalNum: 8,
-      totalPrice: 9999999999,
-      outPrice: -10,
-      items: [{
-        brand: 'ONLY',
-        desp: '一级代理',
-        pro: [{
-          name: '星辰化妆品【大】',
-          num: 1,
-          unitPrice: 999
-        }, {
-          name: '星辰化妆品【大】',
-          num: 2,
-          unitPrice: 999
-        }]
-      },
-      {
-        brand: 'A.T',
-        desp: '零售价',
-        pro: [{
-          name: '星辰化妆品【中】',
-          num: 1,
-          unitPrice: 999
-        }, {
-          name: '星辰化妆品【中】',
-          num: 1,
-          unitPrice: 999
-        }, {
-          name: '星辰化妆品【中】',
-          num: 1,
-          unitPrice: 999
-        }, {
-          name: '星辰化妆品【中】',
-          num: 1,
-          unitPrice: 999
-        }, {
-          name: '星辰化妆品【中】',
-          num: 1,
-          unitPrice: 999
-        }, {
-          name: '星辰化妆品【中】',
-          num: 1,
-          unitPrice: 999
-        }]
-      }]
-    }
+    order:null,
+    orderDetail:[]
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    var _orderId = options.order_id,
+    _that=this
+    wx.request({
+      url: 'http://120.24.49.36/mapi/order/queryOrder.do',
+      data:{
+        account_id: 1,
+        order_id: _orderId
+      },
+      success:function(res){
+        console.log(res.data)
+        if(res.data.code==0){
+          _that.setData({
+            order: res.data.order,
+            orderDetail:res.data.list
+          })
+        }
+      }
+    })
   },
 
   /**

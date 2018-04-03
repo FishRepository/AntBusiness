@@ -1,37 +1,42 @@
 <!--pages/shop/shopOperate/shopOperate.wxml-->
 <view class='container'>
-  <view class='view-top'>
-    <text>品牌名称：</text>
-    <input value='{{item_name}}'></input>
-  </view>
-  <view class='view-title'>默认代理商级别</view>
-  <view class='view-default'>
-    <text class='default-left'>级别名称：</text>
-    <text class='default-right'>我的进货价</text>
-  </view>
-  <view class='view-default'>
-    <text class='default-left'>级别名称：</text>
-    <text class='default-right'>零售价</text>
-  </view>
-  <view class='view-default'>
-    <text class='default-left'>级别名称：</text>
-    <text class='default-right'>进货价出售</text>
-  </view>
-  <view class='view-title'>自定义代理商级别</view>
-
-  <block wx:for="{{defineItems}}" wx:key="{{name}}">
-    <view class='view-user-define'>
-      <view class='view-user-define-left'>
-        <image src='/images/shop/shopOperate/icon_del.png'></image>
-        <text>级别名称：</text>
-      </view>
-      <input value='{{item.name}}'></input>
+  <view class='main-top'>
+    <view class='view-top'>
+      <text>品牌名称：</text>
+      <input value='{{item_name}}'></input>
     </view>
-  </block>
-
-  <view class='view-add-define' bindtap='addDefine'>
-    <image src='/images/shop/shopOperate/icon_add.png'></image>
-    <text>添加代理商级别</text>
+    <view class='view-title'>默认代理商级别</view>
+    <view class='view-default'>
+      <text class='default-left'>级别名称：</text>
+      <text class='default-right'>我的进货价</text>
+    </view>
+    <view class='view-default'>
+      <text class='default-left'>级别名称：</text>
+      <text class='default-right'>零售价</text>
+    </view>
+    <view class='view-default'>
+      <text class='default-left'>级别名称：</text>
+      <text class='default-right'>进货价出售</text>
+    </view>
+    <view class='view-title'>自定义代理商级别</view>
   </view>
+
+  <scroll-view scroll-y='true' class='main-scroll'>
+    <block wx:for="{{defineItems}}" wx:key="{{agentlevel_id}}">
+      <view class='view-user-define' wx:if="{{item.agentlevel_default==0}}">
+        <view class='view-user-define-left'>
+          <image src='/images/shop/shopOperate/icon_del.png' bindtap='delDefine' data-index="{{index}}"></image>
+          <text>级别名称：</text>
+        </view>
+        <input value='{{item.agentlevel_name}}'></input>
+      </view>
+    </block>
+
+    <view class='view-add-define' bindtap='addDefine'>
+      <image src='/images/shop/shopOperate/icon_add.png'></image>
+      <text>添加代理商级别</text>
+    </view>
+  </scroll-view>
+
   <button class='view-button'>保存</button>
 </view>

@@ -6,53 +6,37 @@ Page({
    * 页面的初始数据
    */
   data: {
-    items: [{
-      name: 'YSL星辰口红【小】YSL星辰口红'
-    }, {
-      name: 'YSL星辰口红【B】'
-    }, {
-      name: 'YSL星辰口红【C】'
-    }, {
-      name: 'YSL星辰口红【D】'
-    }, {
-      name: 'YSL星辰口红【E】'
-    }, {
-      name: 'YSL星辰口红【F】'
-    }, {
-      name: 'YSL星辰口红【G】'
-    }, {
-      name: 'YSL星辰口红【H】'
-    }, {
-      name: 'YSL星辰口红【I】'
-    }, {
-      name: 'YSL星辰口红【J】'
-    }, {
-      name: 'YSL星辰口红【J】'
-    }, {
-      name: 'YSL星辰口红【J】'
-    }, {
-      name: 'YSL星辰口红【J】'
-    }, {
-      name: 'YSL星辰口红【J】'
-    }, {
-      name: 'YSL星辰口红【J】'
-    }, {
-      name: 'YSL星辰口红【J】'
-    }, {
-      name: 'YSL星辰口红【J】'
-    }, {
-      name: 'YSL星辰口红【J】'
-    }, {
-      name: 'YSL星辰口红【JJJJ】'
-    }],
+    items: [],
     startX: 0,
-    startY: 0
+    startY: 0,
+    brandId: null
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    var _brandId = options.brand_id,
+      _that = this;
+    _that.setData({
+      brandId: _brandId
+    })
+    wx.request({
+      url: 'http://120.24.49.36/mapi/goods/queryGoods.do',
+      data: {
+        account_id: 1,
+        brand_id: _brandId,
+        type: 0
+      },
+      success: function (res) {
+        // console.log(res.data)
+        if (res.data.code == 0) {
+          _that.setData({
+            items: res.data.list
+          })
+        }
+      }
+    })
     var list = this.data.items
     for (var j = 0, len = list.length; j < len; ++j) {
       list[j].isTouchMove = false
@@ -196,8 +180,10 @@ Page({
   },
   //进入品牌详情
   gotoGetail: function (e) {
+    var idx = e.currentTarget.dataset.index,
+        _that = this;
     wx.navigateTo({
-      url: '/pages/shop/shopProductDetail/shopProductDetail'
+      url: '/pages/shop/shopProductDetail/shopProductDetail?brand_id=' + _that.data.brandId + '&goods_id=' + _that.data.items[idx].goods_id
     })
   }
 })

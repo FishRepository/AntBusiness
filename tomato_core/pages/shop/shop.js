@@ -5,40 +5,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    items: [{
-      name: 'DIOR',
-      proNum: 23
-    }, {
-      name: 'CHANEL',
-      proNum: 22
-    }, {
-      name: 'A.T',
-      proNum: 10
-    }, {
-      name: '雅诗兰黛',
-      proNum: 12
-    },
-    {
-      name: '施华洛',
-      proNum: 8
-    },
-    {
-      name: 'DIOR',
-      proNum: 23
-    }, {
-      name: 'CHANEL',
-      proNum: 22
-    }, {
-      name: 'A.T',
-      proNum: 10
-    }, {
-      name: '雅诗兰黛',
-      proNum: 12
-    },
-    {
-      name: '施华洛',
-      proNum: 8
-    }],
+    items: [],
     startX: 0,
     startY: 0
   },
@@ -47,11 +14,27 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    var list = this.data.items
+    var _that = this
+    wx.request({
+      url: 'http://120.24.49.36/mapi/goods/queryBrand.do',
+      data: {
+        account_id: 1,
+        type: 1
+      },
+      success: function (res) {
+        if (res.data.code == 0) {
+          // console.log(res.data.list)
+          _that.setData({
+            items: res.data.list
+          })
+        }
+      }
+    })
+    var list = _that.data.items
     for (var j = 0, len = list.length; j < len; ++j) {
       list[j].isTouchMove = false
     }
-    this.setData({
+    _that.setData({
       items: list
     })
   },
@@ -176,22 +159,23 @@ Page({
   //编辑事件
   editShop: function (e) {
     var idx = e.currentTarget.dataset.index
-    var that = this
-    var sel_item = that.data.items[idx]
+    var _that = this;
     wx.navigateTo({
-      url: '/pages/shop/shopOperate/shopOperate?name=' + sel_item.name
+      url: '/pages/shop/shopOperate/shopOperate?brand_id=' + _that.data.items[idx].brand_id
     })
   },
   //添加商品事件
   addShop: function (e) {
     wx.navigateTo({
-      url: '/pages/shop/shopOperate/shopOperate?name='
+      url: '/pages/shop/shopOperate/shopOperate?brand_id='
     })
   },
   //进入品牌详情
   gotoGetail: function (e) {
+    var idx = e.currentTarget.dataset.index,
+      _that = this;
     wx.navigateTo({
-      url: '/pages/shop/shopDetail/shopDetail'
+      url: '/pages/shop/shopDetail/shopDetail?brand_id=' + _that.data.items[idx].brand_id
     })
   }
 })

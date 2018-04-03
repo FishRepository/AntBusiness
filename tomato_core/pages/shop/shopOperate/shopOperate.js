@@ -5,30 +5,34 @@ Page({
    * 页面的初始数据
    */
   data: {
-    item_name:null,
-    defineItems:[{
-      name:'批发价'
-    },{
-        name: '代理价'
-    },{
-        name: '团购价'
-    },{
-        name: '内部价'
-    }]
+    item_name: '',
+    defineItems: []
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    var name = options.name
-    if(name){
-      this.setData({
-        item_name: name
-      })
-    }else{
-      this.setData({
-        defineItems: []
+    var _brandId = options.brand_id,
+      _that = this;
+    if (_brandId) {
+      //编辑
+      wx.request({
+        url: 'http://120.24.49.36/mapi/goods/queryAgentLevel.do',
+        data: {
+          account_id: 1,
+          brand_id: _brandId,
+          type: 1
+        },
+        success: function (res) {
+          // console.log(res.data)
+          if (res.data.code == 0) {
+            _that.setData({
+              item_name: res.data.brand_name,
+              defineItems: res.data.list
+            })
+          }
+        }
       })
     }
   },
@@ -82,10 +86,24 @@ Page({
 
   },
 
-/**
- * 添加自定义代理商级别
- */
-  addDefine:function(e){
-    
+  /**
+   * 添加自定义代理商级别
+   */
+  addDefine: function (e) {
+    var _that = this,
+      length = _that.data.defineItems.length;
+    _that.data.defineItems.splice(length, 0, { agentlevel_name: '', agentlevel_default: 0 })
+    _that.setData({
+      defineItems: _that.data.defineItems
+    })
+  },
+
+  delDefine: function (e) {
+    var _that = this,
+      idx = e.currentTarget.dataset.index;//当前索引
+    _that.data.defineItems.splice(idx, 1)
+    _that.setData({
+      defineItems: _that.data.defineItems
+    })
   }
 })

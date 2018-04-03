@@ -83,7 +83,9 @@
 }
 
 .order-main {
-  margin-top: 180px;
+  width: 100%;
+  margin-bottom: 50px;
+  /* margin-top: 180px; */
 }
 
 .order-date {
