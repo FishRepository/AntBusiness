@@ -81,6 +81,8 @@
         var password = $('#password').val();
         $.ajax({
             url: "${ctx}/login/validate",
+            type: 'post',
+            dataType: 'json',
             data: {
                 username: username,
                 password:password

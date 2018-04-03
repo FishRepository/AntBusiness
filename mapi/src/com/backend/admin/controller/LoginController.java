@@ -12,17 +12,23 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+/**
+ * @author caojiantao
+ */
 @Controller
 @RequestMapping("/login")
 public class LoginController {
 
-    @RequestMapping("")
-    public ModelAndView login(HttpServletRequest request , HttpSession session){
+    private final static String USERNAME = "zhangsan";
 
+    private final static String PASSWORD = "123456";
+
+    @RequestMapping("")
+    public ModelAndView login(HttpServletRequest request) {
         ModelAndView model = new ModelAndView();
-        if(SessionUtils.isLogin(request)){
+        if (SessionUtils.isLogin(request)) {
             model.setViewName("admin/index");
-        }else {
+        } else {
             model.setViewName("admin/page-login");
         }
         return model;
@@ -30,16 +36,19 @@ public class LoginController {
 
     @RequestMapping("/validate")
     @ResponseBody
-    public RequestResultVO validate(@RequestParam(value = "username") String username, @RequestParam(value = "password") String password){
+    public RequestResultVO validate(@RequestParam(value = "username") String username,
+                                    @RequestParam(value = "password") String password,
+                                    HttpSession session) {
         RequestResultVO vo = new RequestResultVO();
-        if(StringUtils.isBlank(username)||StringUtils.isBlank(password)){
+        if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
             vo.setSuccess(false);
             return vo;
         }
-        if(!username.equals("zhangsan") || !password.equals("123456")){
+        if (!username.equals(USERNAME) || !password.equals(PASSWORD)) {
             vo.setSuccess(false);
             return vo;
         }
+        session.setAttribute("username", username);
         vo.setSuccess(true);
         return vo;
     }
