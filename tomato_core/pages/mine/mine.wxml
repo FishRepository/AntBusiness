@@ -1,6 +1,6 @@
  <view class='userinfo'>
     <image class='userinfo-avatar' src='/images/logo.png'></image>
-    <text class='userinfo-nickname'>曹建涛</text>
+    <text class='userinfo-nickname'>{{userInfo.account_username?userInfo.account_username:''}}</text>
   </view>
 
   <view class='userinfo-contact'>
@@ -8,18 +8,18 @@
     <view class='v-text'>
       <image src='/images/login/icon_phone.png'></image>
       <text>手机号</text>
-      <text class='text-right'>13437104137</text>
+      <text class='text-right'>{{userInfo.account_userphone}}</text>
     </view>
     <view class='divider'></view>
     <view class='v-text'>
       <image src='/images/login/icon_weixin.png'></image>
       <text>微信号</text>
-      <text class='text-right'>已绑定</text>
+      <text class='text-right'>{{userInfo.account_wechat?'已绑定':'未绑定'}}</text>
     </view>
     <view class='divider'></view>
   </view>
 
-  <button class='btn-logout'>退出登录</button>
+  <button class='btn-logout' bindtap='loginOut'>退出登录</button>
 
   <view class='download'>
     <image src='/images/logo.png' class='download-logo'></image>

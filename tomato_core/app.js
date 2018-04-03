@@ -34,6 +34,18 @@ App({
     })
   },
   globalData: {
-    userInfo: null
+    userInfo: {
+      account_address: "",
+      account_icon: "",
+      account_id: "",
+      account_imei: "",
+      account_integral: "",
+      account_qq: "",
+      account_username: "",
+      account_userphone: "",
+      account_wechat: "",
+      last_time: "",
+      password:""
+    }
   }
 })

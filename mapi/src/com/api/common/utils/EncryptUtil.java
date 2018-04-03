@@ -2,6 +2,7 @@ package com.api.common.utils;
 
 import java.io.UnsupportedEncodingException;
 
+import com.key.KeyUtils;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -33,5 +34,11 @@ public class EncryptUtil {
             }  
         }  
         return result;  
+    }
+
+    public static void main(String[] args) {
+        String str = "BC453CA4CC09D0954E62D12856F4598C";
+
+        System.out.println(KeyUtils.decodepwd(str));
     }
 }

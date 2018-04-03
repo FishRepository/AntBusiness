@@ -1,7 +1,7 @@
 {
   "pages": [
-    "pages/index/index",
     "pages/login/login",
+    "pages/index/index",
     "pages/logs/logs",
     "pages/order/order",
     "pages/order/orderDetail/orderDetail",
@@ -11,7 +11,8 @@
     "pages/shop/shopProductOperate/shopProductOperate",
     "pages/shop/shopProductDetail/shopProductDetail",
     "pages/mine/mine",
-    "pages/forget/forget"
+    "pages/forget/forget",
+    "pages/regist/regist"
   ],
   "window": {
     "backgroundTextStyle": "light",

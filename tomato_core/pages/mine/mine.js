@@ -1,4 +1,5 @@
 // pages/mine/mine.js
+var app = getApp();
 var WebService = require('../../utils/webService.js');
 Page({
 
@@ -6,14 +7,18 @@ Page({
    * 页面的初始数据
    */
   data: {
-    url:''
+    userInfo:null
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    var userInfo = app.globalData.userInfo;
+    var that = this;
+    that.setData({
+      userInfo: userInfo
+    });
   },
 
   /**
@@ -70,6 +75,14 @@ Page({
     var sendUrl = WebService.HOST + WebService.SEND_CODE_URL;
     that.setData({
       url: sendUrl
+    })
+  },
+
+  loginOut: function () {
+    wx.clearStorage();
+    app.globalData.userInfo = null;
+    wx.redirectTo({
+      url: '/pages/login/login',
     })
   }
 })

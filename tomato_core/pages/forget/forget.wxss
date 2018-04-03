@@ -58,3 +58,16 @@ page {
 .btn-verification::after {
   border: 1px solid #e44865;
 }
+
+.btn-verify-forbidden {
+  position:absolute;
+  right: 30rpx;
+  color: #8E8E8E;
+  margin-right:0;
+  font-size: 12pt;
+  line-height: 2;
+}
+
+.btn-verifiy-forbidden::after {
+  border: 1px solid #8E8E8E;
+}

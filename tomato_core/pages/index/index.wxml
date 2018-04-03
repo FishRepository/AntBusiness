@@ -12,7 +12,7 @@
       <navigator class='top-navigator' url='/pages/order/order'>
         <image class='top-right-img' src='/images/index/icon_top_2.png'></image>
       </navigator>
-      <navigator class='top-navigator' url='/pages/forget/forget'>
+      <navigator class='top-navigator' url='/pages/mine/mine'>
         <image class='top-right-img' src='/images/index/icon_top_3.png'></image>
       </navigator>
     </view>
