@@ -1,0 +1,73 @@
+/* pages/login/login.wxss */
+page {
+  height: 100%;
+  background-color: #f2f2f2;
+}
+
+.v-logo {
+  padding: 40rpx 0 60rpx 0;
+  text-align: center;
+}
+
+.img-logo {
+  width: 130rpx;
+  height: 130rpx;
+}
+
+.v-input {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  background-color: white;
+}
+
+.v-input input {
+  display: inline-block;
+}
+
+.divider {
+  height: 2rpx;
+  background-color: #d8d6d6;
+}
+
+.v-operate {
+  margin-top: 100rpx;
+  text-align: center;
+}
+
+.btn {
+  width: 80%;
+  border-color: #e44865;
+  background-color: transparent;
+}
+
+.btn-primary {
+  color: white;
+  background-color: #e44865;
+}
+
+.btn-verification {
+  position:absolute;
+  right: 30rpx;
+  color: #e44865;
+  margin-right:0;
+  font-size: 12pt;
+  line-height: 2;
+}
+
+.btn-verification::after {
+  border: 1px solid #e44865;
+}
+
+.btn-verify-forbidden {
+  position:absolute;
+  right: 30rpx;
+  color: #8E8E8E;
+  margin-right:0;
+  font-size: 12pt;
+  line-height: 2;
+}
+
+.btn-verifiy-forbidden::after {
+  border: 1px solid #8E8E8E;
+}
