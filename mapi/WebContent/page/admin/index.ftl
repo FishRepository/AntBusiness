@@ -220,82 +220,84 @@
 
     <div class="modal fade"
          tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
-        <div class="modal-dialog" role="document" >
+        <div class="modal-dialog" role="document">
             <div class="modal-content" style="width:900px;">
                 <div class="modal-header">
                     <h5 class="modal-title">新增条目</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal">
-                        <div class="form-group row">
-                            <label class="control-label col-md-3">标题&nbsp;：</label>
-                            <div class="col-md-8">
-                                <input id="title" name="title" class="form-control" type="text" placeholder="Enter full name">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="control-label col-md-3">等级&nbsp;：</label>
-                            <div class="col-md-8">
-                                <div class="form-check">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input" type="radio" value="1" name="type">初级
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input" type="radio" value="2" name="type">高级
-                                    </label>
+                    <fieldset id="fieldset">
+                        <form id="form-data" class="form-horizontal" enctype="multipart/form-data">
+                            <input name="id" type="text" hidden>
+                            <div class="form-group row">
+                                <label class="control-label col-md-3">标题&nbsp;：</label>
+                                <div class="col-md-8">
+                                    <input name="title" class="form-control" type="text" placeholder="Enter full name">
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="control-label col-md-3">功能说明&nbsp;：</label>
-                            <div class="col-md-8">
-                                <textarea id="functionDes" name="functionDes" class="form-control" rows="4" placeholder="Enter your address"></textarea>
+                            <div class="form-group row">
+                                <label class="control-label col-md-3">等级&nbsp;：</label>
+                                <div class="col-md-8">
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="radio" value="1" name="type" checked>初级
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="radio" value="2" name="type">高级
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="control-label col-md-3">操作介绍&nbsp;：</label>
-                            <div class="col-md-8">
-                                <button id="addOne" class="btn btn-sm btn-success" type="button"><i class="fa fa-plus-circle"></i>增加</button>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <button id="minusOne" class="btn btn-danger btn-sm" type="button"><i class="fa fa-minus-circle"></i>删除</button>
+                            <div class="form-group row">
+                                <label class="control-label col-md-3">功能说明&nbsp;：</label>
+                                <div class="col-md-8">
+                                    <textarea name="functionDes" class="form-control" rows="4" placeholder="Enter your address"></textarea>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row" id="div-opIntroduceTxt1">
-                            <label class="control-label col-md-3">操作介绍一&nbsp;：</label>
-                            <div class="col-md-8">
-                                <textarea id="opIntroduceTxt1" name="opIntroduceTxt1" class="form-control" rows="4" placeholder="Enter your address"></textarea>
+                            <div class="form-group row">
+                                <label class="control-label col-md-3">操作介绍&nbsp;：</label>
+                                <div class="col-md-8">
+                                    <button id="addOne" class="btn btn-sm btn-success" type="button"><i class="fa fa-plus-circle"></i>增加</button>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <button id="minusOne" class="btn btn-danger btn-sm" type="button"><i class="fa fa-minus-circle"></i>删除</button>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row" id="div-opIntroduceImg1">
-                            <label class="control-label col-md-3">图片一&nbsp;：</label>
-                            <div class="col-md-8">
-                                <input id="input-opIntroduceImg1" name="imgFile" class="form-control" type="file">
+                            <div class="row-introduce">
+                                <div class="form-group row">
+                                    <label class="control-label col-md-3">操作介绍一&nbsp;：</label>
+                                    <div class="col-md-8">
+                                        <textarea name="opIntroduceTxt1" class="form-control" rows="4" placeholder="Enter your address"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="control-label col-md-3">图片一&nbsp;：</label>
+                                    <div class="col-md-8">
+                                        <input name="img_1" class="form-control" type="file">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="control-label col-md-3">图片一预览&nbsp;：</label>
+                                    <div class="col-md-8">
+                                        <input name="opIntroduceImg1" hidden/>
+                                        <img style="width: 100%; display: block;" name="opIntroduceImg1">
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row" id="preview-Img1" style="display: none">
-                            <label class="control-label col-md-3">图片一预览&nbsp;：</label>
-                            <div class="col-md-8">
-                                <img style="height: 200px; width: 100%; display: block;" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22318%22%20height%3D%22180%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20318%20180%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_158bd1d28ef%20text%20%7B%20fill%3Argba(255%2C255%2C255%2C.75)%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C%20monospace%3Bfont-size%3A16pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_158bd1d28ef%22%3E%3Crect%20width%3D%22318%22%20height%3D%22180%22%20fill%3D%22%23777%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22129.359375%22%20y%3D%2297.35%22%3EImage%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="Card image">
-                            </div>
-                            <input />
-                        </div>
-                    </form>
-
+                        </form>
+                    </fieldset>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" type="button">保存</button>
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">关闭</button>
+                    <button class="btn btn-primary" type="button" onclick="saveItem()">保存</button>
+                    <button class="btn btn-secondary" type="button" onclick="closePopup()">关闭</button>
                 </div>
             </div>
         </div>
     </div>
 
 </main>
-
-
 
 
 <!-- Essential javascripts for application to work-->
@@ -312,10 +314,14 @@
 <!-- Data table plugin-->
 <script type="text/javascript" src="${ctx}/js/plugins/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="${ctx}/js/plugins/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript" src="${ctx}/js/plugins/sweetalert.min.js"></script>
 <script type="text/javascript" src="${ctx}/js/plugins/bootstrap-notify.min.js"></script>
+<script type="text/javascript" src="${ctx}/js/string.js"></script>
+<script type="text/javascript" src="${ctx}/js/jquery.form.js"></script>
+<script type="text/javascript" src="${ctx}/js/peppa.form.js"></script>
+<script type="text/javascript" src="${ctx}/js/img-preview.js"></script>
+<script type="text/javascript" src="${ctx}/js/date-format.js"></script>
 <script type="text/javascript">
-
-
     $(function () {
         $('#sampleTable').dataTable({
             // 开启服务器模式
@@ -338,105 +344,290 @@
             // // 分页dom结构（搜索框，分页组件）
             // 'dom': 't<"bottom"<"pull-left"i><"pull-left info"l><"pull-right"p>>',
             'ajax': {
-                url:'${ctx}/admin/listGuide',
-                type:"POST"
+                url: '${ctx}/admin/listGuide',
+                type: "POST"
                 // ,
                 // data:getFormJson($('#queryForm'))
             },
             'columns': [
-                { 'data': 'id'},
-                { 'data': 'title' },
-                { 'data': function(row){
-                        var status = (row.type === 1) ? '初级' : '进阶';
-                        return status;
+                {'data': 'id'},
+                {'data': 'title'},
+                {
+                    'data': function (row) {
+                        return (row.type === 1) ? '初级' : '进阶';
                     }
                 },
-                { 'data': 'createTime' },
-                { 'data': function(row){
-                        var status = (row.status === 1) ? '有效' : '无效';
-                        return status;
+                {
+                    'data': function (row) {
+                        return (new Date(row.createTime)).pattern('yyyy-MM-dd HH:mm:ss');
                     }
                 },
-                { 'data':
-                    function(row){
-                        var a = "<a  class=\'btn btn-sm btn-warning\' href=\'javascript:disable("+row.id+")\'><i class=\'fa fa-ban\'></i>停用</a>" +
-                                '&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;' +
-                                "<a class=\'btn btn-info btn-sm\' href=\'javascript:viewPreview("+row.id+")\'><i class='fa fa-eye\'></i>查看</a>";
-                        var b = "<a class=\'btn btn-sm btn-success\' href=\'javascript:enable("+row.id+")\'><i class=\'fa fa-check\'></i>启用</a>" +
-                                '&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;' +
-                                "<a class=\'btn btn-primary btn-sm\' href=\'javascript:updatePreview("+row.id+")\'><i class=\'fa fa-pencil-square-o\'></i>修改</a>"+
-                                '&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;' +
-                                "<a class='btn btn-info btn-sm' href=\'javascript:viewPreview("+row.id+")\'><i class='fa fa-eye'></i>查看</a>"+
-                                '&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;' +
-                                "<a class=\'btn btn-danger btn-sm\' href=\'javascript:del("+row.id+")\'><i class=\'fa fa-trash-o\'></i>删除</a>";
-                        var c = (row.status === 1) ? a:b;
-                        return c;
+                {
+                    'data': function (row) {
+                        return (row.status === 1) ? '有效' : '无效';
                     }
+                },
+                {
+                    'data':
+                            function (row) {
+                                var a = "<a  class=\'btn btn-sm btn-warning\' href=\'javascript:disableItem(" + row.id + ")\'><i class=\'fa fa-ban\'></i>停用</a>" +
+                                        '&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;' +
+                                        "<a class=\'btn btn-info btn-sm\' href=\'javascript:viewItem(" + row.id + ")\'><i class='fa fa-eye\'></i>查看</a>";
+                                var b = "<a class=\'btn btn-sm btn-success\' href=\'javascript:enableItem(" + row.id + ")\'><i class=\'fa fa-check\'></i>启用</a>" +
+                                        '&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;' +
+                                        "<a class=\'btn btn-primary btn-sm\' href=\'javascript:editItem(" + row.id + ")\'><i class=\'fa fa-pencil-square-o\'></i>修改</a>" +
+                                        '&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;' +
+                                        "<a class='btn btn-info btn-sm' href=\'javascript:viewItem(" + row.id + ")\'><i class='fa fa-eye'></i>查看</a>" +
+                                        '&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;' +
+                                        "<a class=\'btn btn-danger btn-sm\' href=\'javascript:removeItem(" + row.id + ")\'><i class=\'fa fa-trash-o\'></i>删除</a>";
+                                var c = (row.status === 1) ? a : b;
+                                return c;
+                            }
                 }
             ]
         });
     });
 
-    $('#addNew').click(function(){
+    $('#addNew').click(function () {
         $('.modal').modal('show');
+        initImgPreview();
     });
 
-    $('#addOne').click(function(){
+    $('#addOne').click(function () {
         //获取当前操作说明数组长度
-        var index = $("div[id^='div-opIntroduceTxt']").length;
-        if(index<5){
-            var indexCh = index===1?'二':index===2?'三':index===3?'四':index===4?'五':'';
-            var htmlVar = buildOpIntroduceDiv(index+1,indexCh);
+        var index = $(".row-introduce").length;
+        if (index < 5) {
+            var indexCh = index === 1 ? '二' : index === 2 ? '三' : index === 3 ? '四' : index === 4 ? '五' : '';
+            var htmlVar = buildOpIntroduceDiv(index + 1, indexCh);
             $('.form-horizontal').append(htmlVar);
-        }else{
+        } else {
             alert("最多只能添加五条操作介绍!");
         }
     });
 
-    $('#minusOne').click(function(){
+    $('#minusOne').click(function () {
         //获取当前操作说明数组长度
         var index = $("div[id^='div-opIntroduceTxt']").length;
-        if(index>1){
-            $('#div-opIntroduceTxt'+index).remove();
-            $('#div-opIntroduceImg'+index).remove();
-        }else{
+        if (index > 1) {
+            $('#div-opIntroduceTxt' + index).remove();
+            $('#div-opIntroduceImg' + index).remove();
+        } else {
             alert("至少保留一条操作介绍!");
         }
     });
-    
+
     function buildOpIntroduceDiv(index, indexCh) {
         var htmlVar = '';
-        htmlVar+='<div class="form-group row" id="div-opIntroduceTxt'+index+'">';
-        htmlVar+='    <label class="control-label col-md-3">操作介绍'+indexCh+'&nbsp;：</label>';
-        htmlVar+='   <div class="col-md-8">';
-        htmlVar+='       <textarea id="opIntroduceTxt'+index+'" name="opIntroduceTxt'+index+'" class="form-control" rows="4" placeholder="Enter your address"></textarea>';
-        htmlVar+='    </div>';
-        htmlVar+='</div>';
-        htmlVar+='<div class="form-group row" id="div-opIntroduceImg'+index+'">';
-        htmlVar+='    <label class="control-label col-md-3">图片'+indexCh+'&nbsp;：</label>';
-        htmlVar+='   <div class="col-md-8">';
-        htmlVar+='       <input id="opIntroduceImg'+index+'" name="opIntroduceImg'+index+'" class="form-control" type="file">';
-        htmlVar+='   </div>';
-        htmlVar+='</div>';
-        htmlVar+='<div class="form-group row" id="preview-Img'+index+'" style="display: none">';
-        htmlVar+='    <label class="control-label col-md-3">图片'+indexCh+'预览&nbsp;：</label>';
-        htmlVar+='    <div class="col-md-8">';
-        htmlVar+='        <img style="height: 200px; width: 100%; display: block;" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22318%22%20height%3D%22180%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20318%20180%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_158bd1d28ef%20text%20%7B%20fill%3Argba(255%2C255%2C255%2C.75)%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C%20monospace%3Bfont-size%3A16pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_158bd1d28ef%22%3E%3Crect%20width%3D%22318%22%20height%3D%22180%22%20fill%3D%22%23777%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22129.359375%22%20y%3D%2297.35%22%3EImage%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="Card image">';
-        htmlVar+='    </div>';
-        htmlVar+='</div>';
+        htmlVar += '<div class="row-introduce">';
+        htmlVar += '<div class="form-group row" id="div-opIntroduceTxt' + index + '">';
+        htmlVar += '    <label class="control-label col-md-3">操作介绍' + indexCh + '&nbsp;：</label>';
+        htmlVar += '   <div class="col-md-8">';
+        htmlVar += '       <textarea id="opIntroduceTxt' + index + '" name="opIntroduceTxt' + index + '" class="form-control" rows="4" placeholder="Enter your address"></textarea>';
+        htmlVar += '    </div>';
+        htmlVar += '</div>';
+        htmlVar += '<div class="form-group row" id="div-opIntroduceImg' + index + '">';
+        htmlVar += '    <label class="control-label col-md-3">图片' + indexCh + '&nbsp;：</label>';
+        htmlVar += '   <div class="col-md-8">';
+        htmlVar += '       <input id="opIntroduceImg' + index + '" name="img_' + index + '" class="form-control" type="file">';
+        htmlVar += '   </div>';
+        htmlVar += '</div>';
+        htmlVar += '<div class="form-group row" id="preview-Img' + index + '">';
+        htmlVar += '    <label class="control-label col-md-3">图片' + indexCh + '预览&nbsp;：</label>';
+        htmlVar += '    <div class="col-md-8">';
+        htmlVar += '        <input name="opIntroduceImg' + index + '" hidden/>';
+        htmlVar += '        <img style="width: 100%; display: block;" name="opIntroduceImg' + index + '">';
+        htmlVar += '    </div>';
+        htmlVar += '</div>';
+        htmlVar += '</div>';
         return htmlVar;
     }
-    
-    function notify(title, msg){
+
+    function notify(title, msg) {
         $.notify({
-            title: title+" : ",
+            title: title + " : ",
             message: msg,
             icon: 'fa fa-close'
-        },{
+        }, {
             type: "danger"
         });
     }
-</script>
 
+    // 编辑栏目
+    function editItem(id) {
+        $.ajax({
+            url: '${ctx}/admin/getGuideById',
+            type: 'get',
+            data: {
+                id: id
+            },
+            success: function (result) {
+                initTxtImg(result);
+                $('#form-data').fill(result);
+                $('.modal').modal('show');
+            }
+        });
+    }
+
+    // 初始化文字图片项
+    function initTxtImg(result) {
+        if (result.opIntroduceImg2) {
+            $('#addOne').click();
+        }
+        if (result.opIntroduceImg3) {
+            $('#addOne').click();
+        }
+        if (result.opIntroduceImg4) {
+            $('#addOne').click();
+        }
+        if (result.opIntroduceImg5) {
+            $('#addOne').click();
+        }
+        initImgPreview();
+    }
+
+    // 保存栏目
+    function saveItem() {
+        var $form = $('#form-data');
+        var url = '${ctx}/admin/saveGuide';
+        $form.ajaxSubmit({
+            url: url,
+            type: 'POST',
+            dataType: 'json',
+            beforeSubmit: function () {
+                console.log('before');
+            },
+            success: function (result) {
+                if (result.success) {
+                    closePopup();
+                    reloadDataTable();
+                }
+            }
+        });
+    }
+
+    // 重新加载表格
+    function reloadDataTable() {
+        $('#sampleTable').DataTable().ajax.reload();
+    }
+
+    // 弹出框关闭事件
+    $('.modal').on('hidden.bs.modal', function () {
+        $('.row-introduce:gt(0)').remove();
+        var $form = $('#form-data');
+        $form.clear();
+        $('#fieldset').attr('disabled', false);
+    });
+
+    // 关闭弹出框
+    function closePopup() {
+        $('.modal').modal('hide');
+    }
+
+    // 图片预览联动
+    function initImgPreview() {
+        var length = 5;
+        for (var i = 1; i <= length; i++) {
+            $('input[name="img_' + i + '"]').preview($('img[name="opIntroduceImg' + i + '"]'));
+        }
+    }
+
+    function viewItem(id) {
+        $.ajax({
+            url: '${ctx}/admin/getGuideById',
+            type: 'get',
+            data: {
+                id: id
+            },
+            success: function (result) {
+                $('#fieldset').attr('disabled', true);
+                $('#form-data').fill(result);
+                $('.modal').modal('show');
+            }
+        });
+    }
+
+    function enableItem(id) {
+        swal({
+                    title: "确定启用吗？",
+                    text: "启用即发布到线上环境！",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    closeOnConfirm: false
+                },
+                function () {
+                    $.ajax({
+                        url: '${ctx}/admin/changeStatus',
+                        type: 'get',
+                        data: {
+                            id: id,
+                            status: 1
+                        },
+                        success: function () {
+                            swal("操作成功！");
+                            reloadDataTable();
+                        }
+                    });
+                }
+        );
+    }
+
+    function disableItem(id) {
+        swal({
+                    title: "确定停用吗？",
+                    text: "停用即撤回线上环境的部署！",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    closeOnConfirm: false
+                },
+                function () {
+                    $.ajax({
+                        url: '${ctx}/admin/changeStatus',
+                        type: 'get',
+                        data: {
+                            id: id,
+                            status: 0
+                        },
+                        success: function () {
+                            swal("操作成功！");
+                            reloadDataTable();
+                        }
+                    });
+                }
+        );
+    }
+
+    function removeItem(id) {
+        swal({
+                    title: "确定删除该项吗？",
+                    text: "删除将移除此项！",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    closeOnConfirm: false
+                },
+                function () {
+                    $.ajax({
+                        url: '${ctx}/admin/removeGuide',
+                        type: 'get',
+                        data: {
+                            id: id
+                        },
+                        success: function () {
+                            swal("操作成功！");
+                            reloadDataTable();
+                        }
+                    });
+                }
+        );
+    }
+</script>
 </body>
 </html>

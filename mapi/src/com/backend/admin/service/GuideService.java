@@ -26,7 +26,8 @@ public class GuideService {
 
     public int saveGuide(Guide guide){
        if(guide!=null){
-           return guideMapper.saveGuide(guide);
+           guideMapper.saveGuide(guide);
+           return guide.getId();
        } else{
            return -1;
        }

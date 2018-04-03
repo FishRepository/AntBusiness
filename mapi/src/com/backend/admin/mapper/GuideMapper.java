@@ -19,7 +19,7 @@ public interface GuideMapper {
 
     Guide selectById(Integer id);
 
-    int saveGuide(Guide guide);
+    void saveGuide(Guide guide);
 
     int updateGuide(Guide guide);
 

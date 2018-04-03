@@ -33,7 +33,7 @@
           WHERE id = #{id}
     </select>
     
-    <select id="saveGuide" parameterType="com.backend.admin.entity.Guide">
+    <insert id="saveGuide" parameterType="com.backend.admin.entity.Guide" keyProperty="id" useGeneratedKeys="true">
         INSERT INTO guide(
           title,
           type,
@@ -69,26 +69,26 @@
           0,
           0
         )
-    </select>
+    </insert>
 
-    <select id="updateGuide" parameterType="com.backend.admin.entity.Guide">
+    <update id="updateGuide" parameterType="com.backend.admin.entity.Guide">
         UPDATE guide
         <trim prefix="SET" suffixOverrides="," suffix="WHERE id = #{id}">
             <if test="title!=null">title = #{title},</if>
             <if test="type!=null">type = #{type},</if>
             <if test="functionDes!=null">function_des = #{functionDes},</if>
-            <if test="opIntroduceTxt1!=null">op_introduce_txt1 = #{opIntroduceTxt1},</if>
-            <if test="opIntroduceImg1!=null">op_introduce_img1 = #{opIntroduceImg1},</if>
-            <if test="opIntroduceTxt2!=null">op_introduce_txt2 = #{opIntroduceTxt2},</if>
-            <if test="opIntroduceImg2!=null">op_introduce_img2 = #{opIntroduceImg2},</if>
-            <if test="opIntroduceTxt3!=null">op_introduce_txt3 = #{opIntroduceTxt3},</if>
-            <if test="opIntroduceImg3!=null">op_introduce_img3 = #{opIntroduceImg3},</if>
-            <if test="opIntroduceTxt4!=null">op_introduce_txt4 = #{opIntroduceTxt4},</if>
-            <if test="opIntroduceImg4!=null">op_introduce_img4 = #{opIntroduceImg4},</if>
-            <if test="opIntroduceTxt5!=null">op_introduce_txt5 = #{opIntroduceTxt5},</if>
-            <if test="opIntroduceImg5!=null">op_introduce_img5 = #{opIntroduceImg5},</if>
+            op_introduce_txt1 = #{opIntroduceTxt1},
+            op_introduce_img1 = #{opIntroduceImg1},
+            op_introduce_txt2 = #{opIntroduceTxt2},
+            op_introduce_img2 = #{opIntroduceImg2},
+            op_introduce_txt3 = #{opIntroduceTxt3},
+            op_introduce_img3 = #{opIntroduceImg3},
+            op_introduce_txt4 = #{opIntroduceTxt4},
+            op_introduce_img4 = #{opIntroduceImg4},
+            op_introduce_txt5 = #{opIntroduceTxt5},
+            op_introduce_img5 = #{opIntroduceImg5},
             <if test="status!=null">status = #{status},</if>
             <if test="isDelete!=null">is_delete = #{isDelete},</if>
         </trim>
-    </select>
+    </update>
 </mapper>
