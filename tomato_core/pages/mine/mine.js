@@ -81,7 +81,7 @@ Page({
   loginOut: function () {
     wx.clearStorage();
     app.globalData.userInfo = null;
-    wx.redirectTo({
+    wx.reLaunch({
       url: '/pages/login/login',
     })
   }
