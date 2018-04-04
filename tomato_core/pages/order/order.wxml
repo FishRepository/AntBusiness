@@ -10,7 +10,7 @@
   </view>
 
   <!-- 出货订单 -->
-  <scroll-view scroll-y='true' wx:if="{{tabType==1}}" class='order-view'>
+  <scroll-view scroll-y='true' wx:if="{{tabType==1}}" class='order-view' style='height:{{winH}}px' bindscrolltolower="searchScrollLower">
     <block wx:for="{{outOrders}}" wx:key="{{month}}" wx:for-index="p_index">
       <view class='order-date'>{{item.month}}</view>
       <block wx:for="{{item.orderlist}}" wx:key="{{order_id}}" wx:for-item="child" wx:for-index="c_index">

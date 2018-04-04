@@ -6,14 +6,23 @@
   font-size: 11pt;
 }
 
-.pro-name {
+.pro-name-view {
+  display: flex;
   height: 30px;
   align-items: center;
-  display: flex;
+  justify-content: center;
+  /* text-align: center; */
+  padding: 10px;
+}
+
+.pro-name {
+  height: 100%;
+  width: 100%;
+  /* align-items: center;
+  display: flex; */
   padding: 5px;
   border: 1px solid #e6e6e6;
-  /* width: 100%; */
-  margin: 10px;
+  /* width: 100%; *//* margin: 10px; */
 }
 
 .pro-parent-name {
@@ -29,11 +38,11 @@
   align-items: center;
   display: flex;
   justify-content: space-between;
-  padding: 30px 10px 0px;
+  padding: 10px;
 }
 
 .pro-my-price-left {
-  width: 80%;
+  width: 100%;
 }
 
 .pro-my-price input {
@@ -50,12 +59,12 @@
   align-items: center;
   display: flex;
   padding: 0px 10px;
-  /* color: #8a8a8a; */
+  color: #8a8a8a;
   background-color: #e6e6e6;
 }
 
 .pro-out-item {
-  height: 50px;
+  height: 40px;
   align-items: center;
   display: flex;
   justify-content: space-between;
@@ -64,7 +73,7 @@
 }
 
 .pro-out-item-left {
-  width: 80%;
+  width: 100%;
 }
 
 .pro-out-item input {
@@ -76,8 +85,30 @@
   margin-right: 0px;
 }
 
+.bottom-border{
+  border-top: 1px solid #e6e6e6;
+}
+
 .valduate {
   color: #f25862;
+}
+
+.main-top {
+  position: fixed;
+  z-index: 5;
+  top: 0;
+  width: 100%;
+  background-color: white;
+  height: 180px;
+}
+
+.main-bottom {
+  position: fixed;
+  z-index: 5;
+  bottom: 0;
+  width: 100%;
+  background-color: white;
+  height: 100px;
 }
 
 .view-button {
@@ -93,7 +124,9 @@
   color: white;
   width: 100%;
   height: 50px;
-  position: fixed;
-  z-index: 5;
-  bottom: 0;
+}
+
+.main-scroll {
+  margin-top: 180px;
+  margin-bottom: 100px;
 }

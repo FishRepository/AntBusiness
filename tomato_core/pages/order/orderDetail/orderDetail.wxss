@@ -105,9 +105,9 @@
   text-align: left;
   align-items: center;
   /* justify-content:space-between; */
-  height: 30px;
-  padding: 0px 10px;
-  font-size: 10pt;
+  padding: 10px;
+  font-size: 11pt;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .num-right {
@@ -119,14 +119,10 @@
   text-align: left;
   align-items: center;
   justify-content: space-between;
-  height: 30px;
-  padding: 0px 10px;
-  font-size: 10pt;
+  padding: 10px;
+  font-size: 12pt;
+  color: #e64663;
   border-bottom: 1px solid #f0f0f0;
-}
-
-.outprice-left {
-  color: #03a9f4;
 }
 
 .order-item {

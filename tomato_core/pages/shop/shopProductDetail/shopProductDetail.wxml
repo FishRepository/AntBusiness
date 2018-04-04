@@ -2,10 +2,10 @@
 <view class='container'>
   <view class='pro-name'>{{goods.goods_name}}</view>
   <view class='pro-parent-name'>{{brand.brand_name}}</view>
-  <!-- <view class='pro-my-price'>
-    <text>{{item.itemPrice[0].name}}</text>
-    <text>￥{{item.itemPrice[0].price}}</text>
-  </view> -->
+   <view class='pro-my-price'>
+    <text>我的进货价</text>
+    <text class='pro-price-color'>￥{{goods.goods_price}}</text>
+  </view> 
   <view class='pro-out-title'>对外销售价格</view>
   <block wx:for="{{items}}" wx:key="{{goodsprice_id}}">
     <view class='pro-out-item'>
@@ -13,4 +13,8 @@
       <text>￥{{item.goods_price}}</text>
     </view>
   </block>
+  <view class='pro-out-item'>
+      <text>进货价出售</text>
+      <text class='pro-price-color'>￥{{goods.goods_price}}</text>
+    </view>
 </view>

@@ -19,6 +19,10 @@
   z-index: 999;
 }
 
+.placeholder-input{
+  color: #cdcdcd;
+}
+
 .main-scroll {
   margin-top: 240px;
   margin-bottom: 50px;

@@ -1,4 +1,5 @@
 // pages/order/orderDetail/orderDetail.js
+var app = getApp();
 Page({
 
   /**
@@ -18,11 +19,11 @@ Page({
     wx.request({
       url: 'http://120.24.49.36/mapi/order/queryOrder.do',
       data:{
-        account_id: 1,
+        account_id: app.globalData.account_id,
         order_id: _orderId
       },
       success:function(res){
-        console.log(res.data)
+        // console.log(res.data)
         if(res.data.code==0){
           _that.setData({
             order: res.data.order,

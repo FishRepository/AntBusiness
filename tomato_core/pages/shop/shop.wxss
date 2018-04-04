@@ -40,7 +40,7 @@
 
 .item-title {
   height: 100%;
-  width: 100%;
+  width: 150px;
   -webkit-transform: translateX(90px);
   transform: translateX(90px);
   -webkit-transition: all 0.5s;

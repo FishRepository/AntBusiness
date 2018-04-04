@@ -33,7 +33,7 @@
       <text class='num-right'>{{order.goods_count}}件商品</text>
     </view>
     <view class='order-outprice'>
-      <text class='outprice-left'>额外费用></text>
+      <text class='outprice-left'>额外费用</text>
       <text class='outprice-right'>￥{{order.order_premium}}</text>
     </view>
     <view class='order-item'>

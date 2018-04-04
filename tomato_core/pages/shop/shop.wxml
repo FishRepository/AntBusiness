@@ -1,6 +1,5 @@
 <!--pages/shop/shop.wxml-->
 <view class='container'>
-
   <scroll-view scroll-y='true' class='main-scroll'>
     <block wx:for="{{items}}" wx:key="{{brand_id}}">
       <view class="item-view {{item.isTouchMove?'touch-move-active':''}}" data-index="{{index}}" bindtouchstart="touchstart" bindtouchmove="touchmove" catchtap='gotoGetail'>
