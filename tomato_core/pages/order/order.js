@@ -1,5 +1,6 @@
 // pages/order/order.js
 const util = require('../../utils/util.js');
+var app = getApp();
 Page({
 
   /**
@@ -10,7 +11,11 @@ Page({
     outOrders: [],
     inOrders: [],
     startX: 0,
-    startY: 0
+    startY: 0,
+    outCurrentPage: 1,
+    inCurrentPage: 1,
+    isOutAll: false,
+    isInAll: false
   },
 
   /**
@@ -22,16 +27,16 @@ Page({
     wx.request({
       url: 'http://120.24.49.36/mapi/order/listPageAllOrder.do',
       data: {
-        account_id: 1,
-        type: 3,//出货订单
-        currentPage: 1,
+        account_id: app.globalData.account_id,
+        type: 3,
+        currentPage: _that.data.outCurrentPage,
         showCount: 10
       },
       success: function (res) {
         // console.log(res.data)
-        if (res.data.code == 0) {
+        if (res.data.code == 0 && res.data.list) {
           var list_out = res.data.list;
-          for (var i = 0, i_len = list_out.length; i < i_len; ++i){
+          for (var i = 0, i_len = list_out.length; i < i_len; ++i) {
             var chile_list_out = list_out[i].orderlist;
             for (var j = 0, j_len = chile_list_out.length; j < j_len; ++j) {
               chile_list_out[j].order_time = util.formatTimeStamp(chile_list_out[j].create_time, 'M-D')
@@ -47,14 +52,14 @@ Page({
     wx.request({
       url: 'http://120.24.49.36/mapi/order/listPageAllOrder.do',
       data: {
-        account_id: 1,
-        type: 4,//进货订单
-        currentPage: 1,
+        account_id: app.globalData.account_id,
+        type: 4,
+        currentPage: _that.data.inCurrentPage,
         showCount: 10
       },
       success: function (res) {
         // console.log(res.data)
-        if (res.data.code == 0) {
+        if (res.data.code == 0 && res.data.list) {
           var list_in = res.data.list;
           for (var i = 0, i_len = list_in.length; i < i_len; ++i) {
             var chile_list_in = list_in[i].orderlist;
@@ -70,6 +75,94 @@ Page({
     })
   },
 
+  searchScrollLower: function () {
+    var _that = this,
+      _outOrders = _that.data.outOrders,
+      _inOrders = _that.data.inOrders,
+      _outNowPage = _that.data.outCurrentPage,
+      _inNowPage = _that.data.inCurrentPage,
+      _isOutAll = _that.data.isOutAll,
+      _isInAll = _that.data.isInAll,
+      nowTab = _that.data.tabType;//当前页签
+    if (1 == nowTab) {
+      if (!_isOutAll) {
+        wx.showLoading({
+          title: '',
+          mask: true
+        })
+        //出货订单下滑翻页
+        wx.request({
+          url: 'http://120.24.49.36/mapi/order/listPageAllOrder.do',
+          data: {
+            account_id: app.globalData.account_id,
+            type: 3,
+            currentPage: _outNowPage + 1,
+            showCount: 10
+          },
+          success: function (res) {
+            // console.log(res.data)
+            wx.hideLoading()
+            if (res.data.code == 0 && res.data.list) {
+              _that.setData({
+                isOutAll: true,
+                outCurrentPage: _outNowPage + 1
+              })
+              var list_out = res.data.list;
+              for (var i = 0, i_len = list_out.length; i < i_len; ++i) {
+                var chile_list_out = list_out[i].orderlist;
+                for (var j = 0, j_len = chile_list_out.length; j < j_len; ++j) {
+                  chile_list_out[j].order_time = util.formatTimeStamp(chile_list_out[j].create_time, 'M-D')
+                }
+                _outOrders.splice(_outOrders.length, 0, list_out[i])
+              }
+              _that.setData({
+                outOrders: _outOrders
+              })
+            }
+          }
+        })
+      }
+    } else {
+      if (!_isInAll) {
+        wx.showLoading({
+          title: '',
+          mask: true
+        })
+        //进货订单下滑翻页
+        wx.request({
+          url: 'http://120.24.49.36/mapi/order/listPageAllOrder.do',
+          data: {
+            account_id: app.globalData.account_id,
+            type: 4,
+            currentPage: _inNowPage + 1,
+            showCount: 10
+          },
+          success: function (res) {
+            // console.log(res.data)
+            wx.hideLoading()
+            if (res.data.code == 0 && res.data.list) {
+              _that.setData({
+                isInAll: true,
+                inCurrentPage: _inNowPage + 1
+              })
+              var list_in = res.data.list;
+              for (var i = 0, i_len = list_in.length; i < i_len; ++i) {
+                var chile_list_in = list_in[i].orderlist;
+                for (var j = 0, j_len = chile_list_in.length; j < j_len; ++j) {
+                  chile_list_in[j].order_time = util.formatTimeStamp(chile_list_in[j].create_time, 'M-D')
+                }
+                _inOrders.splice(_inOrders.length, 0, list_out[i])
+              }
+              _that.setData({
+                inOrders: _inOrders
+              })
+            }
+          }
+        })
+      }
+    }
+  },
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -81,7 +174,13 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    wx.getSystemInfo({
+      success: (res) => { // 用这种方法调用，this指向Page
+        this.setData({
+          winH: res.windowHeight
+        });
+      }
+    })
   },
 
   /**
@@ -280,16 +379,16 @@ Page({
    * 进入订单详情
    */
   gotoGetail: function (e) {
-    var _that=this,
+    var _that = this,
       nowTab = _that.data.tabType,//当前页签
       p_index = e.currentTarget.dataset.pindex,//当前父索引
       c_index = e.currentTarget.dataset.cindex;//当前索引
-      var order_id;
-      if (1==nowTab){
-        order_id = _that.data.outOrders[p_index].orderlist[c_index].order_id
-      }else{
-        order_id = _that.data.inOrders[p_index].orderlist[c_index].order_id
-      }
+    var order_id;
+    if (1 == nowTab) {
+      order_id = _that.data.outOrders[p_index].orderlist[c_index].order_id
+    } else {
+      order_id = _that.data.inOrders[p_index].orderlist[c_index].order_id
+    }
     wx.navigateTo({
       url: '/pages/order/orderDetail/orderDetail?order_id=' + order_id
     })
@@ -308,17 +407,34 @@ Page({
       content: '确认删除该订单？',
       success: function (res) {
         if (res.confirm) {
+          wx.showLoading({
+            title: '',
+            mask: true
+          })
+          var _orderId;
           if (1 == nowTab) {
+            _orderId = that.data.outOrders[p_index].orderlist[c_index].order_id
             that.data.outOrders[p_index].orderlist.splice(c_index, 1)
             that.setData({
               outOrders: that.data.outOrders
             })
           } else {
+            _orderId = that.data.inOrders[p_index].orderlist[c_index].order_id
             that.data.inOrders[p_index].orderlist.splice(c_index, 1)
             that.setData({
               inOrders: that.data.inOrders
             })
           }
+          wx.request({
+            url: 'http://120.24.49.36/mapi/order/deleteOrder.do',
+            data: {
+              account_id: app.globalData.account_id,
+              order_id: _orderId
+            },
+            success(res) {
+              wx.hideLoading();
+            }
+          })
         } else if (res.cancel) {
 
         }

@@ -1,15 +1,14 @@
 // pages/shop/shopProductDetail/shopProductDetail.js
+var app = getApp();
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    item: {
-      brand: 'YSL星辰口红【小】',
-      goods: 'A.T',
-      items: []
-    }
+    brand: '',
+    goods: '',
+    items: []
   },
 
   /**
@@ -22,12 +21,12 @@ Page({
     wx.request({
       url: 'http://120.24.49.36/mapi/goods/queryOneGoods.do',
       data: {
-        account_id: 1,
+        account_id: app.globalData.account_id,
         brand_id: brandId,
         goods_id: goodsId
       },
       success: function (res) {
-        console.log(res.data)
+        // console.log(res.data)
         if (res.data.code == 0) {
           _that.setData({
             brand: res.data.brand,

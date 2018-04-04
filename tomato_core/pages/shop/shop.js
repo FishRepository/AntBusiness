@@ -1,4 +1,5 @@
 // pages/shop/shop.js
+var app = getApp();
 Page({
 
   /**
@@ -14,11 +15,25 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+
+  },
+
+  /**
+   * 生命周期函数--监听页面初次渲染完成
+   */
+  onReady: function () {
+
+  },
+
+  /**
+   * 生命周期函数--监听页面显示
+   */
+  onShow: function () {
     var _that = this
     wx.request({
       url: 'http://120.24.49.36/mapi/goods/queryBrand.do',
       data: {
-        account_id: 1,
+        account_id: app.globalData.account_id,
         type: 1
       },
       success: function (res) {
@@ -37,20 +52,6 @@ Page({
     _that.setData({
       items: list
     })
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
   },
 
   /**
@@ -140,12 +141,27 @@ Page({
   },
   //删除事件
   delShop: function (e) {
-    var that = this
+    var that = this,
+      idx = e.currentTarget.dataset.index;
     wx.showModal({
       title: '提示',
       content: '是否确认删除该品牌？',
       success: function (res) {
         if (res.confirm) {
+          wx.showLoading({
+            title: '',
+            mask: true
+          })
+          wx.request({
+            url: 'http://120.24.49.36/mapi/goods/deleteBrand.do?=1&=1',
+            data: {
+              brand_id: that.data.items[idx].brand_id,
+              account_id: app.globalData.account_id
+            },
+            success: function (res) {
+              wx.hideLoading();
+            }
+          })
           that.data.items.splice(e.currentTarget.dataset.index, 1)
           that.setData({
             items: that.data.items

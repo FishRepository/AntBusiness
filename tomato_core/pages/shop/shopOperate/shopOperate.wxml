@@ -3,7 +3,7 @@
   <view class='main-top'>
     <view class='view-top'>
       <text>品牌名称：</text>
-      <input value='{{item_name}}'></input>
+      <input value='{{item_name}}' placeholder='输入品牌名称' placeholder-class='placeholder-input' bindinput='bindInputName'></input>
     </view>
     <view class='view-title'>默认代理商级别</view>
     <view class='view-default'>
@@ -20,7 +20,6 @@
     </view>
     <view class='view-title'>自定义代理商级别</view>
   </view>
-
   <scroll-view scroll-y='true' class='main-scroll'>
     <block wx:for="{{defineItems}}" wx:key="{{agentlevel_id}}">
       <view class='view-user-define' wx:if="{{item.agentlevel_default==0}}">
@@ -28,15 +27,13 @@
           <image src='/images/shop/shopOperate/icon_del.png' bindtap='delDefine' data-index="{{index}}"></image>
           <text>级别名称：</text>
         </view>
-        <input value='{{item.agentlevel_name}}'></input>
+        <input value='{{item.agentlevel_name}}' placeholder='输入级别名称' placeholder-class='placeholder-input' bindinput='bindInputLevel' data-index='{{index}}'></input>
       </view>
     </block>
-
     <view class='view-add-define' bindtap='addDefine'>
       <image src='/images/shop/shopOperate/icon_add.png'></image>
       <text>添加代理商级别</text>
     </view>
   </scroll-view>
-
-  <button class='view-button'>保存</button>
+  <button class='view-button' bindtap='saveBrand'>保存</button>
 </view>

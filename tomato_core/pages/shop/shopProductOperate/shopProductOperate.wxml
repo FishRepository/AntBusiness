@@ -1,30 +1,37 @@
 <!--pages/shop/shopProductOperate/shopProductOperate.wxml-->
 <view class='container'>
-  <input class='pro-name' value='{{item.name}}'></input>
-  <view class='pro-parent-name'>{{item.parentName}}</view>
-  <view class='pro-my-price'>
-    <view class='pro-my-price-left'>
-      <text>{{item.itemPrice[0].name}}</text>
-      <text class='valduate'>*</text>
+  <view class='main-top'>
+    <view class='pro-name-view'>
+      <input class='pro-name' value='{{goods.goods_name}}' placeholder='输入商品名称' bindinput='bindInputGoods'></input>
     </view>
-    ￥
-    <input value='{{item.itemPrice[0].price}}'></input>
+    <view class='pro-parent-name'>{{brand.brand_name}}</view>
+    <view class='pro-my-price'>
+      <view class='pro-my-price-left'>
+        <text>我的进货价</text>
+      </view>
+      <text class='valduate'>￥</text>
+      <input class='valduate' value='{{goods.goods_price}}' bindinput='bindInputGoodsPrice'></input>
+    </view>
+    <view class='pro-out-title'>对外销售价格</view>
   </view>
-  <view class='pro-out-title'>对外销售价格</view>
-  <view class='pro-out-item'>
-    <text class='pro-out-item-left'>{{item.itemPrice[1].name}}</text> ￥
-    <input value='{{item.itemPrice[1].price}}'></input>
+
+  <scroll-view class='main-scroll'>
+    <block wx:for="{{items}}" wx:key="{{goodsprice_id}}">
+      <view class='pro-out-item'>
+        <text class='pro-out-item-left'>{{item.agentlevel_name}}</text> ￥
+        <input value='{{item.goods_price}}' bindinput='bindInputItemPrice' data-index='{{index}}'></input>
+      </view>
+    </block>
+  </scroll-view>
+
+  <view class='main-bottom'>
+    <view class='pro-out-item bottom-border'>
+      <view class='pro-out-item-left'>
+        <text>进货价出售</text>
+      </view>
+      <text class='valduate'>￥</text>
+      <input class='valduate' value='{{goods.goods_price}}' bindinput='bindInputGoodsPrice'></input>
+    </view>
+    <button class='view-button' bindtap='saveGoods'>保存</button>
   </view>
-  <view class='pro-out-item'>
-    <text class='pro-out-item-left'>{{item.itemPrice[2].name}}</text> ￥
-    <input value='{{item.itemPrice[2].price}}'></input>
-  </view>
-  <view class='pro-out-item'>
-    <view class='pro-out-item-left'>
-      <text>{{item.itemPrice[3].name}}</text>
-      <text class='valduate'>*</text>
-    </view> ￥
-    <input value='{{item.itemPrice[3].price}}'></input>
-  </view>
-  <button class='view-button'>保存</button>
 </view>

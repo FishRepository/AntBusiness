@@ -1,5 +1,6 @@
 // pages/shop/shopDetail/shopDetail.js
 // pages/shop/shop.js
+var app = getApp();
 Page({
 
   /**
@@ -9,7 +10,7 @@ Page({
     items: [],
     startX: 0,
     startY: 0,
-    brandId: null
+    brandId: ''
   },
 
   /**
@@ -24,7 +25,7 @@ Page({
     wx.request({
       url: 'http://120.24.49.36/mapi/goods/queryGoods.do',
       data: {
-        account_id: 1,
+        account_id: app.globalData.account_id,
         brand_id: _brandId,
         type: 0
       },
@@ -57,7 +58,35 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    // let pages = getCurrentPages();
+    // let currPage = pages[pages.length - 1];
+    var _that = this,
+      _brandId = _that.data.brandId;
+    if (_brandId) {
+      wx.request({
+        url: 'http://120.24.49.36/mapi/goods/queryGoods.do',
+        data: {
+          account_id: app.globalData.account_id,
+          brand_id: _brandId,
+          type: 0
+        },
+        success: function (res) {
+          // console.log(res.data)
+          if (res.data.code == 0) {
+            _that.setData({
+              items: res.data.list
+            })
+          }
+        }
+      })
+      var list = this.data.items
+      for (var j = 0, len = list.length; j < len; ++j) {
+        list[j].isTouchMove = false
+      }
+      this.setData({
+        items: list
+      })
+    }
   },
 
   /**
@@ -147,12 +176,30 @@ Page({
   },
   //删除事件
   delShop: function (e) {
-    var that = this
+    var that = this,
+      idx = e.currentTarget.dataset.index,
+      _brandId = that.data.brandId,
+      _item = that.data.items[idx];
     wx.showModal({
       title: '提示',
       content: '是否确认删除该品牌？',
       success: function (res) {
         if (res.confirm) {
+          wx.showLoading({
+            title: '',
+            mask: true
+          })
+          wx.request({
+            url: 'http://120.24.49.36/mapi/goods/deleteGoods.do',
+            data: {
+              brand_id: _brandId,
+              account_id: app.globalData.account_id,
+              goods_id: _item.goods_id
+            },
+            success: function (e) {
+              wx.hideLoading();
+            }
+          })
           that.data.items.splice(e.currentTarget.dataset.index, 1)
           that.setData({
             items: that.data.items
@@ -163,27 +210,32 @@ Page({
       }
     })
   },
-  //编辑事件
+  //编辑商品事件
   editShop: function (e) {
-    var idx = e.currentTarget.dataset.index
-    var that = this
-    var sel_item = that.data.items[idx]
+    var idx = e.currentTarget.dataset.index,
+      that = this,
+      brand_id = that.data.brandId,
+      sel_item = that.data.items[idx];
     wx.navigateTo({
-      url: '/pages/shop/shopProductOperate/shopProductOperate?name=' + sel_item.name
+      url: '/pages/shop/shopProductOperate/shopProductOperate?brand_id=' + brand_id + '&goods_id=' + sel_item.goods_id
     })
   },
   //添加商品事件
   addShop: function (e) {
+    var that = this,
+      brand_id = that.data.brandId;
     wx.navigateTo({
-      url: '/pages/shop/shopProductOperate/shopProductOperate?name='
+      url: '/pages/shop/shopProductOperate/shopProductOperate?brand_id=' + brand_id + '&goods_id='
     })
   },
-  //进入品牌详情
+  //进入商品详情
   gotoGetail: function (e) {
     var idx = e.currentTarget.dataset.index,
-        _that = this;
+      that = this,
+      brand_id = that.data.brandId,
+      sel_item = that.data.items[idx];
     wx.navigateTo({
-      url: '/pages/shop/shopProductDetail/shopProductDetail?brand_id=' + _that.data.brandId + '&goods_id=' + _that.data.items[idx].goods_id
+      url: '/pages/shop/shopProductDetail/shopProductDetail?brand_id=' + brand_id + '&goods_id=' + sel_item.goods_id
     })
   }
 })
