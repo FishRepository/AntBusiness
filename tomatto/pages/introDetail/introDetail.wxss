@@ -1,5 +1,5 @@
 /* pages/introDetail/introDetail.wxss */
-
+@import "../../wxParse/wxParse.wxss";
 .container {
   position: fixed;
   height: 100%;
@@ -66,7 +66,17 @@
 
 .main-ope-view {
   padding: 5px 15px;
-  border-bottom: 1px solid #c0c0c0;
+  color: #c0c0c0;
+  /* border-bottom: 1px solid #c0c0c0; */
+}
+
+.main-ope-view image {
+  margin: 20rpx 0;
+  width: 100% !important;
+}
+
+.wxParse-p, .wxParse-inline {
+  font-size: 9pt;
 }
 
 .main-ope-text {

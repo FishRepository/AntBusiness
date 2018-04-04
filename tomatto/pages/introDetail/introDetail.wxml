@@ -1,4 +1,5 @@
 <!--pages/introDetail/introDetail.wxml-->
+<import src="../../wxParse/wxParse.wxml"/>
 <view class="container">
   <view class='main-top'>
     <text class='main-title'>{{title}}</text>
@@ -7,19 +8,23 @@
     <!--功能说明-->
     <view class='main-function'>
       <text class='main-item-title'>功能说明</text>
-      <block wx:for="{{functions}}" wx:key="{{desp}}">
+      <text class='main-item-desp-text'>{{functions}}</text>
+      <!-- <block wx:for="{{functions}}" wx:key="{{desp}}">
         <text class='main-item-desp-text'>{{index+1}}、{{item.desp}}</text>
-      </block>
+      </block> -->
     </view>
     <!--操作介绍-->
     <view class='main-operate'>
       <text class='main-item-title'>操作介绍</text>
-      <block wx:for="{{operates}}" wx:key="{{desp}}">
+      <view class='main-ope-view'>
+        <template is="wxParse" data="{{wxParseData:operates.nodes}}"/>
+      </view>
+      <!-- <block wx:for="{{operates}}" wx:key="{{desp}}">
         <view class='main-ope-view'>
           <text class='main-ope-text'>{{index+1}}、{{item.desp}}</text>
           <image mode='aspectFit' class='main-ope-img' src='{{item.img}}' bindtap='prePhotos' data-index='{{index}}'></image>
         </view>
-      </block>
+      </block> -->
     </view>
   </scroll-view>
 </view>

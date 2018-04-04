@@ -37,6 +37,12 @@
                     } else {
                         // 其它基本类型
                         selector = '[name="' + k + '"]';
+                        // 单选按钮
+                        var $radio = $(selector + '[type="radio"]');
+                        if ($radio.length > 0) {
+                            $(selector + '[value="' + v + '"]').prop('checked', true);
+                            return;
+                        }
                         $this.find(selector).val(v);
                         // 图片格式绑定src
                         if (typeof(v) === "string" && (v.endsWith(".jpg") || v.endsWith(".png") || v.endsWith(".bmp")
@@ -49,7 +55,8 @@
         },
         clear: function () {
             var $this = $(this);
-            $this.find('input').val('');
+            $this.find('input[type!="radio"]').val('');
+            $this.find('input:radio:first').prop('checked', true);
             $this.find('textarea').val('');
             $this.find('img').attr('src', '');
         }

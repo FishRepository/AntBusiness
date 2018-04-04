@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.backend.admin.mapper.IntroductionMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.backend.admin.entity.Introduction">
+        <id column="id" property="id"/>
+        <result column="type" property="type"/>
+        <result column="title" property="title"/>
+        <result column="functions" property="functions"/>
+        <result column="operates" property="operates"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="status" property="status"/>
+        <result column="is_deleted" property="deleted"/>
+    </resultMap>
+
+    <select id="listIntroduction" resultMap="BaseResultMap">
+        SELECT * FROM introduction
+        WHERE is_deleted = 0
+        <if test="status!=null">
+            AND status = #{status}
+        </if>
+    </select>
+
+    <select id="getIntroductionById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT *
+        FROM introduction
+        WHERE id = #{id}
+    </select>
+
+    <insert id="saveIntroduction" parameterType="com.backend.admin.entity.Introduction" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO introduction (
+            type,
+            title,
+            functions,
+            operates,
+            create_time,
+            update_time
+        ) VALUES (
+            #{type},
+            #{title},
+            #{functions},
+            #{operates},
+            NOW(),
+            NOW()
+        )
+    </insert>
+
+    <update id="updateIntroduction" parameterType="com.backend.admin.entity.Introduction">
+        UPDATE introduction
+        <trim prefix="SET" suffixOverrides="," suffix="WHERE id = #{id}">
+            type = #{type},
+            title = #{title},
+            functions = #{functions},
+            operates = #{operates},
+            update_time = NOW(),
+            <if test="status!=null">`status` = #{status},</if>
+            <if test="deleted!=null">is_deleted = #{deleted},</if>
+        </trim>
+    </update>
+</mapper>

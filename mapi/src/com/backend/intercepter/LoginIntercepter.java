@@ -15,8 +15,8 @@ public class LoginIntercepter implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
-        if(!SessionUtils.isLogin(httpServletRequest)){
-            httpServletResponse.sendRedirect("/login");
+        if (!SessionUtils.isLogin(httpServletRequest)) {
+            httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/login");
         }
         return true;
     }

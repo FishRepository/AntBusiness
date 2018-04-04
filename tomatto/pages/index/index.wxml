@@ -9,9 +9,9 @@
       <view class='itro-title'>
         <text class='itro-title-text'>{{item.title}}</text>
       </view>
-      <block wx:for="{{item.items}}" wx:for-item="child" wx:key="{{memo}}">
-        <navigator class='itro-item' url='/pages/introDetail/introDetail?title={{child.memo}}'>
-          <text class='itro-item-text'>{{child.memo}}</text>
+      <block wx:for="{{item.items}}" wx:for-item="child" wx:key="{{title}}">
+        <navigator class='itro-item' url='/pages/introDetail/introDetail?id={{child.id}}&title={{child.title}}'>
+          <text class='itro-item-text'>{{child.title}}</text>
           <image class='itro-item-img' src='/images/home/icon_right_go.png'></image>
         </navigator>
       </block>
