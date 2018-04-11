@@ -1,5 +1,5 @@
  <view class='userinfo'>
-    <image class='userinfo-avatar' src='/images/logo.png'></image>
+    <image class='userinfo-avatar' src='{{userInfo.account_icon}}'></image>
     <text class='userinfo-nickname'>{{userInfo.account_username?userInfo.account_username:''}}</text>
   </view>
 

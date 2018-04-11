@@ -1,4 +1,5 @@
 // pages/shop/shopProductDetail/shopProductDetail.js
+var WebService = require('../../../utils/webService.js');
 var app = getApp();
 Page({
 
@@ -19,9 +20,9 @@ Page({
       goodsId = options.goods_id,
       _that = this;
     wx.request({
-      url: 'http://120.24.49.36/mapi/goods/queryOneGoods.do',
+      url: WebService.HOST + '/mapi/goods/queryOneGoods.do',
       data: {
-        account_id: app.globalData.account_id,
+        account_id: app.globalData.userInfo.account_id,
         brand_id: brandId,
         goods_id: goodsId
       },

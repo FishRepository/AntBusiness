@@ -1,4 +1,16 @@
 /* pages/login/login.wxss */
+
+.container {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  /* display: flex; */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+}
+
 page {
   height: 100%;
   background-color: #f2f2f2;

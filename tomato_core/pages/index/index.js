@@ -1,210 +1,74 @@
 //index.js
 //获取应用实例
 const app = getApp()
-
+var WebService = require('../../utils/webService.js');
 Page({
   data: {
-    brands: [{
-      name: 'A.T',
-      items: [{
-        proName: '星辰化妆品【中】',
-        price: 999.00,
-        num: 0
-      }, {
-        proName: '星辰化妆品【小】',
-        price: 599.00,
-        num: 0
-      }, {
-        proName: '星辰化妆品【小】',
-        price: 999.00,
-        num: 0
-      }, {
-        proName: '星辰化妆品【小】',
-        price: 699.00,
-        num: 0
-      }, {
-        proName: '星辰化妆品【中】',
-        price: 999.00,
-        num: 0
-      }, {
-        proName: '星辰化妆品【小】',
-        price: 599.00,
-        num: 0
-      }, {
-        proName: '星辰化妆品【小】',
-        price: 999.00,
-        num: 0
-      }, {
-        proName: '星辰化妆品【小】',
-        price: 699.00,
-        num: 0
-      }, {
-        proName: '星辰化妆品【中】',
-        price: 999.00,
-        num: 0
-      }, {
-        proName: '星辰化妆品【小】',
-        price: 599.00,
-        num: 0
-      }, {
-        proName: '星辰化妆品【小】',
-        price: 999.00,
-        num: 0
-      }, {
-        proName: '星辰化妆品【小】',
-        price: 699.00,
-        num: 0
-      }]
-    },
-    {
-      name: '香奈儿',
-      items: [{
-        proName: '香奈儿妆品【中】',
-        price: 999.00,
-        num: 0
-      }, {
-        proName: '香奈儿妆品【小】',
-        price: 599.00,
-        num: 0
-      },
-      {
-        proName: '香奈儿妆品【小】',
-        price: 599.00,
-        num: 0
-      }]
-    },
-    {
-      name: '施华洛世奇水晶',
-      items: [{
-        proName: '施华洛世奇水晶妆品【中】',
-        price: 999.00,
-        num: 0
-      }, {
-        proName: '施华洛世奇水晶妆品【小】',
-        price: 399.00,
-        num: 0
-      },
-      {
-        proName: '香奈儿妆品【小】',
-        price: 599.00,
-        num: 0
-      }]
-    },
-    {
-      name: '雅诗兰黛',
-      items: [{
-        proName: '雅诗兰黛妆品【中】',
-        price: 999.00,
-        num: 0
-      }, {
-        proName: '雅诗兰黛妆品【小】',
-        price: 499.00,
-        num: 0
-      }]
-    },
-    {
-      name: '格斯蓝雅',
-      items: [{
-        proName: '格斯蓝雅妆品【中】',
-        price: 999.00,
-        num: 0
-      }, {
-        proName: '格斯蓝雅妆品【小】',
-        price: 499.00,
-        num: 0
-      }]
-    },
-    {
-      name: 'Mircel',
-      items: [{
-        proName: '星辰化妆品【中】',
-        price: 999.00,
-        num: 0
-      }, {
-        proName: '星辰化妆品【小】',
-        price: 599.00,
-        num: 0
-      }, {
-        proName: '星辰化妆品【小】',
-        price: 999.00,
-        num: 0
-      }, {
-        proName: '星辰化妆品【小】',
-        price: 699.00,
-        num: 0
-      }]
-    }],
-    selIdx: 0,
-    totalPrice: 0,
-    selBandNum: 0,
-    totalNum: 0,
-    nowLevel: '我要进货',
-    outPrice: 0,
-    levelList: [{
-      name: '零售价'
-    }, {
-      name: '我要进货'
-    }, {
-      name: 'VIP'
-    }, {
-      name: 'SVIP'
-    }, {
-      name: '官方'
-    }, {
-      name: '总代'
-    }],
-    maskVisual: false,
-    animationData: {}
+    brands: [],//品牌集合
+    orderTypeName: '出货订单',//订单类型名称
+    totalPrice: 0,//总价格(减去额外费用后的数目)
+    nowLevel: '',//当前显示的代理层级
+    nowLevelList: [],//当前选中的品牌代理层级集合
+    outPrice: 0,//额外费用
+    selbrandIdx: 0,//当前选中的品牌index
+    selgoodsIdx: 0,//当前选中的商品index
+    selBandNum: 0,//已选择品牌数
+    selGoodsNum: 0,//已选择商品总数量
   },
   onLoad: function () {
-    var _that = this
-    var list = _that.data.brands
-    var t_price = 0;
-    var t_selbanNum = 0;
-    for (var i = 0, len = list.length; i < len; ++i) {
-      var c_list = list[i].items
-      var is_selBand = false
-      for (var j = 0, j_len = c_list.length; j < j_len; ++j) {
-        var num = c_list[j].num
-        var price = c_list[j].price
-        if (num > 0) {
-          is_selBand = true
-          t_price += num * price
+    var _that = this;
+    wx.request({
+      url: WebService.HOST + '/mapi/goodsV2/queryBrandAndGoods.do',
+      data: {
+        account_id: app.globalData.userInfo.account_id
+      },
+      success: function (res) {
+        if (res.data.code === 0 && res.data.list) {
+          console.log(res.data.list)
+          var _brandList = res.data.list,
+            _firstagentlevellist = _brandList[0].agentlevellist,
+            _nowLevel = _firstagentlevellist[_firstagentlevellist.length - 1]
+          //当前代理层级赋值
+          _that.setData({
+            brands: _brandList,
+            nowLevel: _nowLevel,
+            nowLevelList: _firstagentlevellist
+          })
         }
       }
-      if (is_selBand) {
-        t_selbanNum++
-      }
-    }
-    _that.setData({
-      totalPrice: t_price
     })
   },
   /**
    * 切换品牌列表
    */
   swapTabTable: function (e) {
-    var selIndex = e.currentTarget.id
+    var selIndex = e.currentTarget.id,
+      _that = this,
+      _brandList = _that.data.brands,
+      _firstagentlevellist = _brandList[selIndex].agentlevellist,
+      _nowLevel = _firstagentlevellist[_firstagentlevellist.length - 1];
     this.setData({
-      selIdx: selIndex
+      selbrandIdx: selIndex,
+      nowLevel: _nowLevel,
+      nowLevelList: _brandList[selIndex].agentlevellist
     })
   },
   /**
    * 减数量
    */
   subProNum: function (e) {
-    var _that = this
-    var selidx = e.currentTarget.dataset.pindex
-    var idx = e.currentTarget.dataset.cindex
-    var list = _that.data.brands
-    var c_list = list[selidx].items
-    var alNum = c_list[idx].num
-    c_list[idx].num = alNum - 1
-    var new_totalNum = _that.data.totalNum - 1;
-    var newT_price = _that.data.totalPrice - c_list[idx].price
+    var _that = this,
+      selidx = e.currentTarget.dataset.pindex,
+      idx = e.currentTarget.dataset.cindex,
+      list = _that.data.brands,
+      c_list = list[selidx].goodsAndGoodsPricelist,
+      alNum = c_list[idx].num;
+    c_list[idx].num = alNum - 1;
+    var new_totalNum = _that.data.selGoodsNum - 1;
+    var newT_price = _that.data.totalPrice - c_list[idx].goods_price
     var new_selBandNum = 0;
     for (var i = 0, len = list.length; i < len; ++i) {
-      var child = list[i].items
+      var child = list[i].goodsAndGoodsPricelist
       var is_selBand = false
       list[i].hasSelectItem = false
       for (var j = 0, j_len = child.length; j < j_len; ++j) {
@@ -221,29 +85,33 @@ Page({
       brands: list,
       totalPrice: newT_price,
       selBandNum: new_selBandNum,
-      totalNum: new_totalNum
+      selGoodsNum: new_totalNum
     })
   },
   /**
    * 加数量
    */
   addProNum: function (e) {
-    var _that = this
-    var selidx = e.currentTarget.dataset.pindex
-    var idx = e.currentTarget.dataset.cindex
-    var list = _that.data.brands
-    var c_list = list[selidx].items
-    var alNum = c_list[idx].num
-    c_list[idx].num = alNum + 1
-    var new_totalNum = _that.data.totalNum + 1;
-    var newT_price = _that.data.totalPrice + c_list[idx].price
+    var _that = this,
+      selidx = e.currentTarget.dataset.pindex,
+      idx = e.currentTarget.dataset.cindex,
+      list = _that.data.brands,
+      c_list = list[selidx].goodsAndGoodsPricelist,
+      alNum = c_list[idx].num;
+    if (alNum) {
+      c_list[idx].num = alNum + 1;
+    } else {
+      c_list[idx].num = 1 * 1;
+    }
+    var new_totalNum = _that.data.selGoodsNum + 1;
+    var newT_price = _that.data.totalPrice + c_list[idx].goods_price
     var new_selBandNum = 0;
     for (var i = 0, len = list.length; i < len; ++i) {
-      var child = list[i].items
+      var child = list[i].goodsAndGoodsPricelist
       var is_selBand = false
       list[i].hasSelectItem = false
       for (var j = 0, j_len = child.length; j < j_len; ++j) {
-        if (child[j].num > 0) {
+        if (child[j].num && child[j].num > 0) {
           is_selBand = true
           list[i].hasSelectItem = true
         }
@@ -256,17 +124,17 @@ Page({
       brands: list,
       totalPrice: newT_price,
       selBandNum: new_selBandNum,
-      totalNum: new_totalNum
+      selGoodsNum: new_totalNum
     })
   },
   /**
    * 清空按钮操作
    */
   clearEmpty: function (e) {
-    var _that = this
-    var list = _that.data.brands
+    var _that = this,
+      list = _that.data.brands;
     for (var i = 0, len = list.length; i < len; ++i) {
-      var child = list[i].items
+      var child = list[i].goodsAndGoodsPricelist
       for (var j = 0, j_len = child.length; j < j_len; ++j) {
         child[j].num = 0
       }
@@ -275,7 +143,7 @@ Page({
       brands: list,
       totalPrice: 0,
       selBandNum: 0,
-      totalNum: 0,
+      selGoodsNum: 0,
       maskVisual: false
     })
     _that.cascadeDismiss();
@@ -285,15 +153,10 @@ Page({
    */
   showNumModalDialog: function (e) {
     var _that = this,
-      prtIdx = _that.data.selIdx,
-      idx = e.currentTarget.dataset.index,
-      prtBrand = _that.data.brands[prtIdx],
-      brandItem = prtBrand.items[idx];
-    this.setData({
+      idx = e.currentTarget.dataset.index;
+    _that.setData({
       showNumModal: true,
-      selBrand: prtBrand,
-      selBrandItem: brandItem,
-      selBrandItemIndex: idx
+      selgoodsIdx: idx
     })
   },
   /**
@@ -314,10 +177,10 @@ Page({
    */
   brandItemNumChange: function (e) {
     var _that = this,
-      prtIdx = _that.data.selIdx,
+      prtIdx = _that.data.selbrandIdx,
       idx = e.currentTarget.dataset.index,
       list = _that.data.brands;
-    list[prtIdx].items[idx].num = e.detail.value
+    list[prtIdx].goodsAndGoodsPricelist[idx].num = e.detail.value;
     _that.setData({
       brands: list
     });
@@ -325,12 +188,12 @@ Page({
     var t_selbanNum = 0;
     var t_totalNum = 0;
     for (var i = 0, len = list.length; i < len; ++i) {
-      var c_list = list[i].items
+      var c_list = list[i].goodsAndGoodsPricelist
       var is_selBand = false
       list[i].hasSelectItem = false
       for (var j = 0, j_len = c_list.length; j < j_len; ++j) {
         var num = c_list[j].num
-        var price = c_list[j].price
+        var price = c_list[j].goods_price
         if (num > 0) {
           is_selBand = true
           list[i].hasSelectItem = true
@@ -346,7 +209,7 @@ Page({
       brands: list,
       totalPrice: t_price,
       selBandNum: t_selbanNum,
-      totalNum: t_totalNum
+      selGoodsNum: t_totalNum
     })
   },
 
@@ -358,17 +221,17 @@ Page({
       showLevelModal: true
     })
     var _that = this,
-      nowLevelName = _that.data.nowLevel,
-      list = _that.data.levelList
+      _nowLevel = _that.data.nowLevel,
+      list = _that.data.nowLevelList;
     for (var i = 0, len = list.length; i < len; ++i) {
-      if (nowLevelName == list[i].name) {
+      if (_nowLevel.agentlevel_id == list[i].agentlevel_id) {
         list[i].checked = true;
       } else {
         list[i].checked = false;
       }
     }
     this.setData({
-      levelList: list
+      nowLevelList: list
     });
   },
   /**
@@ -385,7 +248,7 @@ Page({
   switchSelectLevel: function (e) {
     var _that = this,
       idx = e.currentTarget.dataset.index,
-      list = _that.data.levelList;
+      list = _that.data.nowLevelList;
     for (var i = 0, len = list.length; i < len; ++i) {
       if (idx == i) {
         list[i].checked = true;
@@ -394,8 +257,8 @@ Page({
       }
     }
     this.setData({
-      levelList: list,
-      nowLevel: list[idx].name
+      nowLevelList: list,
+      nowLevel: list[idx]
     });
   },
 
@@ -433,7 +296,6 @@ Page({
   brandOutPriceChange: function (e) {
     var _that = this,
       nowSymbol = _that.data.outPriceSymbol;
-    console.log(nowSymbol)
     if (nowSymbol == '+') {
       this.setData({
         outPrice: (e.detail.value * 1)
@@ -469,7 +331,7 @@ Page({
    * 切换购物车开与关
    */
   cascadeToggle: function () {
-    
+
     var that = this
     if (that.data.maskVisual) {
       that.cascadeDismiss();
@@ -477,7 +339,7 @@ Page({
       that.cascadePopup();
     }
     // if (that.data.totalPrice > 0) {
-      
+
     // } else {
     //   that.cascadeDismiss();
     // }
@@ -518,19 +380,19 @@ Page({
      * 立即下单弹窗
      */
   showOrderSureDialog: function (e) {
-    if (this.data.totalNum>0){
+    if (this.data.totalNum > 0) {
       this.setData({
         showOrderSure: true,
         maskVisual: false
       })
-    }else{
+    } else {
       wx.showToast({
         title: '当前订单无商品',
         icon: 'none',
         duration: 2000
       })
     }
-    
+
   },
   /**
      * 隐藏立即下单弹窗

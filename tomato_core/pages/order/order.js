@@ -1,6 +1,7 @@
 // pages/order/order.js
 const util = require('../../utils/util.js');
 var app = getApp();
+var WebService = require('../../utils/webService.js');
 Page({
 
   /**
@@ -25,9 +26,9 @@ Page({
     var _that = this
     //查询出货订单
     wx.request({
-      url: 'http://120.24.49.36/mapi/order/listPageAllOrder.do',
+      url: WebService.HOST+'/mapi/order/listPageAllOrder.do',
       data: {
-        account_id: app.globalData.account_id,
+        account_id: app.globalData.userInfo.account_id,
         type: 3,
         currentPage: _that.data.outCurrentPage,
         showCount: 10
@@ -50,9 +51,9 @@ Page({
     })
     //查询进货订单
     wx.request({
-      url: 'http://120.24.49.36/mapi/order/listPageAllOrder.do',
+      url: WebService.HOST +'/mapi/order/listPageAllOrder.do',
       data: {
-        account_id: app.globalData.account_id,
+        account_id: app.globalData.userInfo.account_id,
         type: 4,
         currentPage: _that.data.inCurrentPage,
         showCount: 10
@@ -92,9 +93,9 @@ Page({
         })
         //出货订单下滑翻页
         wx.request({
-          url: 'http://120.24.49.36/mapi/order/listPageAllOrder.do',
+          url: WebService.HOST +'/mapi/order/listPageAllOrder.do',
           data: {
-            account_id: app.globalData.account_id,
+            account_id: app.globalData.userInfo.account_id,
             type: 3,
             currentPage: _outNowPage + 1,
             showCount: 10
@@ -130,9 +131,9 @@ Page({
         })
         //进货订单下滑翻页
         wx.request({
-          url: 'http://120.24.49.36/mapi/order/listPageAllOrder.do',
+          url: WebService.HOST +'/mapi/order/listPageAllOrder.do',
           data: {
-            account_id: app.globalData.account_id,
+            account_id: app.globalData.userInfo.account_id,
             type: 4,
             currentPage: _inNowPage + 1,
             showCount: 10
@@ -426,9 +427,9 @@ Page({
             })
           }
           wx.request({
-            url: 'http://120.24.49.36/mapi/order/deleteOrder.do',
+            url: WebService.HOST +'/mapi/order/deleteOrder.do',
             data: {
-              account_id: app.globalData.account_id,
+              account_id: app.globalData.userInfo.account_id,
               order_id: _orderId
             },
             success(res) {

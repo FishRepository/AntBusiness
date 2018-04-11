@@ -1,4 +1,5 @@
 // pages/shop/shopOperate/shopOperate.js
+var WebService = require('../../../utils/webService.js');
 var app = getApp();
 Page({
 
@@ -23,9 +24,9 @@ Page({
       })
       //编辑
       wx.request({
-        url: 'http://120.24.49.36/mapi/goods/queryAgentLevel.do',
+        url: WebService.HOST + '/mapi/goods/queryAgentLevel.do',
         data: {
-          account_id: app.globalData.account_id,
+          account_id: app.globalData.userInfo.account_id,
           brand_id: _brandId,
           type: 1
         },
@@ -132,10 +133,10 @@ Page({
     var item = _that.data.defineItems[idx]
     if (item.agentlevel_id) {
       wx.request({
-        url: 'http://120.24.49.36/mapi/goods/deleteAgentLevel.do',
+        url: WebService.HOST + '/mapi/goods/deleteAgentLevel.do',
         data: {
           brand_id: _brandId,
-          account_id: app.globalData.account_id,
+          account_id: app.globalData.userInfo.account_id,
           agentlevel_id: item.agentlevel_id
         }
       })
@@ -186,10 +187,10 @@ Page({
         if (_brandId && _brandId.length > 0) {
           //说明是进行了修改操作
           wx.request({
-            url: 'http://120.24.49.36/mapi/goods/updateBrand.do',
+            url: WebService.HOST + '/mapi/goods/updateBrand.do',
             data: {
               brand_id: _brandId,
-              account_id: app.globalData.account_id,
+              account_id: app.globalData.userInfo.account_id,
               brand_name: _brandName
             },
             success: function (res) {
@@ -198,10 +199,10 @@ Page({
                 if (_levelList[i].agentlevel_id) {
                   //修改
                   wx.request({
-                    url: 'http://120.24.49.36/mapi/goods/updateAgentLevel.do',
+                    url: WebService.HOST + '/mapi/goods/updateAgentLevel.do',
                     data: {
                       brand_id: _brandId,
-                      account_id: app.globalData.account_id,
+                      account_id: app.globalData.userInfo.account_id,
                       agentlevel_id: _levelList[i].agentlevel_id,
                       agentlevel_name: _levelList[i].agentlevel_name
                     }
@@ -209,10 +210,10 @@ Page({
                 } else {
                   //新增
                   wx.request({
-                    url: 'http://120.24.49.36/mapi/goods/insertAgentLevel.do',
+                    url: WebService.HOST + '/mapi/goods/insertAgentLevel.do',
                     data: {
                       brand_id: _brandId,
-                      account_id: app.globalData.account_id,
+                      account_id: app.globalData.userInfo.account_id,
                       agentlevel_name: _levelList[i].agentlevel_name
                     }
                   })
@@ -232,9 +233,9 @@ Page({
         } else {
           //新增操作
           wx.request({
-            url: 'http://120.24.49.36/mapi/goods/insertBrand.do',
+            url: WebService.HOST + '/mapi/goods/insertBrand.do',
             data: {
-              account_id: app.globalData.account_id,
+              account_id: app.globalData.userInfo.account_id,
               brand_name: _brandName,
               agentlevel_names: _leveNames
             },

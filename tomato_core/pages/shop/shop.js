@@ -1,4 +1,5 @@
 // pages/shop/shop.js
+var WebService = require('../../utils/webService.js');
 var app = getApp();
 Page({
 
@@ -31,9 +32,9 @@ Page({
   onShow: function () {
     var _that = this
     wx.request({
-      url: 'http://120.24.49.36/mapi/goods/queryBrand.do',
+      url: WebService.HOST + '/mapi/goods/queryBrand.do',
       data: {
-        account_id: app.globalData.account_id,
+        account_id: app.globalData.userInfo.account_id,
         type: 1
       },
       success: function (res) {
@@ -153,10 +154,10 @@ Page({
             mask: true
           })
           wx.request({
-            url: 'http://120.24.49.36/mapi/goods/deleteBrand.do?=1&=1',
+            url: WebService.HOST + '/mapi/goods/deleteBrand.do?=1&=1',
             data: {
               brand_id: that.data.items[idx].brand_id,
-              account_id: app.globalData.account_id
+              account_id: app.globalData.userInfo.account_id
             },
             success: function (res) {
               wx.hideLoading();

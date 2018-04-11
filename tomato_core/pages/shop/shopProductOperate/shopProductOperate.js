@@ -1,5 +1,6 @@
 // pages/shop/shopProductOperate/shopProductOperate.js
 var app = getApp();
+var WebService = require('../../../utils/webService.js');
 Page({
 
   /**
@@ -21,9 +22,9 @@ Page({
     if (_brandId && _goodsId) {
       //说明是过来的编辑链接
       wx.request({
-        url: 'http://120.24.49.36/mapi/goods/queryOneGoods.do',
+        url: WebService.HOST + '/mapi/goods/queryOneGoods.do',
         data: {
-          account_id: app.globalData.account_id,
+          account_id: app.globalData.userInfo.account_id,
           brand_id: _brandId,
           goods_id: _goodsId
         },
@@ -41,9 +42,9 @@ Page({
     } else {
       //传递过来是新增链接，加载代理层级
       wx.request({
-        url: 'http://120.24.49.36/mapi/goods/queryAgentLevel.do',
+        url: WebService.HOST + '/mapi/goods/queryAgentLevel.do',
         data: {
-          account_id: app.globalData.account_id,
+          account_id: app.globalData.userInfo.account_id,
           brand_id: _brandId,
           type: 1
         },
@@ -172,10 +173,10 @@ Page({
         })
         //修改商品
         wx.request({
-          url: 'http://120.24.49.36/mapi/goods/updateGoods.do',
+          url: WebService.HOST + '/mapi/goods/updateGoods.do',
           data: {
             brand_id: _brand.brand_id,
-            account_id: app.globalData.account_id,
+            account_id: app.globalData.userInfo.account_id,
             goods_id: _goods.goods_id,
             goods_name: _goods.goods_name,
             goods_price: _goods.goods_price
@@ -184,9 +185,9 @@ Page({
             //修改商品代理价格
             for (var i in _itemList) {
               wx.request({
-                url: 'http://120.24.49.36/mapi/goods/updateGoodsPrice.do',
+                url: WebService.HOST + '/mapi/goods/updateGoodsPrice.do',
                 data: {
-                  account_id: app.globalData.account_id,
+                  account_id: app.globalData.userInfo.account_id,
                   goods_id: _goods.goods_id,
                   agentlevel_id: _itemList[i].agentlevel_id,
                   goods_price: _itemList[i].goods_price
@@ -217,9 +218,9 @@ Page({
         })
         //新增逻辑
         wx.request({
-          url: 'http://120.24.49.36/mapi/goods/insertGoods.do?=1&=1&=g1&=10&=2,20|3,30',
+          url: WebService.HOST + '/mapi/goods/insertGoods.do',
           data: {
-            account_id: app.globalData.account_id,
+            account_id: app.globalData.userInfo.account_id,
             brand_id: _brand.brand_id,
             goods_name: _goods.goods_name,
             goods_price: _goods.goods_price ? _goods.goods_price : 0,

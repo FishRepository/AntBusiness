@@ -1,5 +1,6 @@
 // pages/order/orderDetail/orderDetail.js
 var app = getApp();
+var WebService = require('../../../utils/webService.js');
 Page({
 
   /**
@@ -17,9 +18,9 @@ Page({
     var _orderId = options.order_id,
     _that=this
     wx.request({
-      url: 'http://120.24.49.36/mapi/order/queryOrder.do',
+      url: WebService.HOST +'/mapi/order/queryOrder.do',
       data:{
-        account_id: app.globalData.account_id,
+        account_id: app.globalData.userInfo.account_id,
         order_id: _orderId
       },
       success:function(res){

@@ -1,6 +1,7 @@
 // pages/shop/shopDetail/shopDetail.js
 // pages/shop/shop.js
 var app = getApp();
+var WebService = require('../../../utils/webService.js');
 Page({
 
   /**
@@ -23,9 +24,9 @@ Page({
       brandId: _brandId
     })
     wx.request({
-      url: 'http://120.24.49.36/mapi/goods/queryGoods.do',
+      url: WebService.HOST + '/mapi/goods/queryGoods.do',
       data: {
-        account_id: app.globalData.account_id,
+        account_id: app.globalData.userInfo.account_id,
         brand_id: _brandId,
         type: 0
       },
@@ -64,9 +65,9 @@ Page({
       _brandId = _that.data.brandId;
     if (_brandId) {
       wx.request({
-        url: 'http://120.24.49.36/mapi/goods/queryGoods.do',
+        url: WebService.HOST + '/mapi/goods/queryGoods.do',
         data: {
-          account_id: app.globalData.account_id,
+          account_id: app.globalData.userInfo.account_id,
           brand_id: _brandId,
           type: 0
         },
@@ -190,10 +191,10 @@ Page({
             mask: true
           })
           wx.request({
-            url: 'http://120.24.49.36/mapi/goods/deleteGoods.do',
+            url: WebService.HOST + '/mapi/goods/deleteGoods.do',
             data: {
               brand_id: _brandId,
-              account_id: app.globalData.account_id,
+              account_id: app.globalData.userInfo.account_id,
               goods_id: _item.goods_id
             },
             success: function (e) {
