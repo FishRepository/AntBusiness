@@ -3,6 +3,19 @@
 <mapper namespace="com.backend.admin.mapper.IntroductionMapper">
 
     <!-- 通用查询映射结果 -->
+    <resultMap id="typeMap" type="com.backend.admin.entity.IntroductionType">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="is_deleted" property="deleted"/>
+    </resultMap>
+
+    <select id="getIntroductionTypeById" parameterType="java.lang.Integer" resultMap="typeMap">
+        SELECT *
+        FROM introduction_type
+        WHERE id = #{id}
+    </select>
+
+    <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.backend.admin.entity.Introduction">
         <id column="id" property="id"/>
         <result column="type" property="type"/>
@@ -13,11 +26,15 @@
         <result column="update_time" property="updateTime"/>
         <result column="status" property="status"/>
         <result column="is_deleted" property="deleted"/>
+        <association column="type" property="introductionType" select="getIntroductionTypeById"/>
     </resultMap>
 
     <select id="listIntroduction" resultMap="BaseResultMap">
         SELECT * FROM introduction
         WHERE is_deleted = 0
+        <if test="type!=null">
+            AND type = #{type}
+        </if>
         <if test="status!=null">
             AND status = #{status}
         </if>
@@ -58,5 +75,9 @@
             <if test="status!=null">`status` = #{status},</if>
             <if test="deleted!=null">is_deleted = #{deleted},</if>
         </trim>
+    </update>
+
+    <update id="resetTypeByTypeId" parameterType="int">
+        UPDATE introduction SET type = 0 WHERE type = #{typeId}
     </update>
 </mapper>

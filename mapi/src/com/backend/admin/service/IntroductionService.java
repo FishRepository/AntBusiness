@@ -48,4 +48,8 @@ public class IntroductionService {
         introduction.setDeleted(true);
         return updateIntroduction(introduction);
     }
+
+    public void resetTypeByTypeId(int typeId) {
+        introductionMapper.resetTypeByTypeId(typeId);
+    }
 }

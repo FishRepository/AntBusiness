@@ -27,7 +27,7 @@ public class LoginController {
     public ModelAndView login(HttpServletRequest request) {
         ModelAndView model = new ModelAndView();
         if (SessionUtils.isLogin(request)) {
-            model.setViewName("admin/index");
+            model.setViewName("admin/introduction");
         } else {
             model.setViewName("admin/page-login");
         }

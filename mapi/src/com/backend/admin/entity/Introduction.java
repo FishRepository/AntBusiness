@@ -22,6 +22,8 @@ public class Introduction {
 
     private Boolean isDeleted;
 
+    private IntroductionType introductionType;
+
     public Integer getId() {
         return id;
     }
@@ -92,5 +94,29 @@ public class Introduction {
 
     public void setDeleted(Boolean deleted) {
         isDeleted = deleted;
+    }
+
+    public IntroductionType getIntroductionType() {
+        return introductionType;
+    }
+
+    public void setIntroductionType(IntroductionType introductionType) {
+        this.introductionType = introductionType;
+    }
+
+    @Override
+    public String toString() {
+        return "Introduction{" +
+                "id=" + id +
+                ", type=" + type +
+                ", title='" + title + '\'' +
+                ", functions='" + functions + '\'' +
+                ", operates='" + operates + '\'' +
+                ", status=" + status +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", isDeleted=" + isDeleted +
+                ", introductionType=" + introductionType +
+                '}';
     }
 }

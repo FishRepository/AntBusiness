@@ -1,7 +1,9 @@
 package com.backend.admin.controller;
 
 import com.backend.admin.entity.Introduction;
+import com.backend.admin.entity.IntroductionType;
 import com.backend.admin.service.IntroductionService;
+import com.backend.admin.service.IntroductionTypeService;
 import com.backend.common.ErrorEnums;
 import com.backend.common.RequestResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
+/**
+ * @author caojiantao
+ */
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -19,9 +24,12 @@ public class AdminController {
     @Autowired
     private IntroductionService introductionService;
 
-    @RequestMapping("/index")
+    @Autowired
+    private IntroductionTypeService introductionTypeService;
+
+    @RequestMapping("/introduction")
     public ModelAndView index() {
-        return new ModelAndView("admin/indexNew");
+        return new ModelAndView("admin/introduction");
     }
 
     @ResponseBody
@@ -90,6 +98,57 @@ public class AdminController {
             vo.success("操作成功");
         } else {
             vo.error(ErrorEnums.DbError);
+        }
+        return vo;
+    }
+
+    @RequestMapping(value = {"/introductionType", "/index"})
+    public String introductionType() {
+        return "admin/introductionType";
+    }
+
+    @ResponseBody
+    @RequestMapping("/listIntroductionType")
+    public RequestResultVO<List<IntroductionType>> listIntroductionType() {
+        RequestResultVO<List<IntroductionType>> vo = new RequestResultVO<>();
+        vo.success(introductionTypeService.listIntroductionType(null));
+        return vo;
+    }
+
+    @ResponseBody
+    @RequestMapping("/getIntroductionTypeById")
+    public IntroductionType getIntroductionTypeById(int id) {
+        return introductionTypeService.getIntroductionTypeById(id);
+    }
+
+    @ResponseBody
+    @RequestMapping("/removeIntroductionTypeById")
+    public RequestResultVO<String> removeIntroductionTypeById(int id) {
+        RequestResultVO<String> vo = new RequestResultVO<>();
+        if (introductionTypeService.removeIntroductionTypeById(id)) {
+            vo.success("操作成功");
+        } else {
+            vo.error(ErrorEnums.DbError);
+        }
+        return vo;
+    }
+
+    @ResponseBody
+    @RequestMapping("/saveIntroductionType")
+    public RequestResultVO<String> saveIntroductionType(IntroductionType type) {
+        RequestResultVO<String> vo = new RequestResultVO<>();
+        if (type.getId() == null) {
+            if (introductionTypeService.saveIntroductionType(type)) {
+                vo.success("操作成功");
+            } else {
+                vo.error(ErrorEnums.DbError);
+            }
+        } else {
+            if (introductionTypeService.updateIntroductionType(type)) {
+                vo.success("操作成功");
+            } else {
+                vo.error(ErrorEnums.DbError);
+            }
         }
         return vo;
     }

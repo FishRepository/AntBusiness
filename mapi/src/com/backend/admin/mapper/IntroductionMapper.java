@@ -14,4 +14,6 @@ public interface IntroductionMapper {
     void saveIntroduction(Introduction introduction);
 
     int updateIntroduction(Introduction introduction);
+
+    int resetTypeByTypeId(int typeId);
 }

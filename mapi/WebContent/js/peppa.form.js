@@ -56,6 +56,7 @@
         clear: function () {
             var $this = $(this);
             $this.find('input[type!="radio"]').val('');
+            $this.find('select').find('option:first').prop('selected', true);
             $this.find('input:radio:first').prop('checked', true);
             $this.find('textarea').val('');
             $this.find('img').attr('src', '');

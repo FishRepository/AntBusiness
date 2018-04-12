@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.backend.admin.mapper.IntroductionTypeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.backend.admin.entity.IntroductionType">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="is_deleted" property="deleted"/>
+    </resultMap>
+
+    <select id="listIntroductionType" resultMap="BaseResultMap">
+        SELECT *
+        FROM introduction_type
+        WHERE is_deleted = 0
+    </select>
+
+    <select id="getIntroductionTypeById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT *
+        FROM introduction_type
+        WHERE id = #{id}
+    </select>
+
+    <insert id="saveIntroductionType" parameterType="com.backend.admin.entity.IntroductionType" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO introduction_type (
+            name
+        ) VALUES (
+            #{name}
+        )
+    </insert>
+
+    <update id="updateIntroductionType" parameterType="com.backend.admin.entity.IntroductionType">
+        UPDATE introduction_type
+        <trim prefix="SET" suffixOverrides="," suffix="WHERE id = #{id}">
+            name = #{name},
+            <if test="deleted!=null">is_deleted = #{deleted},</if>
+        </trim>
+    </update>
+</mapper>
