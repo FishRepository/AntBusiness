@@ -24,10 +24,36 @@ Page({
       },
       success: function (res) {
         if (res.data.code === 0 && res.data.list) {
-          console.log(res.data.list)
+          // console.log(res.data.list)
           var _brandList = res.data.list,
             _firstagentlevellist = _brandList[0].agentlevellist,
-            _nowLevel = _firstagentlevellist[_firstagentlevellist.length - 1]
+            _nowLevel = _firstagentlevellist[_firstagentlevellist.length - 1];
+          //加入默认的代理层级
+          _firstagentlevellist.splice(_firstagentlevellist.length, 0, {
+            agentlevel_id: -1,
+            agentlevel_name: '我要进货'
+          }, {
+              agentlevel_id: -2,
+              agentlevel_name: '进货价出售'
+            });
+          for (var i in _brandList[0].goodsAndGoodsPricelist) {
+            var _goodsPriceAgentList = _brandList[0].goodsAndGoodsPricelist[i].goodspricelist;
+            //先给商品加入默认代理层级
+            _goodsPriceAgentList.splice(_goodsPriceAgentList.length, 0, {
+              agentlevel_id: -1,
+              agentlevel_name: '我要进货',
+              goods_price: _brandList[0].goodsAndGoodsPricelist[i].goods_price
+            }, {
+                agentlevel_id: -2,
+                agentlevel_name: '进货价出售',
+                goods_price: _brandList[0].goodsAndGoodsPricelist[i].goods_price
+              });
+            for (var j in _goodsPriceAgentList) {
+              if (_goodsPriceAgentList[j].agentlevel_id === _nowLevel.agentlevel_id) {
+                _brandList[0].goodsAndGoodsPricelist[i].goods_price = _goodsPriceAgentList[j].goods_price
+              }
+            }
+          }
           //当前代理层级赋值
           _that.setData({
             brands: _brandList,
@@ -47,11 +73,40 @@ Page({
       _brandList = _that.data.brands,
       _firstagentlevellist = _brandList[selIndex].agentlevellist,
       _nowLevel = _firstagentlevellist[_firstagentlevellist.length - 1];
+    //加入默认的代理层级
+    _firstagentlevellist.splice(_firstagentlevellist.length, 0, {
+      agentlevel_id: -1,
+      agentlevel_name: '我要进货'
+    }, {
+        agentlevel_id: -2,
+        agentlevel_name: '进货价出售'
+      });
     this.setData({
       selbrandIdx: selIndex,
       nowLevel: _nowLevel,
-      nowLevelList: _brandList[selIndex].agentlevellist
+      nowLevelList: _firstagentlevellist
     })
+    for (var i in _brandList[selIndex].goodsAndGoodsPricelist) {
+      var _goodsPriceAgentList = _brandList[selIndex].goodsAndGoodsPricelist[i].goodspricelist;
+      //先给商品加入默认代理层级
+      _goodsPriceAgentList.splice(_goodsPriceAgentList.length, 0, {
+        agentlevel_id: -1,
+        agentlevel_name: '我要进货',
+        goods_price: _brandList[selIndex].goodsAndGoodsPricelist[i].goods_price
+      }, {
+          agentlevel_id: -2,
+          agentlevel_name: '进货价出售',
+          goods_price: _brandList[selIndex].goodsAndGoodsPricelist[i].goods_price
+        });
+      for (var j in _goodsPriceAgentList) {
+        if (_goodsPriceAgentList[j].agentlevel_id === _nowLevel.agentlevel_id) {
+          _brandList[selIndex].goodsAndGoodsPricelist[i].goods_price = _goodsPriceAgentList[j].goods_price
+        }
+      }
+    }
+    _that.setData({
+      brands: _brandList
+    });
   },
   /**
    * 减数量
@@ -127,6 +182,7 @@ Page({
       selGoodsNum: new_totalNum
     })
   },
+
   /**
    * 清空按钮操作
    */
@@ -247,6 +303,8 @@ Page({
    */
   switchSelectLevel: function (e) {
     var _that = this,
+      _brandList = _that.data.brands,
+      selBrandIdx = _that.data.selbrandIdx,
       idx = e.currentTarget.dataset.index,
       list = _that.data.nowLevelList;
     for (var i = 0, len = list.length; i < len; ++i) {
@@ -256,10 +314,57 @@ Page({
         list[i].checked = false;
       }
     }
-    this.setData({
+    _that.setData({
       nowLevelList: list,
       nowLevel: list[idx]
     });
+    var _nowLevel = list[idx];
+    for (var i in _brandList[selBrandIdx].goodsAndGoodsPricelist) {
+      for (var j in _brandList[selBrandIdx].goodsAndGoodsPricelist[i].goodspricelist) {
+        if (_brandList[selBrandIdx].goodsAndGoodsPricelist[i].goodspricelist[j].agentlevel_id === _nowLevel.agentlevel_id) {
+          _brandList[selBrandIdx].goodsAndGoodsPricelist[i].goods_price = _brandList[selBrandIdx].goodsAndGoodsPricelist[i].goodspricelist[j].goods_price
+        }
+      }
+    }
+    _that.setData({
+      brands: _brandList
+    });
+    var _orderTypeName = ''
+    if (_nowLevel.agentlevel_id === -1) {
+      _orderTypeName = '进货订单';
+    } else {
+      _orderTypeName = '出货订单';
+    }
+    _that.setData({
+      orderTypeName: _orderTypeName
+    })
+    //重新计算订单数量和价格
+    var _outPrice = _that.data.outPrice,
+      new_selBandNum = 0,
+      new_totalNum = 0,
+      new_totalPrice = 0;
+    for (var i = 0, len = _brandList.length; i < len; ++i) {
+      var child = _brandList[i].goodsAndGoodsPricelist
+      var is_selBand = false
+      _brandList[i].hasSelectItem = false
+      for (var j = 0, j_len = child.length; j < j_len; ++j) {
+        if (child[j].num && child[j].num > 0 && child[j].goods_price > 0) {
+          is_selBand = true
+          list[i].hasSelectItem = true
+          new_totalNum = new_totalNum + child[j].num
+          new_totalPrice = new_totalPrice + child[j].num * child[j].goods_price
+        }
+      }
+      if (is_selBand) {
+        new_selBandNum++
+      }
+    }
+    new_totalPrice = new_totalPrice + _outPrice
+    _that.setData({
+      totalPrice: new_totalPrice,
+      selBandNum: new_selBandNum,
+      selGoodsNum: new_totalNum
+    })
   },
 
   /**
@@ -296,15 +401,15 @@ Page({
   brandOutPriceChange: function (e) {
     var _that = this,
       nowSymbol = _that.data.outPriceSymbol;
+    var thisOutPrice = 0;
     if (nowSymbol == '+') {
-      this.setData({
-        outPrice: (e.detail.value * 1)
-      })
+      thisOutPrice = e.detail.value * 1
     } else {
-      this.setData({
-        outPrice: (0 - e.detail.value * 1)
-      })
+      thisOutPrice = 0 - e.detail.value * 1
     }
+    _that.setData({
+      outPrice: thisOutPrice
+    })
   },
   /**
    * 切换额外费用正负
@@ -320,13 +425,32 @@ Page({
       nowSymbol = '+'
       nowOutPrice = Math.abs(nowOutPrice) * 1
     }
-    this.setData({
+    _that.setData({
       outPriceSymbol: nowSymbol,
       outPrice: nowOutPrice
     })
   },
-
-
+  /**
+   * 额外费用弹框确认
+   */
+  outPriceConfirm: function (e) {
+    var _that = this,
+      _brandList = _that.data.brands,
+      _outPrice = _that.data.outPrice;
+    var nowTotalPrice = 0;
+    for (var i = 0, len = _brandList.length; i < len; ++i) {
+      var child = _brandList[i].goodsAndGoodsPricelist
+      for (var j = 0, j_len = child.length; j < j_len; ++j) {
+        if (child[j].num > 0) {
+          nowTotalPrice = nowTotalPrice + child[j].num * child[j].goods_price
+        }
+      }
+    }
+    _that.setData({
+      showPriceModal: false,
+      totalPrice: nowTotalPrice + _outPrice
+    })
+  },
   /**
    * 切换购物车开与关
    */

@@ -38,7 +38,7 @@
     </scroll-view>
     <scroll-view scroll-y='true' class='table-right'>
       <block wx:for="{{brands[selbrandIdx].goodsAndGoodsPricelist}}" wx:for-item="child" wx:key="{{goods_id}}">
-        <view class='table-right-item'>
+        <view class='table-right-item' wx:if="{{child.goods_price>0}}">
           <text class='left-child-text' catchtap='showNumModalDialog' data-index="{{index}}">{{child.goods_name}}</text>
           <view class='bottom-child-view'>
             <text class='price-text' catchtap='showNumModalDialog' data-index="{{index}}">￥{{child.goods_price}}</text>
@@ -125,7 +125,7 @@
     </view>
     <view class="modal-footer">
       <view class="btn-cancel" bindtap="hidePriceModalDialog">取消</view>
-      <view class="btn-confirm" bindtap="hidePriceModalDialog">确定</view>
+      <view class="btn-confirm" bindtap="outPriceConfirm">确定</view>
     </view>
   </view>
 
@@ -137,7 +137,7 @@
       <view class='cart-view-main'>
         <view class='car-view-main-left'>
           <view class='cart-view-left'>购物车</view>
-          <view>已选择{{totalNum}}件商品</view>
+          <view>已选择{{selGoodsNum}}件商品</view>
         </view>
         <view>
           <text>合计：</text>
@@ -150,14 +150,14 @@
       </view>
     </view>
     <scroll-view scroll-y='true' class='cart-main-scroll'>
-      <block wx:for="{{brands}}" wx:key="{{name}}" wx:for-index="p_index">
+      <block wx:for="{{brands}}" wx:key="{{brand_id}}" wx:for-index="p_index">
         <view class='cart-scroll-item' wx:if="{{item.hasSelectItem}}">
           <view class='cart-scroll-title'>{{item.brand_name}}</view>
-          <block wx:for="{{item.items}}" wx:for-item="child" wx:key="{{proName}}" wx:for-index="c_index">
-            <view class='cart-scroll-detail' wx:if="{{child.num>0}}">
+          <block wx:for="{{item.goodsAndGoodsPricelist}}" wx:for-item="child" wx:key="{{goods_id}}" wx:for-index="c_index">
+            <view class='cart-scroll-detail' wx:if="{{child.num*child.goods_price>0}}">
               <view class='child-left-view'>
-                <view class='child-left-view-title'>{{child.proName}}</view>
-                <view class='child-left-view-price'>￥{{child.price}}</view>
+                <view class='child-left-view-title'>{{child.goods_name}}</view>
+                <view class='child-left-view-price'>￥{{child.goods_price}}</view>
               </view>
               <view class='child-right-view'>
                 <image wx:if="{{child.num>0}}" src='/images/index/icon_del.png' data-cindex="{{c_index}}" data-pindex="{{p_index}}" catchtap='subProNum'></image>
@@ -175,10 +175,7 @@
   <!-- 立即下单 -->
   <view class="modal-mask" catchtap='hideOrderSureDialog' catchtouchmove="preventTouchMove" wx:if="{{showOrderSure}}"></view>
   <view class="modal-dialog" wx:if="{{showOrderSure}}">
-
     <view class='modal-main'>
-
-
       <view class='order-main-img'>
         <image src='/images/index/icon_sure_outorder.png'></image>
       </view>
@@ -199,7 +196,6 @@
             <text>￥{{totalPrice}}</text>
           </view>
         </view>
-
         <view class='static-bottom-right'></view>
       </view>
     </view>
