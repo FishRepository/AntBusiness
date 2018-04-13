@@ -14,8 +14,6 @@ Page({
     selgoodsIdx: 0,//当前选中的商品index
     selBandNum: 0,//已选择品牌数
     selGoodsNum: 0,//已选择商品总数量
-    isGlobalBrandGoodsNone: false,//默认有商品
-    showOrderSure: false//下单弹框默认不显示
   },
   onShow: function () {
     var _that = this;
@@ -37,6 +35,8 @@ Page({
             account_id: app.globalData.userInfo.account_id
           },
           success: function (res) {
+            //隐藏加载动画
+            wx.hideLoading();
             if (res.data.code === 0 && res.data.list) {
               var _brandList = res.data.list,
                 _firstagentlevellist = _brandList[0].agentlevellist,
@@ -77,14 +77,14 @@ Page({
                 brands: _brandList,
                 orderTypeName: '2',//默认置为出货订单
                 nowLevel: _nowLevel,
-                nowLevelList: _brandList[0].agentlevellist
+                nowLevelList: _brandList[0].agentlevellist,
+                isGlobalBrandGoodsNone: false
               })
-              //隐藏加载动画
-              wx.hideLoading();
             } else {
               wx.hideLoading();
               //设置无商品页面
               _that.setData({
+                orderTypeName: '',
                 isGlobalBrandGoodsNone: true
               })
             }
@@ -514,6 +514,10 @@ Page({
   showOrderSureDialog: function (e) {
     var _that = this;
     if (_that.data.selGoodsNum > 0) {
+      _that.setData({
+        showOrderSure: true,
+        maskVisual: false
+      })
       //先添加当前订单信息入库
       var _brandList = _that.data.brands,
         _outPrice = _that.data.outPrice,
@@ -542,6 +546,11 @@ Page({
             if (res.data.code === 0 && res.data.order) {
               _that.setData({
                 thisOrder: res.data.order
+              })
+              //将当前所有的数据存入缓存中
+              wx.setStorage({
+                key: 'indexOrderData',
+                data: _that.data
               })
             }
           }
@@ -572,19 +581,15 @@ Page({
               _that.setData({
                 thisOrder: res.data.order
               })
+              //将当前所有的数据存入缓存中
+              wx.setStorage({
+                key: 'indexOrderData',
+                data: _that.data
+              })
             }
           }
         })
       }
-      _that.setData({
-        showOrderSure: true,
-        maskVisual: false
-      })
-      //将当前所有的数据存入缓存中
-      wx.setStorage({
-        key: 'indexOrderData',
-        data: _that.data
-      })
       //设置系统剪贴板内容
       wx.setClipboardData({
         data: '【番茄管家】温馨提示：主人 您的本次订单共计 ' + _that.data.selGoodsNum + ' 个商品 【请支付金额 ¥ ' + _that.data.totalPrice + ' 元 】祝您天天开心 心想事成(^_^)',
@@ -607,14 +612,6 @@ Page({
     //删除当前订单，页面数据不动
     var _that = this,
       _thisOrder = _that.data.thisOrder;
-    _that.setData({
-      showOrderSure: false
-    });
-    //将当前所有的数据存入缓存中
-    wx.setStorage({
-      key: 'indexOrderData',
-      data: _that.data
-    })
     wx.request({
       url: WebService.HOST + '/mapi/order/deleteOrder.do',
       data: {
@@ -626,6 +623,15 @@ Page({
           console.log("删除当前编辑订单成功！")
         }
       }
+    })
+    _that.setData({
+      showOrderSure: false,
+      thisOrder: {}
+    });
+    //将当前所有的数据存入缓存中
+    wx.setStorage({
+      key: 'indexOrderData',
+      data: _that.data
     })
   },
   /**

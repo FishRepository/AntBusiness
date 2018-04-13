@@ -3,7 +3,7 @@
   <!--头部-->
   <view class='main-top'>
     <view class='top-left'>
-      <text class='top-left-button' wx:if="{{orderTypeName}}">{{orderTypeName==1?'进货订单':'出货订单'}}</text>
+      <text class='top-left-button' wx:if="{{orderTypeName&&orderTypeName>0}}">{{orderTypeName==1?'进货订单':'出货订单'}}</text>
     </view>
     <view class='top-right'>
       <navigator class='top-navigator' url='/pages/shop/shop'>
@@ -130,7 +130,7 @@
       <view class='modal-price'>
         <text>额外费用</text>
         <text class='modal-price-symbol'>{{outPriceSymbol}}</text>
-        <input type="number" value='{{modalOutPrice}}' bindinput='brandOutPriceChange'></input>
+        <input type="digit" value='{{modalOutPrice}}' bindinput='brandOutPriceChange'></input>
         <image src='/images/index/icon_add_sub.png' catchtap='switchOurPriceSymbol'></image>
       </view>
       <view class="modal-footer">

@@ -10,7 +10,7 @@
         <text>我的进货价</text>
       </view>
       <text class='valduate'>￥</text>
-      <input class='valduate' value='{{goods.goods_price}}' bindinput='bindInputGoodsPrice'></input>
+      <input class='valduate' type='digit' value='{{goods.goods_price}}' bindinput='bindInputGoodsPrice'></input>
     </view>
     <view class='pro-out-title'>对外销售价格</view>
   </view>
@@ -19,7 +19,7 @@
     <block wx:for="{{items}}" wx:key="{{goodsprice_id}}">
       <view class='pro-out-item'>
         <text class='pro-out-item-left'>{{item.agentlevel_name}}</text> ￥
-        <input value='{{item.goods_price}}' bindinput='bindInputItemPrice' data-index='{{index}}'></input>
+        <input value='{{item.goods_price}}' type='digit' bindinput='bindInputItemPrice' data-index='{{index}}'></input>
       </view>
     </block>
   </scroll-view>
@@ -30,7 +30,7 @@
         <text>进货价出售</text>
       </view>
       <text class='valduate'>￥</text>
-      <input class='valduate' value='{{goods.goods_price}}' bindinput='bindInputGoodsPrice'></input>
+      <input class='valduate' type='digit' value='{{goods.goods_price}}' bindinput='bindInputGoodsPrice'></input>
     </view>
     <button class='view-button' bindtap='saveGoods'>保存</button>
   </view>
