@@ -181,7 +181,7 @@ Page({
       url: '/pages/shop/shopOperate/shopOperate?brand_id=' + _that.data.items[idx].brand_id
     })
   },
-  //添加商品事件
+  //添加品牌事件
   addShop: function (e) {
     wx.navigateTo({
       url: '/pages/shop/shopOperate/shopOperate?brand_id='
