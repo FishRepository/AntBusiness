@@ -587,7 +587,6 @@
 .modal-main {
   padding: 0px 10px;
   height: 300px;
-
 }
 
 .order-main-img {
@@ -602,7 +601,7 @@
   height: 150px;
 }
 
-.static-main-middle{
+.static-main-middle {
   display: flex;
   text-align: center;
   align-items: center;
@@ -625,8 +624,8 @@
   font-size: 10pt;
 }
 
-.order-price-view{
-   width: 50%; 
+.order-price-view {
+  width: 50%;
 }
 
 .order-price-view text {
@@ -703,9 +702,7 @@
   margin-top: 30px;
 }
 
-
-
-.none-main{
+.none-main {
   width: 100%;
   height: 100%;
   padding: 20px;
@@ -713,30 +710,30 @@
   text-align: center;
 }
 
-.none-main image{
+.none-main image {
   width: 100px;
   height: 100px;
   margin: 20px;
 }
 
-.none-title{
+.none-title {
   font-size: 11pt;
   font-weight: bold;
   padding: 20px;
 }
 
-.none-operate{
+.none-operate {
   padding: 10px 20px;
   text-align: center;
 }
 
-.none-operate button{
+.none-operate button {
   background-color: #e64663;
   color: white;
   font-size: 10pt;
 }
 
-.none-bottom{
+.none-bottom {
   position: fixed;
   display: flex;
   bottom: 0;

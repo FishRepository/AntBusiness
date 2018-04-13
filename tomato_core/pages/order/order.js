@@ -23,7 +23,11 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    var _that = this
+    var _that = this;
+    wx.showLoading({
+      title: '加载出货订单...',
+      mask: true
+    })
     //查询出货订单
     wx.request({
       url: WebService.HOST+'/mapi/order/listPageAllOrder.do',
@@ -34,6 +38,7 @@ Page({
         showCount: 10
       },
       success: function (res) {
+        wx.hideLoading();
         // console.log(res.data)
         if (res.data.code == 0 && res.data.list) {
           var list_out = res.data.list;
@@ -49,6 +54,10 @@ Page({
         }
       }
     })
+    wx.showLoading({
+      title: '加载进货订单...',
+      mask: true
+    })
     //查询进货订单
     wx.request({
       url: WebService.HOST +'/mapi/order/listPageAllOrder.do',
@@ -61,6 +70,7 @@ Page({
       success: function (res) {
         // console.log(res.data)
         if (res.data.code == 0 && res.data.list) {
+          wx.hideLoading();
           var list_in = res.data.list;
           for (var i = 0, i_len = list_in.length; i < i_len; ++i) {
             var chile_list_in = list_in[i].orderlist;

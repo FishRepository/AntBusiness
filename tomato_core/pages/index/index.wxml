@@ -18,7 +18,7 @@
     </view>
   </view>
   <!-- 中间部分 -->
-  
+
   <!-- 是否无商品页 -->
   <block wx:if="{{isGlobalBrandGoodsNone}}">
     <!-- 无商品页 -->
@@ -179,11 +179,11 @@
       </scroll-view>
     </view>
     <!-- 立即下单 -->
-    <view class="modal-mask" catchtap='hideOrderSureDialog' catchtouchmove="preventTouchMove" wx:if="{{showOrderSure}}"></view>
+    <view class="modal-mask" catchtap='sureNextOrder' catchtouchmove="preventTouchMove" wx:if="{{showOrderSure}}"></view>
     <view class="modal-dialog" wx:if="{{showOrderSure}}">
       <view class='modal-main'>
         <view class='order-main-img'>
-          <image src='/images/index/icon_sure_outorder.png'></image>
+          <image src="/images/index/{{orderTypeName==='1'?'icon_sure_inorder':'icon_sure_outorder'}}.png"></image>
         </view>
         <view class='order-info-static'>
           <view class='static-top-left'></view>

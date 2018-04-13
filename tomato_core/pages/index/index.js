@@ -14,24 +14,11 @@ Page({
     selgoodsIdx: 0,//当前选中的商品index
     selBandNum: 0,//已选择品牌数
     selGoodsNum: 0,//已选择商品总数量
+    isGlobalBrandGoodsNone: false,//默认有商品
+    showOrderSure: false//下单弹框默认不显示
   },
   onShow: function () {
     var _that = this;
-    _that.setData(
-      {
-        brands: [],//品牌集合
-        orderTypeName: '',//订单类型名称
-        totalPrice: 0,//总价格(减去额外费用后的数目)
-        nowLevel: '',//当前显示的代理层级
-        nowLevelList: [],//当前选中的品牌代理层级集合
-        outPrice: 0,//额外费用
-        selbrandIdx: 0,//当前选中的品牌index
-        selgoodsIdx: 0,//当前选中的商品index
-        selBandNum: 0,//已选择品牌数
-        selGoodsNum: 0,//已选择商品总数量
-        isGlobalBrandGoodsNone: false//默认有商品
-      }
-    )
     wx.getStorage({
       key: 'indexOrderData',
       success: function (res) {
@@ -589,20 +576,20 @@ Page({
           }
         })
       }
+      _that.setData({
+        showOrderSure: true,
+        maskVisual: false
+      })
       //将当前所有的数据存入缓存中
       wx.setStorage({
         key: 'indexOrderData',
         data: _that.data
       })
-      _that.setData({
-        showOrderSure: true,
-        maskVisual: false
-      })
       //设置系统剪贴板内容
       wx.setClipboardData({
         data: '【番茄管家】温馨提示：主人 您的本次订单共计 ' + _that.data.selGoodsNum + ' 个商品 【请支付金额 ¥ ' + _that.data.totalPrice + ' 元 】祝您天天开心 心想事成(^_^)',
         success: function (res) {
-          console.log("当前订单处理完成")
+          console.log("当前编辑订单处理完成")
         }
       })
     } else {
@@ -620,17 +607,23 @@ Page({
     //删除当前订单，页面数据不动
     var _that = this,
       _thisOrder = _that.data.thisOrder;
+    _that.setData({
+      showOrderSure: false
+    });
+    //将当前所有的数据存入缓存中
+    wx.setStorage({
+      key: 'indexOrderData',
+      data: _that.data
+    })
     wx.request({
-      url: 'http://120.24.49.36/mapi/customer/deleteOrder.do?=1&account_id=1',
+      url: WebService.HOST + '/mapi/order/deleteOrder.do',
       data: {
         account_id: app.globalData.userInfo.account_id,
         order_id: _thisOrder.order_id
       },
       success: function (res) {
         if (res.data.code == 0) {
-          _that.setData({
-            showOrderSure: false
-          });
+          console.log("删除当前编辑订单成功！")
         }
       }
     })

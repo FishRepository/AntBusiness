@@ -19,6 +19,10 @@ Page({
     var brandId = options.brand_id,
       goodsId = options.goods_id,
       _that = this;
+    wx.showLoading({
+      title: '加载中...',
+      mask: true
+    })
     wx.request({
       url: WebService.HOST + '/mapi/goods/queryOneGoods.do',
       data: {
@@ -27,6 +31,7 @@ Page({
         goods_id: goodsId
       },
       success: function (res) {
+        wx.hideLoading();
         // console.log(res.data)
         if (res.data.code == 0) {
           _that.setData({

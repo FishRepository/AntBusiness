@@ -30,7 +30,11 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    var _that = this
+    var _that = this;
+    wx.showLoading({
+      title: '加载中...',
+      mask: true
+    })
     wx.request({
       url: WebService.HOST + '/mapi/goods/queryBrand.do',
       data: {
@@ -38,10 +42,17 @@ Page({
         type: 1
       },
       success: function (res) {
+        wx.hideLoading();
         if (res.data.code == 0) {
           // console.log(res.data.list)
           _that.setData({
             items: res.data.list
+          })
+        }else{
+          wx.showToast({
+            title: '无品牌！',
+            icon: 'none',
+            duration: 2000
           })
         }
       }

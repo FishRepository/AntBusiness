@@ -23,6 +23,10 @@ Page({
     _that.setData({
       brandId: _brandId
     })
+    wx.showLoading({
+      title: '加载中...',
+      mask: true
+    })
     wx.request({
       url: WebService.HOST + '/mapi/goods/queryGoods.do',
       data: {
@@ -31,10 +35,17 @@ Page({
         type: 0
       },
       success: function (res) {
+        wx.hideLoading();
         // console.log(res.data)
         if (res.data.code == 0) {
           _that.setData({
             items: res.data.list
+          })
+        }else{
+          wx.showToast({
+            title: '无商品！',
+            icon: 'none',
+            duration: 2000
           })
         }
       }
