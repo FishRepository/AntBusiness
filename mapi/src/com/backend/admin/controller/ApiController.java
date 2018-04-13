@@ -3,7 +3,9 @@ package com.backend.admin.controller;
 import com.api.common.entity.Images;
 import com.api.common.service.ImagesService;
 import com.backend.admin.entity.Introduction;
+import com.backend.admin.entity.IntroductionType;
 import com.backend.admin.service.IntroductionService;
+import com.backend.admin.service.IntroductionTypeService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
@@ -27,6 +29,9 @@ public class ApiController {
 
     @Autowired
     private IntroductionService introductionService;
+
+    @Autowired
+    private IntroductionTypeService introductionTypeService;
 
     @ResponseBody
     @RequestMapping("/upload")
@@ -54,7 +59,8 @@ public class ApiController {
         Set<Map.Entry<Integer, List<Introduction>>> entries = multiValueMap.entrySet();
         for (Map.Entry<Integer, List<Introduction>> entry : entries) {
             JSONObject object = new JSONObject();
-            object.put("title", getTitleByType(entry.getKey()));
+            IntroductionType type = introductionTypeService.getIntroductionTypeById(entry.getKey());
+            object.put("title", type.getName());
             object.put("items", entry.getValue());
             result.add(object);
         }
@@ -65,21 +71,5 @@ public class ApiController {
     @RequestMapping("/getIntroductionById")
     public Introduction getIntroductionById(int id) {
         return introductionService.getIntroductionById(id);
-    }
-
-    private String getTitleByType(int type) {
-        String title;
-        switch (type) {
-            case 1:
-                title = "初级功能";
-                break;
-            case 2:
-                title = "进阶功能";
-                break;
-            default:
-                title = "未知类型";
-                break;
-        }
-        return title;
     }
 }

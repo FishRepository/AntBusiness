@@ -169,13 +169,13 @@
     </div>
     <ul class="app-menu">
         <li>
-            <a class="app-menu__item<#if index==0> active</#if>" href="${ctx}/admin/introduction">
+            <a class="app-menu__item<#if index==0> active</#if>" href="${ctx}/admin/introductionType">
                 <i class="app-menu__icon fa fa-list"></i><span class="app-menu__label">功能分类</span>
             </a>
         </li>
         <li>
-            <a class="app-menu__item<#if index==1> active</#if>" href="${ctx}/admin/introductionType">
-                <i class="app-menu__icon fa fa-list"></i><span class="app-menu__label">功能介绍</span>
+            <a class="app-menu__item<#if index==1> active</#if>" href="${ctx}/admin/introduction">
+                <i class="app-menu__icon fa fa-list"></i><span class="app-menu__label">功能列表</span>
             </a>
         </li>
     </ul>

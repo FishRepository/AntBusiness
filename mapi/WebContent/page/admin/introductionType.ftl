@@ -4,7 +4,7 @@
 <@global.head "Tomato Admin"></@global.head>
 <body class="app sidebar-mini rtl">
 <@global.navbar></@global.navbar>
-<@global.sidebar 1></@global.sidebar>
+<@global.sidebar 0></@global.sidebar>
 <@global.content "功能分类">
     <div class="row">
         <div class="col-md-12">
