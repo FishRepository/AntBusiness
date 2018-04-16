@@ -7,7 +7,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    userInfo:null
+    userInfo:null,
+    wechatIsBind:false
   },
 
   /**
@@ -16,8 +17,14 @@ Page({
   onLoad: function (options) {
     var userInfo = app.globalData.userInfo;
     var that = this;
+    var wechatIsBind = false;
+    if (userInfo.account_wechat){
+      wechatIsBind = true;
+    }
+    
     that.setData({
-      userInfo: userInfo
+      userInfo: userInfo,
+      wechatIsBind: wechatIsBind
     });
   },
 
@@ -78,11 +85,69 @@ Page({
     })
   },
 
+  /**
+   * 用户登出
+   */
   loginOut: function () {
     wx.clearStorage();
     app.globalData.userInfo = null;
     wx.reLaunch({
       url: '/pages/login/login',
     })
+  },
+
+  /**
+   * 绑定微信号
+   */
+  bindWechat: function () {
+    var that = this;
+    var wechatIsBind = that.data.wechatIsBind;
+    if (wechatIsBind){
+      return;
+    }
+    wx.login({
+      success: function (res) {
+        console.log(res.code);
+        if (res.code) {
+          //发起网络请求
+          wx.request({
+            url: WebService.HOST + "/mapi//wx/getOpenid.do",
+            data: {
+              accountId: app.globalData.userInfo.account_id,
+              code: res.code
+            },
+            success: function (res) {
+              if (res.data.code && res.data.code==0){
+                var wechatIsBind = true;
+                that.setData({
+                  wechatIsBind: wechatIsBind
+                });
+                wx.showToast({
+                  title: '绑定成功',
+                  icon: 'success',
+                  duration: 1500
+                });
+                console.log(res.data.msg);
+              }else{
+                console.log(res.data.msg);
+                wx.showToast({
+                  title: res.data.msg,
+                  icon: 'none',
+                  duration: 2500
+                });
+              }
+            }
+          })
+        }
+        // wx.getUserInfo({
+        //   success: function (res) {
+        //     var simpleUser = res.userInfo;
+        //     var encryptedData = res.encryptedData;
+        //     console.log(simpleUser.nickName);
+        //     console.log(simpleUser);
+        //   }
+        // });
+      }
+    });
   }
 })

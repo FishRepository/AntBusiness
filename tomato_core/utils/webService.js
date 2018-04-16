@@ -1,4 +1,4 @@
-const HOST = 'http://120.24.49.36';
+const HOST = 'https://www.ta521.com';
 // const HOST = 'http://127.0.0.1:80';
 
 //发送验证码请求

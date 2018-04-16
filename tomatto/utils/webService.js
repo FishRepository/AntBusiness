@@ -1,5 +1,5 @@
 // const HOST = 'http://120.24.49.36';
-const HOST = 'http://127.0.0.1:80';
+const HOST = 'https://www.ta521.com';
 
 const FETCH_INTRODUCTIONS_URL = '/mapi/v2/listIntroduction';
 const FETCH_INTRODUCTION_URL = '/mapi/v2/getIntroductionById';

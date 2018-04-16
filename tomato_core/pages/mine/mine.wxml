@@ -14,7 +14,7 @@
     <view class='v-text'>
       <image src='/images/login/icon_weixin.png'></image>
       <text>微信号</text>
-      <text class='text-right'>{{userInfo.account_wechat?'已绑定':'未绑定'}}</text>
+      <text class='text-right' bindtap='bindWechat'>{{wechatIsBind?'已绑定':'未绑定'}}</text>
     </view>
     <view class='divider'></view>
   </view>
