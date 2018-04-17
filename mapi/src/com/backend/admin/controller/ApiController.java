@@ -58,8 +58,12 @@ public class ApiController {
         JSONArray result = new JSONArray();
         Set<Map.Entry<Integer, List<Introduction>>> entries = multiValueMap.entrySet();
         for (Map.Entry<Integer, List<Introduction>> entry : entries) {
-            JSONObject object = new JSONObject();
             IntroductionType type = introductionTypeService.getIntroductionTypeById(entry.getKey());
+            if (type == null) {
+                // 未知类型不予展示
+                continue;
+            }
+            JSONObject object = new JSONObject();
             object.put("title", type.getName());
             object.put("items", entry.getValue());
             result.add(object);
