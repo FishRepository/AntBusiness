@@ -3,7 +3,7 @@ page {
 }
 
 .userinfo {
-  padding-top: 10rpx;
+  padding: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,15 +11,17 @@ page {
 }
 
 .userinfo-avatar {
-  width: 130rpx;
-  height: 130rpx;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
-  margin-bottom: 10rpx;
+  /* margin-bottom: 10rpx; */
 }
 
 .userinfo-nickname {
   color: white;
-  margin-bottom: 20rpx;
+  /* margin-bottom: 20rpx; */
+  padding: 10px;
+  font-size: 10pt;
 }
 
 .divider {
@@ -35,8 +37,12 @@ page {
 .v-text {
   display: flex;
   align-items: center;
-  padding: 30rpx;
+  text-align: center;
+  /* justify-content: center; */
+  padding: 10px 20px;
   background-color: white;
+  border-bottom: 1px solid #d8d6d6;
+  font-size: 11pt;
 }
 
 .text-right {
@@ -44,44 +50,58 @@ page {
   right: 30rpx;
 }
 
+.bangding-text {
+  padding: 5px 10px;
+  border: 1px solid #d8d6d6;
+  /* color:#d8d6d6; */
+  border-radius: 5px;
+}
+
 .v-text image {
-  width: 60rpx;
-  height: 60rpx;
-  margin-right: 15rpx;
+  width: 25px;
+  height: 25px;
+  margin-right: 5px;
 }
 
 .btn-logout {
-  margin-top: 80rpx;
-  padding: 15rpx 0;
+  margin-top: 50px;
   background-color: white;
   color: #e14566;
-  border-radius: 0;
+  /* border-radius:0px; */
+  padding: 10px;
+  font-size: 11pt;
+  text-align: center;
+  font-weight: bold;
 }
 
 .download {
-  position:fixed;
-  bottom:0;
+  position: fixed;
+  bottom: 0;
   width: 100%;
   padding: 20rpx;
   display: flex;
   align-items: center;
   font-size: 11pt;
   background-color: white;
+  /* text-align: center; */
+  /* justify-content: space-between; */
 }
 
 .download-logo {
-  width: 90rpx;
-  height: 90rpx;
+  width: 40px;
+  height: 40px;
 }
 
 .download-info {
   margin-left: 20rpx;
+  font-size: 10pt;
 }
 
 .download-emphasize {
-  margin-bottom: 5rpx;
+  margin-bottom: 5px;
   display: block;
   font-weight: bold;
+  font-size: 10pt;
 }
 
 .btn-download {
@@ -90,6 +110,7 @@ page {
   box-sizing: content-box;
   color: #e44865;
 }
+
 .btn-download::after {
   border: 1px solid #e44865;
 }

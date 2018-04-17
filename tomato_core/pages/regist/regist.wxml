@@ -3,25 +3,25 @@
 </view>
 
 <view>
-  <view class='divider'></view>
+  <!-- <view class='divider'></view> -->
   <view class='v-input'>
     <input id='userid' bindinput='useridInput' class='input-login' type='text' placeholder='手机号' value="{{userid}}"/>
     <button wx:if="{{!isShow}}" class='btn-verification' bindtap='sendCode'>验证码</button>
-    <button wx:if="{{isShow}}" class='btn-verify-forbidden'>{{sec}} S</button>
+    <button wx:if="{{isShow}}" class='btn-verification'>{{sec}}s</button>
   </view>
-  <view class='divider'></view>
+  <!-- <view class='divider'></view> -->
   <view class='v-input'>
     <input id='validCode' bindinput='validCodeInput' type='text' placeholder='验证码'  value="{{validCode}}"/>
   </view>
-  <view class='divider'></view>
+  <!-- <view class='divider'></view> -->
   <view class='v-input'>
     <input id='passwd' bindinput='passwdInput' type='text' password='true' placeholder='密码' value="{{passwd}}"/>
   </view>
-  <view class='divider'></view>
+  <!-- <view class='divider'></view> -->
   <view class='v-input'>
     <input id='confirmPasswd' bindinput='confirmPasswdInput' type='text' password='true' placeholder='请确认您的密码' value="{{confirmPasswd}}"/>
   </view>
-  <view class='divider'></view>
+  <!-- <view class='divider'></view> -->
   <view class='v-operate'>
     <button class='btn btn-primary' bindtap='confirm'>确认</button>
   </view>
