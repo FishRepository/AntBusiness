@@ -7,15 +7,15 @@
   ],
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#4B4B4B",
+    "navigationBarBackgroundColor": "#4b4b4b",
     "navigationBarTitleText": "番茄管家操作指南",
     "navigationBarTextStyle": "white"
   },
   "tabBar": {
-    "color": "#fff",
-    "borderStyle": "black",
-    "backgroundColor": "#4B4B4B",
-    "selectedColor": "#e14568",
+    "color": "#8a8a8a",
+    "borderStyle": "white",
+    "backgroundColor": "#4b4b4b",
+    "selectedColor": "#ffffff",
     "list": [
       {
         "pagePath": "pages/index/index",
