@@ -2,10 +2,13 @@ package com.backend.admin.controller;
 
 import com.api.common.entity.Images;
 import com.api.common.service.ImagesService;
+import com.api.order.service.OrderService;
 import com.backend.admin.entity.Introduction;
 import com.backend.admin.entity.IntroductionType;
+import com.backend.admin.mapper.UpdateMapper;
 import com.backend.admin.service.IntroductionService;
 import com.backend.admin.service.IntroductionTypeService;
+import com.backend.admin.service.UpdateService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
@@ -14,10 +17,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartRequest;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -32,6 +38,9 @@ public class ApiController {
 
     @Autowired
     private IntroductionTypeService introductionTypeService;
+
+    @Autowired
+    private UpdateService updateService;
 
     @ResponseBody
     @RequestMapping("/upload")
@@ -75,5 +84,12 @@ public class ApiController {
     @RequestMapping("/getIntroductionById")
     public Introduction getIntroductionById(int id) {
         return introductionService.getIntroductionById(id);
+    }
+
+    @ResponseBody
+    @RequestMapping("/updateOrderTime")
+    public Object updateOrderTime(@RequestParam("order_id") Integer order_id,
+                                  @RequestParam("updateTime") Long updateTime) {
+        return updateService.updateOrderTime(order_id, new Date(updateTime));
     }
 }
