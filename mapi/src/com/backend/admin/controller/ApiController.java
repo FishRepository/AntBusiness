@@ -96,7 +96,8 @@ public class ApiController {
     @ResponseBody
     @RequestMapping("/getOrderListByMonth")
     public Object getOrderListByMonth(@RequestParam("accountId") Integer accountId,
-                                  @RequestParam("month") String month,@RequestParam("year") String year) {
-        return updateService.getOrderListByMonth(accountId, month,year);
+                                      @RequestParam(value = "month", required = false) String month,
+                                      @RequestParam(value = "year", required = false) String year) {
+        return updateService.getOrderListByMonth(accountId, month, year);
     }
 }

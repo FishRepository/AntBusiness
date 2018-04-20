@@ -3,61 +3,60 @@
 <mapper namespace="com.backend.admin.mapper.AccountorderMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="AccountorderMap" type="com.jd.luban.domain.accountOrder.Accountorder">
-        <id column="order_id" property="orderId" />
-        <result column="order_type" property="orderType" />
-        <result column="brand_name" property="brandName" />
-        <result column="brand_id" property="brandId" />
-        <result column="agentlevel_name" property="agentlevelName" />
-        <result column="agentlevel_id" property="agentlevelId" />
-        <result column="goods_count" property="goodsCount" />
-        <result column="order_sales" property="orderSales" />
-        <result column="order_cost" property="orderCost" />
-        <result column="order_profit" property="orderProfit" />
-        <result column="order_premium" property="orderPremium" />
-        <result column="premium_id" property="premiumId" />
-        <result column="premium_name" property="premiumName" />
-        <result column="order_goodssales" property="orderGoodssales" />
-        <result column="order_goodscost" property="orderGoodscost" />
-        <result column="order_goodsprofit" property="orderGoodsprofit" />
-        <result column="customer_id" property="customerId" />
-        <result column="customer_username" property="customerUsername" />
-        <result column="customer_icon" property="customerIcon" />
-        <result column="customer_phone" property="customerPhone" />
-        <result column="customer_phoneid" property="customerPhoneid" />
-        <result column="customer_address" property="customerAddress" />
-        <result column="customer_addressid" property="customerAddressid" />
-        <result column="order_remark" property="orderRemark" />
-        <result column="brand_names" property="brandNames" />
-        <result column="account_id" property="accountId" />
-        <result column="create_time" property="createTime" />
-        <result column="update_time" property="updateTime" />
-        <result column="state" property="state" />
+    <resultMap id="AccountorderMap" type="com.backend.admin.entity.Accountorder">
+        <id column="order_id" property="orderId"/>
+        <result column="order_type" property="orderType"/>
+        <result column="brand_name" property="brandName"/>
+        <result column="brand_id" property="brandId"/>
+        <result column="agentlevel_name" property="agentlevelName"/>
+        <result column="agentlevel_id" property="agentlevelId"/>
+        <result column="goods_count" property="goodsCount"/>
+        <result column="order_sales" property="orderSales"/>
+        <result column="order_cost" property="orderCost"/>
+        <result column="order_profit" property="orderProfit"/>
+        <result column="order_premium" property="orderPremium"/>
+        <result column="premium_id" property="premiumId"/>
+        <result column="premium_name" property="premiumName"/>
+        <result column="order_goodssales" property="orderGoodssales"/>
+        <result column="order_goodscost" property="orderGoodscost"/>
+        <result column="order_goodsprofit" property="orderGoodsprofit"/>
+        <result column="customer_id" property="customerId"/>
+        <result column="customer_username" property="customerUsername"/>
+        <result column="customer_icon" property="customerIcon"/>
+        <result column="customer_phone" property="customerPhone"/>
+        <result column="customer_phoneid" property="customerPhoneid"/>
+        <result column="customer_address" property="customerAddress"/>
+        <result column="customer_addressid" property="customerAddressid"/>
+        <result column="order_remark" property="orderRemark"/>
+        <result column="brand_names" property="brandNames"/>
+        <result column="account_id" property="accountId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="state" property="state"/>
     </resultMap>
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="OrdergoodsMap" type="com.jd.luban.domain.ordergoods.Ordergoods">
-        <id column="ordergoods_id" property="ordergoodsId" />
-        <result column="order_id" property="orderId" />
-        <result column="brand_name" property="brandName" />
-        <result column="brand_id" property="brandId" />
-        <result column="agentlevel_name" property="agentlevelName" />
-        <result column="agentlevel_id" property="agentlevelId" />
-        <result column="goods_id" property="goodsId" />
-        <result column="goods_name" property="goodsName" />
-        <result column="goodsprice_id" property="goodspriceId" />
-        <result column="goods_price" property="goodsPrice" />
-        <result column="goods_costprice" property="goodsCostprice" />
-        <result column="goods_num" property="goodsNum" />
-        <result column="ordergoods_sales" property="ordergoodsSales" />
-        <result column="ordergoods_cost" property="ordergoodsCost" />
-        <result column="ordergoods_profit" property="ordergoodsProfit" />
-        <result column="account_id" property="accountId" />
-        <result column="create_time" property="createTime" />
-        <result column="update_time" property="updateTime" />
-        <result column="state" property="state" />
+    <resultMap id="OrdergoodsMap" type="com.backend.admin.entity.Ordergoods">
+        <id column="ordergoods_id" property="ordergoodsId"/>
+        <result column="order_id" property="orderId"/>
+        <result column="brand_name" property="brandName"/>
+        <result column="brand_id" property="brandId"/>
+        <result column="agentlevel_name" property="agentlevelName"/>
+        <result column="agentlevel_id" property="agentlevelId"/>
+        <result column="goods_id" property="goodsId"/>
+        <result column="goods_name" property="goodsName"/>
+        <result column="goodsprice_id" property="goodspriceId"/>
+        <result column="goods_price" property="goodsPrice"/>
+        <result column="goods_costprice" property="goodsCostprice"/>
+        <result column="goods_num" property="goodsNum"/>
+        <result column="ordergoods_sales" property="ordergoodsSales"/>
+        <result column="ordergoods_cost" property="ordergoodsCost"/>
+        <result column="ordergoods_profit" property="ordergoodsProfit"/>
+        <result column="account_id" property="accountId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="state" property="state"/>
     </resultMap>
-
 
 
     <resultMap id="orderListMap" type="com.backend.admin.entity.OrderListVo" extends="AccountorderMap">
@@ -65,7 +64,7 @@
     </resultMap>
 
     <select id="selectOrderListBytype" resultMap="orderListMap">
-      select * from accountorder ao where ao.state =1
+        select * from accountorder ao where ao.state =1
         <choose>
             <when test="month !=null and month != ''">
                 and month(ao.create_time) = #{month}
@@ -81,7 +80,9 @@
     </select>
 
     <select id="selectOrdergoodsById" parameterType="java.lang.Integer" resultMap="OrdergoodsMap">
-      select * from ordergoods og where og.order_id = #{order_id} and og.state = 1
+        SELECT *
+        FROM ordergoods og
+        WHERE og.order_id = #{order_id} AND og.state = 1
 
     </select>
 
