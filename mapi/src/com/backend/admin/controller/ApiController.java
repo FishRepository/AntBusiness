@@ -92,4 +92,11 @@ public class ApiController {
                                   @RequestParam("updateTime") Long updateTime) {
         return updateService.updateOrderTime(order_id, new Date(updateTime));
     }
+
+    @ResponseBody
+    @RequestMapping("/getOrderListByMonth")
+    public Object getOrderListByMonth(@RequestParam("accountId") Integer accountId,
+                                  @RequestParam("month") String month,@RequestParam("year") String year) {
+        return updateService.getOrderListByMonth(accountId, month,year);
+    }
 }
