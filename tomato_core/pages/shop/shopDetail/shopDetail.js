@@ -194,7 +194,7 @@ Page({
       _item = that.data.items[idx];
     wx.showModal({
       title: '提示',
-      content: '是否确认删除该品牌？',
+      content: '是否确认删除该商品？',
       success: function (res) {
         if (res.confirm) {
           wx.showLoading({

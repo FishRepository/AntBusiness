@@ -14,9 +14,7 @@ Page({
     startX: 0,
     startY: 0,
     outCurrentPage: 1,
-    inCurrentPage: 1,
-    isOutAll: false,
-    isInAll: false
+    inCurrentPage: 1
   },
 
   /**
@@ -92,85 +90,91 @@ Page({
       _inOrders = _that.data.inOrders,
       _outNowPage = _that.data.outCurrentPage,
       _inNowPage = _that.data.inCurrentPage,
-      _isOutAll = _that.data.isOutAll,
-      _isInAll = _that.data.isInAll,
       nowTab = _that.data.tabType;//当前页签
     if (1 == nowTab) {
-      if (!_isOutAll) {
-        wx.showLoading({
-          title: '',
-          mask: true
-        })
-        //出货订单下滑翻页
-        wx.request({
-          url: WebService.HOST +'/mapi/order/listPageAllOrder.do',
-          data: {
-            account_id: app.globalData.userInfo.account_id,
-            type: 3,
-            currentPage: _outNowPage + 1,
-            showCount: 10
-          },
-          success: function (res) {
-            // console.log(res.data)
-            wx.hideLoading()
-            if (res.data.code == 0 && res.data.list) {
-              _that.setData({
-                isOutAll: true,
-                outCurrentPage: _outNowPage + 1
-              })
-              var list_out = res.data.list;
-              for (var i = 0, i_len = list_out.length; i < i_len; ++i) {
-                var chile_list_out = list_out[i].orderlist;
-                for (var j = 0, j_len = chile_list_out.length; j < j_len; ++j) {
-                  chile_list_out[j].order_time = util.formatTimeStamp(chile_list_out[j].create_time, 'M-D')
-                }
-                _outOrders.splice(_outOrders.length, 0, list_out[i])
+      wx.showLoading({
+        title: '',
+        mask: true
+      })
+      //出货订单下滑翻页
+      wx.request({
+        url: WebService.HOST + '/mapi/order/listPageAllOrder.do',
+        data: {
+          account_id: app.globalData.userInfo.account_id,
+          type: 3,
+          currentPage: _outNowPage * 1 + 1,
+          showCount: 10
+        },
+        success: function (res) {
+          // console.log(res.data)
+          wx.hideLoading()
+          if (res.data.code == 0 && res.data.list) {
+            _that.setData({
+              isOutAll: true,
+              outCurrentPage: _outNowPage + 1
+            })
+            var list_out = res.data.list;
+            for (var i = 0, i_len = list_out.length; i < i_len; ++i) {
+              var chile_list_out = list_out[i].orderlist;
+              for (var j = 0, j_len = chile_list_out.length; j < j_len; ++j) {
+                chile_list_out[j].order_time = util.formatTimeStamp(chile_list_out[j].create_time, 'M-D')
               }
-              _that.setData({
-                outOrders: _outOrders
-              })
+              _outOrders.splice(_outOrders.length, 0, list_out[i])
             }
+            _that.setData({
+              outOrders: _outOrders
+            })
+          }else{
+            wx.showToast({
+              title: '无更多记录！',
+              icon: 'none',
+              duration: 2000
+            })
           }
-        })
-      }
+        }
+      })
     } else {
-      if (!_isInAll) {
-        wx.showLoading({
-          title: '',
-          mask: true
-        })
-        //进货订单下滑翻页
-        wx.request({
-          url: WebService.HOST +'/mapi/order/listPageAllOrder.do',
-          data: {
-            account_id: app.globalData.userInfo.account_id,
-            type: 4,
-            currentPage: _inNowPage + 1,
-            showCount: 10
-          },
-          success: function (res) {
-            // console.log(res.data)
-            wx.hideLoading()
-            if (res.data.code == 0 && res.data.list) {
-              _that.setData({
-                isInAll: true,
-                inCurrentPage: _inNowPage + 1
-              })
-              var list_in = res.data.list;
-              for (var i = 0, i_len = list_in.length; i < i_len; ++i) {
-                var chile_list_in = list_in[i].orderlist;
-                for (var j = 0, j_len = chile_list_in.length; j < j_len; ++j) {
-                  chile_list_in[j].order_time = util.formatTimeStamp(chile_list_in[j].create_time, 'M-D')
-                }
-                _inOrders.splice(_inOrders.length, 0, list_out[i])
+      wx.showLoading({
+        title: '',
+        mask: true
+      })
+      //进货订单下滑翻页
+      wx.request({
+        url: WebService.HOST + '/mapi/order/listPageAllOrder.do',
+        data: {
+          account_id: app.globalData.userInfo.account_id,
+          type: 4,
+          currentPage: _inNowPage + 1,
+          showCount: 10
+        },
+        success: function (res) {
+          // console.log(res.data)
+          wx.hideLoading()
+          if (res.data.code == 0 && res.data.list) {
+            _that.setData({
+              isInAll: true,
+              inCurrentPage: _inNowPage + 1
+            })
+            var list_in = res.data.list;
+            for (var i = 0, i_len = list_in.length; i < i_len; ++i) {
+              var chile_list_in = list_in[i].orderlist;
+              for (var j = 0, j_len = chile_list_in.length; j < j_len; ++j) {
+                chile_list_in[j].order_time = util.formatTimeStamp(chile_list_in[j].create_time, 'M-D')
               }
-              _that.setData({
-                inOrders: _inOrders
-              })
+              _inOrders.splice(_inOrders.length, 0, list_out[i])
             }
+            _that.setData({
+              inOrders: _inOrders
+            })
+          }else{
+            wx.showToast({
+              title: '无更多记录！',
+              icon: 'none',
+              duration: 2000
+            })
           }
-        })
-      }
+        }
+      })
     }
   },
 

@@ -40,16 +40,40 @@ Page({
             if (res.data.code === 0 && res.data.list) {
               var _brandList = res.data.list,
                 _firstagentlevellist = _brandList[0].agentlevellist,
+                _nowLevel;
+              if (_firstagentlevellist && _firstagentlevellist.length > 0) {
                 _nowLevel = _firstagentlevellist[_firstagentlevellist.length - 1];
+              } else {
+                _nowLevel = {
+                  agentlevel_id: -3,
+                  agentlevel_name: '零售价'
+                };
+              }
               for (var i in _brandList) {
                 //加入默认的代理层级
-                _brandList[i].agentlevellist.splice(_brandList[i].agentlevellist.length, 0, {
-                  agentlevel_id: -1,
-                  agentlevel_name: '我要进货'
-                }, {
+                if (_brandList[i].agentlevellist && _brandList[i].agentlevellist.length > 0) {
+                  var kys = _brandList[i].agentlevellist.length;
+                  _brandList[i].agentlevellist[kys-1].checked=true;
+                  _brandList[i].agentlevellist.splice(_brandList[i].agentlevellist.length, 0, {
+                    agentlevel_id: -1,
+                    agentlevel_name: '我要进货'
+                  }, {
+                      agentlevel_id: -2,
+                      agentlevel_name: '进货价出售'
+                    });
+                }else{
+                  _brandList[i].agentlevellist = [{
+                    agentlevel_id: -3,
+                    agentlevel_name: '零售价',
+                    checked:true
+                  }, {
+                    agentlevel_id: -1,
+                    agentlevel_name: '我要进货'
+                  }, {
                     agentlevel_id: -2,
                     agentlevel_name: '进货价出售'
-                  });
+                  }];
+                }
                 for (var j in _brandList[i].goodsAndGoodsPricelist) {
                   //先给商品加入默认代理层级
                   _brandList[i].goodsAndGoodsPricelist[j].goodspricelist.splice(_brandList[i].goodsAndGoodsPricelist[j].goodspricelist.length, 0, {
@@ -78,7 +102,17 @@ Page({
                 orderTypeName: '2',//默认置为出货订单
                 nowLevel: _nowLevel,
                 nowLevelList: _brandList[0].agentlevellist,
-                isGlobalBrandGoodsNone: false
+                isGlobalBrandGoodsNone: false,
+                // brands: [],//品牌集合
+                // orderTypeName: '',//订单类型名称
+                totalPrice: 0,//总价格(减去额外费用后的数目)
+                // nowLevel: '',//当前显示的代理层级
+                // nowLevelList: [],//当前选中的品牌代理层级集合
+                outPrice: 0,//额外费用
+                selbrandIdx: 0,//当前选中的品牌index
+                selgoodsIdx: 0,//当前选中的商品index
+                selBandNum: 0,//已选择品牌数
+                selGoodsNum: 0,//已选择商品总数量
               })
             } else {
               wx.hideLoading();
@@ -108,8 +142,13 @@ Page({
     var selIndex = e.currentTarget.id,
       _that = this,
       _brandList = _that.data.brands,
-      _firstagentlevellist = _brandList[selIndex].agentlevellist,
-      _nowLevel = _firstagentlevellist[_firstagentlevellist.length - 3];
+      _firstagentlevellist = _brandList[selIndex].agentlevellist;
+      var _nowLevel;
+      for(var i in _firstagentlevellist){
+        if(_firstagentlevellist[i].checked){
+          _nowLevel=_firstagentlevellist[i];
+        }
+      }
     for (var i in _brandList[selIndex].goodsAndGoodsPricelist) {
       var _goodsPriceAgentList = _brandList[selIndex].goodsAndGoodsPricelist[i].goodspricelist;
       for (var j in _goodsPriceAgentList) {
@@ -125,6 +164,11 @@ Page({
       nowLevelList: _brandList[selIndex].agentlevellist,
       brands: _brandList
     });
+    //将当前所有的数据存入缓存中
+    wx.setStorage({
+      key: 'indexOrderData',
+      data: _that.data
+    })
   },
   /**
    * 减数量
@@ -136,8 +180,8 @@ Page({
       list = _that.data.brands,
       c_list = list[selidx].goodsAndGoodsPricelist,
       alNum = c_list[idx].num;
-    c_list[idx].num = alNum - 1;
-    var new_totalNum = _that.data.selGoodsNum - 1;
+    c_list[idx].num = alNum*1 - 1;
+    var new_totalNum = _that.data.selGoodsNum*1 - 1;
     var newT_price = _that.data.totalPrice - c_list[idx].goods_price
     var new_selBandNum = 0;
     for (var i = 0, len = list.length; i < len; ++i) {
@@ -160,6 +204,11 @@ Page({
       selBandNum: new_selBandNum,
       selGoodsNum: new_totalNum
     })
+    //将当前所有的数据存入缓存中
+    wx.setStorage({
+      key: 'indexOrderData',
+      data: _that.data
+    })
   },
   /**
    * 加数量
@@ -172,11 +221,11 @@ Page({
       c_list = list[selidx].goodsAndGoodsPricelist,
       alNum = c_list[idx].num;
     if (alNum) {
-      c_list[idx].num = alNum + 1;
+      c_list[idx].num = alNum*1 + 1;
     } else {
       c_list[idx].num = 1 * 1;
     }
-    var new_totalNum = _that.data.selGoodsNum + 1;
+    var new_totalNum = _that.data.selGoodsNum*1 + 1;
     var newT_price = _that.data.totalPrice + c_list[idx].goods_price
     var new_selBandNum = 0;
     for (var i = 0, len = list.length; i < len; ++i) {
@@ -199,6 +248,11 @@ Page({
       selBandNum: new_selBandNum,
       selGoodsNum: new_totalNum
     })
+    //将当前所有的数据存入缓存中
+    wx.setStorage({
+      key: 'indexOrderData',
+      data: _that.data
+    })
   },
   /**
    * 清空按钮操作
@@ -219,7 +273,15 @@ Page({
       selGoodsNum: 0,
       maskVisual: false
     })
+    //先清除缓存
+    wx.removeStorage({
+      key: 'indexOrderData',
+      success: function (res) {
+        // wx.hideLoading();
+      }
+    })
     _that.cascadeDismiss();
+    this.onShow();
   },
   /**
    * 弹出数量弹窗
@@ -284,6 +346,11 @@ Page({
       selBandNum: t_selbanNum,
       selGoodsNum: t_totalNum
     })
+    //将当前所有的数据存入缓存中
+    wx.setStorage({
+      key: 'indexOrderData',
+      data: _that.data
+    })
   },
   /**
    * 弹出层级弹窗
@@ -292,19 +359,6 @@ Page({
     this.setData({
       showLevelModal: true
     })
-    var _that = this,
-      _nowLevel = _that.data.nowLevel,
-      list = _that.data.nowLevelList;
-    for (var i = 0, len = list.length; i < len; ++i) {
-      if (_nowLevel.agentlevel_id == list[i].agentlevel_id) {
-        list[i].checked = true;
-      } else {
-        list[i].checked = false;
-      }
-    }
-    this.setData({
-      nowLevelList: list
-    });
   },
   /**
      * 隐藏层级弹窗
@@ -321,20 +375,19 @@ Page({
     var _that = this,
       _brandList = _that.data.brands,
       selBrandIdx = _that.data.selbrandIdx,
-      idx = e.currentTarget.dataset.index,
-      list = _that.data.nowLevelList;
-    for (var i = 0, len = list.length; i < len; ++i) {
+      idx = e.currentTarget.dataset.index;
+    for (var i = 0, len = _brandList[selBrandIdx].agentlevellist.length; i < len; ++i) {
       if (idx == i) {
-        list[i].checked = true;
+        _brandList[selBrandIdx].agentlevellist[i].checked = true;
       } else {
-        list[i].checked = false;
+        _brandList[selBrandIdx].agentlevellist[i].checked = false;
       }
     }
     _that.setData({
-      nowLevelList: list,
-      nowLevel: list[idx]
+      // nowLevelList: list,
+      nowLevel: _brandList[selBrandIdx].agentlevellist[idx]
     });
-    var _nowLevel = list[idx];
+    var _nowLevel = _brandList[selBrandIdx].agentlevellist[idx];
     for (var i in _brandList[selBrandIdx].goodsAndGoodsPricelist) {
       for (var j in _brandList[selBrandIdx].goodsAndGoodsPricelist[i].goodspricelist) {
         if (_brandList[selBrandIdx].goodsAndGoodsPricelist[i].goodspricelist[j].agentlevel_id === _nowLevel.agentlevel_id) {
@@ -363,24 +416,31 @@ Page({
     for (var i = 0, len = _brandList.length; i < len; ++i) {
       var child = _brandList[i].goodsAndGoodsPricelist
       var is_selBand = false
-      _brandList[i].hasSelectItem = false
-      for (var j = 0, j_len = child.length; j < j_len; ++j) {
-        if (child[j].num && child[j].num > 0 && child[j].goods_price > 0) {
-          is_selBand = true
-          list[i].hasSelectItem = true
-          new_totalNum = new_totalNum + child[j].num
-          new_totalPrice = new_totalPrice + child[j].num * child[j].goods_price
+      _brandList[i].hasSelectItem = false;
+      if (child && child.length>0){
+        for (var j = 0, j_len = child.length; j < j_len; ++j) {
+          if (child[j].num && child[j].num > 0 && child[j].goods_price > 0) {
+            is_selBand = true
+            _brandList[i].hasSelectItem = true
+            new_totalNum = new_totalNum + child[j].num
+            new_totalPrice = new_totalPrice*1 + child[j].num * child[j].goods_price
+          }
         }
       }
       if (is_selBand) {
         new_selBandNum++
       }
     }
-    new_totalPrice = new_totalPrice + _outPrice
+    new_totalPrice = new_totalPrice*1 + _outPrice*1
     _that.setData({
       totalPrice: new_totalPrice,
       selBandNum: new_selBandNum,
       selGoodsNum: new_totalNum
+    })
+    //将当前所有的数据存入缓存中
+    wx.setStorage({
+      key: 'indexOrderData',
+      data: _that.data
     })
   },
   /**
@@ -458,13 +518,18 @@ Page({
       var child = _brandList[i].goodsAndGoodsPricelist
       for (var j = 0, j_len = child.length; j < j_len; ++j) {
         if (child[j].num > 0) {
-          nowTotalPrice = nowTotalPrice + child[j].num * child[j].goods_price
+          nowTotalPrice = nowTotalPrice*1 + child[j].num * child[j].goods_price
         }
       }
     }
     _that.setData({
       showPriceModal: false,
-      totalPrice: nowTotalPrice + _outPrice
+      totalPrice: nowTotalPrice*1 + _outPrice*1
+    })
+    //将当前所有的数据存入缓存中
+    wx.setStorage({
+      key: 'indexOrderData',
+      data: _that.data
     })
   },
   /**
@@ -649,11 +714,10 @@ Page({
         wx.hideLoading();
       }
     })
-    this.clearEmpty();
     this.setData({
-      selbrandIdx: 0,
       showOrderSure: false
     });
+    this.clearEmpty();
   },
   /**
      * 隐藏立即下单弹窗

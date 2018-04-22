@@ -83,7 +83,7 @@
       </view>
     </view>
     <!-- 数量输入模态框 -->
-    <view class="modal-mask" catchtouchmove="preventTouchMove" wx:if="{{showNumModal}}"></view>
+    <view class="modal-mask" catchtap='hideNumModalDialog' catchtouchmove="preventTouchMove" wx:if="{{showNumModal}}"></view>
     <view class="modal-dialog" wx:if="{{showNumModal}}">
       <text class='head-top'>{{brands[selbrandIdx].goodsAndGoodsPricelist[selgoodsIdx].goods_name}}</text>
       <view class='head-item head-brand'>
@@ -112,7 +112,7 @@
     <view class="modal-dialog" wx:if="{{showLevelModal}}">
       <view class='modal-level-top'>请选择代理层级</view>
       <scroll-view scroll-y='true' class='modal-level-scroll'>
-        <block wx:for="{{nowLevelList}}" wx:key="{{agentlevel_name}}">
+        <block wx:for="{{brands[selbrandIdx].agentlevellist}}" wx:key="{{agentlevel_name}}">
           <view class='level-item' catchtap='switchSelectLevel' data-index="{{index}}">
             <image src="/images/index/icon_chose_{{item.checked?'on':'off'}}.png"></image>
             <text class="level-item {{item.checked?'level-text-on':''}}">{{item.agentlevel_name}}</text>
