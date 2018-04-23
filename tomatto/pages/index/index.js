@@ -34,5 +34,29 @@ Page({
         })
       }
     })
+  },
+  onShow: function(){
+    var _this = this
+    wx.showLoading({
+      title: '',
+      mask: true
+    })
+    wx.request({
+      url: WebService.HOST + WebService.FETCH_INTRODUCTIONS_URL,
+      success: function (result) {
+        wx.hideLoading();
+        _this.setData({
+          intros: result.data
+        })
+      },
+      fail: function (e) {
+        wx.hideLoading();
+        wx.showToast({
+          title: '数据加载失败！',
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    })
   }
 })
