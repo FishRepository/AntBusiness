@@ -20,8 +20,15 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onShow: function () {
     var _that = this;
+    wx.getSystemInfo({
+      success: (res) => { // 用这种方法调用，this指向Page
+        this.setData({
+          winH: res.windowHeight
+        });
+      }
+    })
     wx.showLoading({
       title: '加载出货订单...',
       mask: true
@@ -183,19 +190,6 @@ Page({
    */
   onReady: function () {
 
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-    wx.getSystemInfo({
-      success: (res) => { // 用这种方法调用，this指向Page
-        this.setData({
-          winH: res.windowHeight
-        });
-      }
-    })
   },
 
   /**
