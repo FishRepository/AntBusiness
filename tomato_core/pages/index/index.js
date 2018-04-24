@@ -42,7 +42,12 @@ Page({
                 _firstagentlevellist = _brandList[0].agentlevellist,
                 _nowLevel;
               if (_firstagentlevellist && _firstagentlevellist.length > 0) {
-                _nowLevel = _firstagentlevellist[_firstagentlevellist.length - 1];
+                for (var x in _firstagentlevellist){
+                  if (_firstagentlevellist[x].agentlevel_default==1){
+                    _nowLevel = _firstagentlevellist[x];
+                    break;
+                  }
+                }
               } else {
                 _nowLevel = {
                   agentlevel_id: -3,
@@ -52,8 +57,11 @@ Page({
               for (var i in _brandList) {
                 //加入默认的代理层级
                 if (_brandList[i].agentlevellist && _brandList[i].agentlevellist.length > 0) {
-                  var kys = _brandList[i].agentlevellist.length;
-                  _brandList[i].agentlevellist[kys-1].checked=true;
+                  for (var x in _brandList[i].agentlevellist) {
+                    if (_brandList[i].agentlevellist[x].agentlevel_default == 1) {
+                      _brandList[i].agentlevellist[x].checked = true;
+                    }
+                  }
                   _brandList[i].agentlevellist.splice(_brandList[i].agentlevellist.length, 0, {
                     agentlevel_id: -1,
                     agentlevel_name: '我要进货'
@@ -258,21 +266,21 @@ Page({
    * 清空按钮操作
    */
   clearEmpty: function (e) {
-    var _that = this,
-      list = _that.data.brands;
-    for (var i = 0, len = list.length; i < len; ++i) {
-      var child = list[i].goodsAndGoodsPricelist
-      for (var j = 0, j_len = child.length; j < j_len; ++j) {
-        child[j].num = 0
-      }
-    }
-    _that.setData({
-      brands: list,
-      totalPrice: 0,
-      selBandNum: 0,
-      selGoodsNum: 0,
-      maskVisual: false
-    })
+    // var _that = this,
+    //   list = _that.data.brands;
+    // for (var i = 0, len = list.length; i < len; ++i) {
+    //   var child = list[i].goodsAndGoodsPricelist
+    //   for (var j = 0, j_len = child.length; j < j_len; ++j) {
+    //     child[j].num = 0
+    //   }
+    // }
+    // _that.setData({
+    //   brands: list,
+    //   totalPrice: 0,
+    //   selBandNum: 0,
+    //   selGoodsNum: 0,
+    //   maskVisual: false
+    // })
     //先清除缓存
     wx.removeStorage({
       key: 'indexOrderData',
@@ -280,7 +288,7 @@ Page({
         // wx.hideLoading();
       }
     })
-    _that.cascadeDismiss();
+    // _that.cascadeDismiss();
     this.onShow();
   },
   /**
@@ -293,6 +301,11 @@ Page({
       showNumModal: true,
       selgoodsIdx: idx
     })
+    //将当前所有的数据存入缓存中
+    wx.setStorage({
+      key: 'indexOrderData',
+      data: _that.data
+    })
   },
   /**
      * 隐藏数量弹窗
@@ -301,6 +314,11 @@ Page({
     this.setData({
       showNumModal: false
     });
+    //将当前所有的数据存入缓存中
+    wx.setStorage({
+      key: 'indexOrderData',
+      data: this.data
+    })
   },
   /**
    * 弹出框蒙层截断touchmove事件
@@ -359,6 +377,11 @@ Page({
     this.setData({
       showLevelModal: true
     })
+    //将当前所有的数据存入缓存中
+    wx.setStorage({
+      key: 'indexOrderData',
+      data: this.data
+    })
   },
   /**
      * 隐藏层级弹窗
@@ -367,6 +390,11 @@ Page({
     this.setData({
       showLevelModal: false
     });
+    //将当前所有的数据存入缓存中
+    wx.setStorage({
+      key: 'indexOrderData',
+      data: this.data
+    })
   },
   /**
    * 选择代理层级
@@ -376,6 +404,53 @@ Page({
       _brandList = _that.data.brands,
       selBrandIdx = _that.data.selbrandIdx,
       idx = e.currentTarget.dataset.index;
+      //当前操作订单只允许操作一种代理层级
+    //如果选择的是我要进货
+    if (_brandList[selBrandIdx].agentlevellist[idx].agentlevel_id==-1){
+      //判断其他品牌是否选了出货代理层级
+      for (var k in _brandList) {
+        //只用判断其他的品牌是否选择了我要进货，如果是当前品牌选择了我要进货，则可以进行切换代理层级操作
+        if (k != selBrandIdx) {
+          var _brand_goodList = _brandList[k].goodsAndGoodsPricelist;
+          for (var m in _brand_goodList) {
+            if (_brand_goodList[m].agentlevel_id != -1 && _brand_goodList[m].num && _brand_goodList[m].num > 0) {
+              wx.showToast({
+                title: '当前订单为【出货订单】，此品牌不能选择【进货订单】代理层级。如需切换订单类型，请先执行清空操作！',
+                icon: 'none',
+                duration: 3000
+              })
+              return;
+            }
+          }
+          //当前品牌选择了我要进货时，将其他品牌默认置为我要进货
+          for (var j in _brandList[k].agentlevellist){
+            if (_brandList[k].agentlevellist[j].agentlevel_id==-1){
+              _brandList[k].agentlevellist[j].checked = true;
+            }else{
+              _brandList[k].agentlevellist[j].checked = false;
+            }
+          }
+        }
+      }
+    }else{
+    //如果选择的是出货代理层级  
+      for (var k in _brandList) {
+        //只用判断其他的品牌是否选择了我要进货，如果是当前品牌选择了我要进货，则可以进行切换代理层级操作
+        if (k != selBrandIdx) {
+          var _brand_goodList = _brandList[k].goodsAndGoodsPricelist;
+          for (var m in _brand_goodList) {
+            if (_brand_goodList[m].agentlevel_id == -1 && _brand_goodList[m].num && _brand_goodList[m].num > 0) {
+              wx.showToast({
+                title: '当前订单为【进货订单】，此品牌不能选择【出货订单】代理层级。如需切换订单类型，请先执行清空操作！',
+                icon: 'none',
+                duration: 3000
+              })
+              return;
+            }
+          }
+        }
+      }
+    }
     for (var i = 0, len = _brandList[selBrandIdx].agentlevellist.length; i < len; ++i) {
       if (idx == i) {
         _brandList[selBrandIdx].agentlevellist[i].checked = true;
@@ -422,7 +497,7 @@ Page({
           if (child[j].num && child[j].num > 0 && child[j].goods_price > 0) {
             is_selBand = true
             _brandList[i].hasSelectItem = true
-            new_totalNum = new_totalNum + child[j].num
+            new_totalNum = new_totalNum*1 + child[j].num*1
             new_totalPrice = new_totalPrice*1 + child[j].num * child[j].goods_price
           }
         }
@@ -462,6 +537,11 @@ Page({
       showPriceModal: true,
       modalOutPrice: Math.abs(nowOutPrice)
     })
+    //将当前所有的数据存入缓存中
+    wx.setStorage({
+      key: 'indexOrderData',
+      data: _that.data
+    })
   },
   /**
      * 隐藏额外费用弹窗
@@ -470,6 +550,11 @@ Page({
     this.setData({
       showPriceModal: false
     });
+    //将当前所有的数据存入缓存中
+    wx.setStorage({
+      key: 'indexOrderData',
+      data: this.data
+    })
   },
   /**
    * 额外费用输入监听事件
@@ -485,6 +570,11 @@ Page({
     }
     _that.setData({
       outPrice: thisOutPrice
+    })
+    //将当前所有的数据存入缓存中
+    wx.setStorage({
+      key: 'indexOrderData',
+      data: _that.data
     })
   },
   /**
@@ -504,6 +594,11 @@ Page({
     _that.setData({
       outPriceSymbol: nowSymbol,
       outPrice: nowOutPrice
+    })
+    //将当前所有的数据存入缓存中
+    wx.setStorage({
+      key: 'indexOrderData',
+      data: _that.data
     })
   },
   /**
@@ -542,6 +637,11 @@ Page({
     } else {
       that.cascadePopup();
     }
+    //将当前所有的数据存入缓存中
+    wx.setStorage({
+      key: 'indexOrderData',
+      data: that.data
+    })
   },
   /**
    * 购物车打开动画
@@ -564,6 +664,11 @@ Page({
         animationData: animation.export()
       })
     }.bind(this), 100)
+    //将当前所有的数据存入缓存中
+    wx.setStorage({
+      key: 'indexOrderData',
+      data: this.data
+    })
   },
   /**
    * 购物车关闭动画
@@ -572,6 +677,11 @@ Page({
     this.setData({
       maskVisual: false
     });
+    //将当前所有的数据存入缓存中
+    wx.setStorage({
+      key: 'indexOrderData',
+      data: this.data
+    })
   },
   /**
      * 立即下单弹窗

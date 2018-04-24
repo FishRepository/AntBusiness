@@ -1,3 +1,10 @@
+.container {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background-color: #f2f2f2;
+}
+
 page {
   background-color: #f2f2f2;
 }

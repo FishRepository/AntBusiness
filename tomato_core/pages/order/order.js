@@ -77,7 +77,7 @@ Page({
             }
           }
           _that.setData({
-            inOrders: res.data.list
+            inOrders: list_in
           })
         }
       }
@@ -110,8 +110,8 @@ Page({
           wx.hideLoading()
           if (res.data.code == 0 && res.data.list) {
             _that.setData({
-              isOutAll: true,
-              outCurrentPage: _outNowPage + 1
+              // isOutAll: true,
+              outCurrentPage: _outNowPage*1 + 1
             })
             var list_out = res.data.list;
             for (var i = 0, i_len = list_out.length; i < i_len; ++i) {
@@ -144,7 +144,7 @@ Page({
         data: {
           account_id: app.globalData.userInfo.account_id,
           type: 4,
-          currentPage: _inNowPage + 1,
+          currentPage: _inNowPage*1 + 1,
           showCount: 10
         },
         success: function (res) {
@@ -152,8 +152,8 @@ Page({
           wx.hideLoading()
           if (res.data.code == 0 && res.data.list) {
             _that.setData({
-              isInAll: true,
-              inCurrentPage: _inNowPage + 1
+              // isInAll: true,
+              inCurrentPage: _inNowPage*1 + 1
             })
             var list_in = res.data.list;
             for (var i = 0, i_len = list_in.length; i < i_len; ++i) {
@@ -161,7 +161,7 @@ Page({
               for (var j = 0, j_len = chile_list_in.length; j < j_len; ++j) {
                 chile_list_in[j].order_time = util.formatTimeStamp(chile_list_in[j].create_time, 'M-D')
               }
-              _inOrders.splice(_inOrders.length, 0, list_out[i])
+              _inOrders.splice(_inOrders.length, 0, list_in[i])
             }
             _that.setData({
               inOrders: _inOrders

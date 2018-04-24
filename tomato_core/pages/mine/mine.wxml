@@ -1,31 +1,33 @@
-<view class='userinfo'>
-  <image class='userinfo-avatar' src='{{userInfo.account_icon}}'></image>
-  <text class='userinfo-nickname'>{{userInfo.account_username?userInfo.account_username:''}}</text>
-</view>
-
-<view class='userinfo-contact'>
-  <!-- <view class='divider'></view> -->
-  <view class='v-text'>
-    <image src='/images/login/icon_phone1.png'></image>
-    <text>手机号</text>
-    <text class='text-right'>{{userInfo.account_userphone}}</text>
+<view class='container'>
+  <view class='userinfo'>
+    <image class='userinfo-avatar' src='{{userInfo.account_icon}}'></image>
+    <text class='userinfo-nickname'>{{userInfo.account_username?userInfo.account_username:''}}</text>
   </view>
-  <!-- <view class='divider'></view> -->
-  <view class='v-text'>
-    <image src='/images/login/icon_weixin1.png'></image>
-    <text>微信号</text>
-    <text class='text-right bangding-text' bindtap='bindWechat'>{{wechatIsBind?'已绑定':'未绑定'}}</text>
+
+  <view class='userinfo-contact'>
+    <!-- <view class='divider'></view> -->
+    <view class='v-text'>
+      <image src='/images/login/icon_phone1.png'></image>
+      <text>手机号</text>
+      <text class='text-right'>{{userInfo.account_userphone}}</text>
+    </view>
+    <!-- <view class='divider'></view> -->
+    <view class='v-text'>
+      <image src='/images/login/icon_weixin1.png'></image>
+      <text>微信号</text>
+      <text class='text-right bangding-text' bindtap='bindWechat'>{{wechatIsBind?'已绑定':'未绑定'}}</text>
+    </view>
+    <!-- <view class='divider'></view> -->
   </view>
-  <!-- <view class='divider'></view> -->
-</view>
 
-<view class='btn-logout' bindtap='loginOut'>退出登录</view>
+  <view class='btn-logout' bindtap='loginOut'>退出登录</view>
 
-<view class='download'>
+  <!-- <view class='download'>
   <image src='/images/logo.png' class='download-logo'></image>
   <view class='download-info'>
     <text class='download-emphasize'>下载番茄管家APP，管理更方便!</text>
     <text>微商必备神器</text>
   </view>
-  <!-- <button class='btn-download'>下载</button> -->
+   <button class='btn-download'>下载</button> 
+</view> -->
 </view>
