@@ -2,6 +2,7 @@ package com.backend.goodsV2.service;
 
 import com.api.goods.entity.BrandAndAgentLevel;
 import com.api.goods.entity.BrandResult;
+import com.api.goods.entity.GoodsAndGoodsPrice;
 import com.api.goods.entity.GoodsResult;
 import com.api.goods.service.GoodsService;
 import com.backend.goodsV2.entity.BrandAndAgentLevelV2;
@@ -43,7 +44,7 @@ public class GoodsServiceV2 {
             }
             setBrandValue(brandAndAgentLevelList.get(i),brandAndAgentLevelV2);
             GoodsResult goodsResult = goodsService.queryGoods(account_id, brandAndAgentLevelV2.getBrand_id(), 1);
-//            brandAndAgentLevelV2.setGoodsAndGoodsPricelist(CollectionUtils.isEmpty(goodsResult.getList())?new ArrayList<>():goodsResult.getList());
+            brandAndAgentLevelV2.setGoodsAndGoodsPricelist(CollectionUtils.isEmpty(goodsResult.getList())?new ArrayList<>():goodsResult.getList());
             brandAndAgentLevelV2List.add(brandAndAgentLevelV2);
         }
         brandResultV2.setCode(0);
@@ -60,6 +61,6 @@ public class GoodsServiceV2 {
         b2.setBrand_from(b1.getBrand_from()==null?0:b1.getBrand_from());
         b2.setBrand_index(b1.getBrand_index()==null?0:b1.getBrand_index());
         b2.setAccount_id(b1.getAccount_id()==null?0:b1.getAccount_id());
-//        b2.setAgentlevellist(CollectionUtils.isEmpty(b1.getAgentlevellist())?new ArrayList<>():b1.getAgentlevellist());
+        b2.setAgentlevellist(CollectionUtils.isEmpty(b1.getAgentlevellist())?new ArrayList<>():b1.getAgentlevellist());
     }
 }

@@ -1,5 +1,6 @@
 package com.backend.admin.service;
 
+import com.api.common.entity.Result;
 import com.api.common.utils.StringUtil;
 import com.backend.admin.entity.OrderListResult;
 import com.backend.admin.entity.OrderListVo;
@@ -25,8 +26,28 @@ public class UpdateService {
     @Autowired
     private AccountorderMapper accountorderMapper;
 
-    public boolean updateOrderTime(int orderId, Date createTime) {
-        return updateMapper.updateOrderTime(orderId, createTime) > 0;
+    public Result updateOrderTime(int orderId, Date createTime) {
+        Result result = new Result();
+        try {
+            if(orderId==0 || createTime==null){
+                result.setCode(500);
+                result.setMsg("param is empty!");
+                return result;
+            }
+            if(updateMapper.updateOrderTime(orderId, createTime) > 0){
+                result.setCode(0);
+                result.setMsg("success");
+            }else{
+                result.setCode(200);
+                result.setMsg("updateOrderTime error!");
+            }
+        } catch (Exception e) {
+            log.error("updateOrderTime error!"+e.getMessage());
+            result.setCode(501);
+            result.setMsg("updateOrderTime error!");
+            return result;
+        }
+        return result;
     }
 
     public OrderListResult getOrderListByMonth(Integer accountId, String month, String year){

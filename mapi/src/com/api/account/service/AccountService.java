@@ -1103,15 +1103,15 @@ public class AccountService {
 										newgoods = new Goods();
 										newgoods.setAccount_id(account_id);
 										newgoods.setBrand_id(brand.getBrand_id());
-										if("官方".equals(agentlevel.getAgentlevel_name())){
+//										if("官方".equals(agentlevel.getAgentlevel_name())){
 											if(oldgoodsprice!=null){
 												newgoods.setGoods_price(oldgoodsprice.getGoods_price());
 											}else{
 												newgoods.setGoods_price(0f);
 											}
-										}else{
-											newgoods.setGoods_price(0f);
-										}
+//										}else{
+//											newgoods.setGoods_price(0f);
+//										}
 										//newgoods.setGoods_price(oldgoods.getGoods_price());
 										newgoods.setGoods_name(oldgoods.getGoods_name());
 										newgoods.setGoods_scale(oldgoods.getGoods_scale());

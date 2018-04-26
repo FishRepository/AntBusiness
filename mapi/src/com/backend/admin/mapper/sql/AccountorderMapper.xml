@@ -76,7 +76,7 @@
             </otherwise>
         </choose>
         and ao.order_type = #{orderType}
-        and ao.account_id = #{accountId}
+        and ao.customer_id = #{accountId}
     </select>
 
     <select id="selectOrdergoodsById" parameterType="java.lang.Integer" resultMap="OrdergoodsMap">
