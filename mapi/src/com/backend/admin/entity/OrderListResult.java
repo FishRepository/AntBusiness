@@ -10,9 +10,7 @@ public class OrderListResult extends Result {
 
     private Double totalprofit;
 
-    private List<OrderListVo> stockList;
-
-    private List<OrderListVo> sellsList;
+    private List<Ordergoods> sellsGoodsList;
 
     public Double getTotalSals() {
         return totalSals;
@@ -30,19 +28,11 @@ public class OrderListResult extends Result {
         this.totalprofit = totalprofit;
     }
 
-    public List<OrderListVo> getStockList() {
-        return stockList;
+    public List<Ordergoods> getSellsGoodsList() {
+        return sellsGoodsList;
     }
 
-    public void setStockList(List<OrderListVo> stockList) {
-        this.stockList = stockList;
-    }
-
-    public List<OrderListVo> getSellsList() {
-        return sellsList;
-    }
-
-    public void setSellsList(List<OrderListVo> sellsList) {
-        this.sellsList = sellsList;
+    public void setSellsGoodsList(List<Ordergoods> sellsGoodsList) {
+        this.sellsGoodsList = sellsGoodsList;
     }
 }

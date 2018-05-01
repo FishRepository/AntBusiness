@@ -4,6 +4,7 @@ import com.api.common.entity.Result;
 import com.api.common.utils.StringUtil;
 import com.backend.admin.entity.OrderListResult;
 import com.backend.admin.entity.OrderListVo;
+import com.backend.admin.entity.Ordergoods;
 import com.backend.admin.mapper.AccountorderMapper;
 import com.backend.admin.mapper.UpdateMapper;
 import org.slf4j.Logger;
@@ -12,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -62,13 +65,16 @@ public class UpdateService {
         Double totalprofit=0.0;
         try {
             List<OrderListVo> sellsList = accountorderMapper.selectOrderListBytype(1, accountId, StringUtil.isEmpty(month) ? "" : month, StringUtil.isEmpty(year) ? "" : year);
-            List<OrderListVo> stockList = accountorderMapper.selectOrderListBytype(2, accountId, StringUtil.isEmpty(month) ? "" : month, StringUtil.isEmpty(year) ? "" : year);
             if(!CollectionUtils.isEmpty(sellsList)){
-                result.setSellsList(sellsList);
+                List<Ordergoods> sellsGoodsList = new ArrayList<>();
+                for (OrderListVo orderListVo: sellsList) {
+                    if(orderListVo!=null && !orderListVo.getOrdergoodsList().isEmpty()){
+                        sellsGoodsList.addAll(orderListVo.getOrdergoodsList());
+                    }
+                }
+                result.setSellsGoodsList(mergeList(sellsGoodsList));
             }
-            if(!CollectionUtils.isEmpty(stockList)){
-                result.setStockList(stockList);
-            }
+
             if(!CollectionUtils.isEmpty(sellsList)){
                 for (OrderListVo orderListVo:sellsList) {
                     totalSals += orderListVo.getOrderSales();
@@ -88,4 +94,16 @@ public class UpdateService {
         return result;
     }
 
+    public static List<Ordergoods> mergeList(List<Ordergoods> list) {
+        HashMap<Integer, Ordergoods> map = new HashMap<>();
+        for (Ordergoods bean : list) {
+            if (map.containsKey(bean.getGoodsId())) {
+                bean.setGoodsNum(map.get(bean.getGoodsId()).getGoodsNum() + bean.getGoodsNum());
+            }
+            map.put(bean.getGoodsNum(), bean);
+        }
+        list.clear();
+        list.addAll(map.values());
+        return list;
+    }
 }
