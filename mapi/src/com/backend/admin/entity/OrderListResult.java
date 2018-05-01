@@ -12,6 +12,8 @@ public class OrderListResult extends Result {
 
     private List<Ordergoods> sellsGoodsList;
 
+    private List<OrderListVo> sellsList;
+
     public Double getTotalSals() {
         return totalSals;
     }
@@ -34,5 +36,13 @@ public class OrderListResult extends Result {
 
     public void setSellsGoodsList(List<Ordergoods> sellsGoodsList) {
         this.sellsGoodsList = sellsGoodsList;
+    }
+
+    public List<OrderListVo> getSellsList() {
+        return sellsList;
+    }
+
+    public void setSellsList(List<OrderListVo> sellsList) {
+        this.sellsList = sellsList;
     }
 }

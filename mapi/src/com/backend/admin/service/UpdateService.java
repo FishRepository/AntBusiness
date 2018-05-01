@@ -70,8 +70,10 @@ public class UpdateService {
                 for (OrderListVo orderListVo: sellsList) {
                     if(orderListVo!=null && !orderListVo.getOrdergoodsList().isEmpty()){
                         sellsGoodsList.addAll(orderListVo.getOrdergoodsList());
+                        orderListVo.setOrdergoodsList(new ArrayList<>());
                     }
                 }
+                result.setSellsList(sellsList);
                 result.setSellsGoodsList(mergeList(sellsGoodsList));
             }
 
