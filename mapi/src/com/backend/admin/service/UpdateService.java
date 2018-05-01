@@ -102,10 +102,11 @@ public class UpdateService {
             if (map.containsKey(bean.getGoodsId())) {
                 bean.setGoodsNum(map.get(bean.getGoodsId()).getGoodsNum() + bean.getGoodsNum());
             }
-            map.put(bean.getGoodsNum(), bean);
+            map.put(bean.getGoodsId(), bean);
         }
         list.clear();
         list.addAll(map.values());
         return list;
     }
+
 }
