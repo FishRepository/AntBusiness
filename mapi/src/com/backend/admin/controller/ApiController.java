@@ -2,10 +2,8 @@ package com.backend.admin.controller;
 
 import com.api.common.entity.Images;
 import com.api.common.service.ImagesService;
-import com.api.order.service.OrderService;
 import com.backend.admin.entity.Introduction;
 import com.backend.admin.entity.IntroductionType;
-import com.backend.admin.mapper.UpdateMapper;
 import com.backend.admin.service.IntroductionService;
 import com.backend.admin.service.IntroductionTypeService;
 import com.backend.admin.service.UpdateService;
@@ -22,8 +20,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartRequest;
 
 import java.io.File;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -86,11 +82,10 @@ public class ApiController {
         return introductionService.getIntroductionById(id);
     }
 
-    @ResponseBody
-    @RequestMapping("/updateOrderTime")
-    public Object updateOrderTime(@RequestParam("order_id") Integer order_id,
-                                  @RequestParam("updateTime") Long updateTime) {
-        return updateService.updateOrderTime(order_id, new Date(updateTime));
+    public static String TimeStamp2Date(String timestampString, String formats){
+        Long timestamp = Long.parseLong(timestampString)*1000;
+        String date = new java.text.SimpleDateFormat(formats).format(new java.util.Date(timestamp));
+        return date;
     }
 
     @ResponseBody
@@ -100,4 +95,17 @@ public class ApiController {
                                       @RequestParam(value = "year", required = false) String year) {
         return updateService.getOrderListByMonth(accountId, month, year);
     }
+
+    public static void main(String[] args) {
+        System.out.printf(TimeStamp2Date(String.valueOf(1524994998),"yyyy-MM-dd HH:mm:ss"));
+    }
+
+    @ResponseBody
+    @RequestMapping("/updateOrderTime")
+    public Object updateOrderTime(@RequestParam("order_id") Integer order_id,
+                                  @RequestParam("updateTime") Long updateTime) {
+        return updateService.updateOrderTime(order_id, new Date(updateTime*1000));
+    }
+
+
 }
