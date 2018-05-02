@@ -112,7 +112,7 @@
 		<if test="type != null and type == 0">
 			and state in (0,1) 
 		</if>
-		order by order_id desc 
+		order by create_time desc
 	</select>
 	
 	<update id="deleteOrder" parameterType="com.api.order.entity.Order">
