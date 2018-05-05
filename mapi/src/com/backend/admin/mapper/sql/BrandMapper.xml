@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.backend.admin.mapper.BrandMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.backend.admin.entity.Brand">
+        <id column="brand_id" property="brandId" />
+        <result column="brand_name" property="brandName" />
+        <result column="goods_count" property="goodsCount" />
+        <result column="images_count" property="imagesCount" />
+        <result column="threshold_count" property="thresholdCount" />
+        <result column="brand_from" property="brandFrom" />
+        <result column="brand_index" property="brandIndex" />
+        <result column="brand_shortname" property="brandShortname" />
+        <result column="brand_downloadcode" property="brandDownloadcode" />
+        <result column="account_id" property="accountId" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="state" property="state" />
+    </resultMap>
+
+</mapper>
