@@ -1,4 +1,4 @@
 package com.backend.admin.controller;
 
-public class GoodsController {
+public class GoodsMgrController {
 }

@@ -1,7 +1,8 @@
 package com.backend.admin.mapper;
 
 import com.backend.admin.entity.Brand;
-import com.baomidou.mybatisplus.mapper.BaseMapper;
+
+import java.util.List;
 
 /**
  * <p>
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * @author 
  * @since 2018-05-05
  */
-public interface BrandMapper extends BaseMapper<Brand> {
+public interface BrandMgrMapper{
 
+    public List<Brand> selectAll();
 }

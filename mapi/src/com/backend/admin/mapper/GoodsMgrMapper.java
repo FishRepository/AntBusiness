@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * @author 
  * @since 2018-05-05
  */
-public interface GoodsMapper extends BaseMapper<Goods> {
+public interface GoodsMgrMapper extends BaseMapper<Goods> {
 
 }
