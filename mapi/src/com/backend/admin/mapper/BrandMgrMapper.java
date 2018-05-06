@@ -14,5 +14,17 @@ import java.util.List;
  */
 public interface BrandMgrMapper{
 
-    public List<Brand> selectAll();
+    List<Brand> selectAll();
+
+    Brand getBrandById(int id);
+
+    void saveBrand(Brand brand);
+
+    int updateBrand(Brand brand);
+
+    int removeBrandById(int id);
+
+    int increaseGoodsCount(int id);
+
+    int decreaseGoodsCount(int id);
 }

@@ -43,6 +43,7 @@ public class Goods extends Model<Goods> {
      */
 	@TableField("brand_id")
 	private Integer brandId;
+	private String brandName;
     /**
      * 商品库存
      */
@@ -88,6 +89,13 @@ public class Goods extends Model<Goods> {
      */
 	private Integer state;
 
+	public String getBrandName() {
+		return brandName;
+	}
+
+	public void setBrandName(String brandName) {
+		this.brandName = brandName;
+	}
 
 	public Integer getGoodsId() {
 		return goodsId;

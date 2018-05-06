@@ -1,7 +1,11 @@
 package com.backend.admin.controller;
 
+import com.backend.admin.entity.Brand;
+import com.backend.admin.entity.Goods;
 import com.backend.admin.entity.Introduction;
 import com.backend.admin.entity.IntroductionType;
+import com.backend.admin.service.BrandMgrService;
+import com.backend.admin.service.GoodsMgrService;
 import com.backend.admin.service.IntroductionService;
 import com.backend.admin.service.IntroductionTypeService;
 import com.backend.common.ErrorEnums;
@@ -26,6 +30,12 @@ public class AdminController {
 
     @Autowired
     private IntroductionTypeService introductionTypeService;
+
+    @Autowired
+    private BrandMgrService brandMgrService;
+
+    @Autowired
+    private GoodsMgrService goodsMgrService;
 
     @RequestMapping("/introduction")
     public ModelAndView index() {
@@ -149,6 +159,108 @@ public class AdminController {
             } else {
                 vo.error(ErrorEnums.DbError);
             }
+        }
+        return vo;
+    }
+
+    @RequestMapping("/brand")
+    public String brand() {
+        return "admin/brand";
+    }
+
+    @ResponseBody
+    @RequestMapping("/listBrand")
+    public RequestResultVO<List<Brand>> listBrand() {
+        RequestResultVO<List<Brand>> vo = new RequestResultVO<>();
+        vo.success(brandMgrService.selectAll());
+        return vo;
+    }
+
+    @ResponseBody
+    @RequestMapping("/getBrandById")
+    public Brand getBrandById(int id) {
+        return brandMgrService.getBrandById(id);
+    }
+
+    @ResponseBody
+    @RequestMapping("/saveBrand")
+    public RequestResultVO<String> saveBrand(Brand brand) {
+        RequestResultVO<String> vo = new RequestResultVO<>();
+        if (brand.getBrandId() == null) {
+            if (brandMgrService.saveBrand(brand)) {
+                vo.success("操作成功");
+            } else {
+                vo.error(ErrorEnums.DbError);
+            }
+        } else {
+            if (brandMgrService.updateBrand(brand)) {
+                vo.success("操作成功");
+            } else {
+                vo.error(ErrorEnums.DbError);
+            }
+        }
+        return vo;
+    }
+
+    @ResponseBody
+    @RequestMapping("/removeBrandById")
+    public RequestResultVO removeBrandById(int id) {
+        RequestResultVO<String> vo = new RequestResultVO<>();
+        if (brandMgrService.removeBrandById(id)) {
+            vo.success("操作成功");
+        } else {
+            vo.error(ErrorEnums.DbError);
+        }
+        return vo;
+    }
+
+    @RequestMapping("/goods")
+    public String goods() {
+        return "admin/goods";
+    }
+
+    @ResponseBody
+    @RequestMapping("/listGoods")
+    public RequestResultVO<List<Goods>> listGoods(Long brandId) {
+        RequestResultVO<List<Goods>> vo = new RequestResultVO<>();
+        vo.success(goodsMgrService.listGoods(brandId));
+        return vo;
+    }
+
+    @ResponseBody
+    @RequestMapping("/getGoodsById")
+    public Goods getGoodsById(int id) {
+        return goodsMgrService.getGoodsById(id);
+    }
+
+    @ResponseBody
+    @RequestMapping("/saveGoods")
+    public RequestResultVO<String> saveGoods(Goods goods) {
+        RequestResultVO<String> vo = new RequestResultVO<>();
+        if (goods.getGoodsId() == null) {
+            if (goodsMgrService.saveGoods(goods)) {
+                vo.success("操作成功");
+            } else {
+                vo.error(ErrorEnums.DbError);
+            }
+        } else {
+            if (goodsMgrService.updateGoods(goods)) {
+                vo.success("操作成功");
+            } else {
+                vo.error(ErrorEnums.DbError);
+            }
+        }
+        return vo;
+    }
+
+    @ResponseBody
+    @RequestMapping("/removeGoodsById")
+    public RequestResultVO removeGoodsById(int id) {
+        RequestResultVO<String> vo = new RequestResultVO<>();
+        if (goodsMgrService.removeGoodsById(id)) {
+            vo.success("操作成功");
+        } else {
+            vo.error(ErrorEnums.DbError);
         }
         return vo;
     }

@@ -178,6 +178,16 @@
                 <i class="app-menu__icon fa fa-list"></i><span class="app-menu__label">功能列表</span>
             </a>
         </li>
+        <li>
+            <a class="app-menu__item<#if index==2> active</#if>" href="${ctx}/admin/brand">
+                <i class="app-menu__icon fa fa-list"></i><span class="app-menu__label">品牌管理</span>
+            </a>
+        </li>
+        <li>
+            <a class="app-menu__item<#if index==3> active</#if>" href="${ctx}/admin/goods">
+                <i class="app-menu__icon fa fa-list"></i><span class="app-menu__label">商品管理</span>
+            </a>
+        </li>
     </ul>
 </aside>
 </#macro>

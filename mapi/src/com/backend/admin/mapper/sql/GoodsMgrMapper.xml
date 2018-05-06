@@ -4,19 +4,64 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.backend.admin.entity.Goods">
-        <id column="goods_id" property="goodsId" />
-        <result column="goods_name" property="goodsName" />
-        <result column="goods_price" property="goodsPrice" />
-        <result column="brand_id" property="brandId" />
-        <result column="goods_stock" property="goodsStock" />
-        <result column="goods_setstock" property="goodsSetstock" />
-        <result column="goods_threshold" property="goodsThreshold" />
-        <result column="goods_scale" property="goodsScale" />
-        <result column="goods_index" property="goodsIndex" />
-        <result column="account_id" property="accountId" />
-        <result column="create_time" property="createTime" />
-        <result column="update_time" property="updateTime" />
-        <result column="state" property="state" />
+        <id column="goods_id" property="goodsId"/>
+        <result column="goods_name" property="goodsName"/>
+        <result column="goods_price" property="goodsPrice"/>
+        <result column="brand_id" property="brandId"/>
+        <result column="brand_name" property="brandName"/>
+        <result column="goods_stock" property="goodsStock"/>
+        <result column="goods_setstock" property="goodsSetstock"/>
+        <result column="goods_threshold" property="goodsThreshold"/>
+        <result column="goods_scale" property="goodsScale"/>
+        <result column="goods_index" property="goodsIndex"/>
+        <result column="account_id" property="accountId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="state" property="state"/>
     </resultMap>
-    
+
+    <sql id="getGoods">
+        SELECT
+            g.goods_id,
+            g.brand_id,
+            b.brand_name,
+            g.goods_name,
+            g.goods_price,
+            g.create_time,
+            g.update_time
+        FROM goods AS g LEFT JOIN brand AS b ON g.brand_id = b.brand_id
+    </sql>
+
+    <!--仅传入一个类型的参数判断，那么在 xml文件中应该使用_parameter来代替参数名。-->
+    <select id="listGoods" resultMap="BaseResultMap" parameterType="long">
+        <include refid="getGoods"/>
+        WHERE g.account_id = 0 AND g.state = 1
+        <if test="_parameter!=null and _parameter!=0">AND g.brand_id = #{_parameter}</if>
+    </select>
+
+    <select id="getGoodsById" parameterType="int" resultMap="BaseResultMap">
+        <include refid="getGoods"/>
+        WHERE g.account_id = 0 AND g.state = 1 AND g.goods_id = #{id}
+    </select>
+
+    <insert id="saveGoods" parameterType="com.backend.admin.entity.Goods" keyProperty="goodsId" useGeneratedKeys="true">
+        INSERT INTO goods (goods_name, goods_price, brand_id, create_time, update_time)
+        VALUES (#{goodsName}, #{goodsPrice}, #{brandId}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    </insert>
+
+    <update id="updateGoods" parameterType="com.backend.admin.entity.Goods">
+        UPDATE goods
+        <trim prefix="SET" suffixOverrides="," suffix="WHERE goods_id = #{goodsId}">
+            goods_name = #{goodsName},
+            goods_price = #{goodsPrice},
+            brand_id = #{brandId},
+            update_time = CURRENT_TIMESTAMP
+        </trim>
+    </update>
+
+    <update id="removeGoodsById" parameterType="int">
+        UPDATE goods
+        SET state = 0
+        WHERE goods_id = #{id}
+    </update>
 </mapper>

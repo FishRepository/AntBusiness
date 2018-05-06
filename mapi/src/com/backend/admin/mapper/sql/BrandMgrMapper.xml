@@ -4,22 +4,65 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.backend.admin.entity.Brand">
-        <id column="brand_id" property="brandId" />
-        <result column="brand_name" property="brandName" />
-        <result column="goods_count" property="goodsCount" />
-        <result column="images_count" property="imagesCount" />
-        <result column="threshold_count" property="thresholdCount" />
-        <result column="brand_from" property="brandFrom" />
-        <result column="brand_index" property="brandIndex" />
-        <result column="brand_shortname" property="brandShortname" />
-        <result column="brand_downloadcode" property="brandDownloadcode" />
-        <result column="account_id" property="accountId" />
-        <result column="create_time" property="createTime" />
-        <result column="update_time" property="updateTime" />
-        <result column="state" property="state" />
+        <id column="brand_id" property="brandId"/>
+        <result column="brand_name" property="brandName"/>
+        <result column="goods_count" property="goodsCount"/>
+        <result column="images_count" property="imagesCount"/>
+        <result column="threshold_count" property="thresholdCount"/>
+        <result column="brand_from" property="brandFrom"/>
+        <result column="brand_index" property="brandIndex"/>
+        <result column="brand_shortname" property="brandShortname"/>
+        <result column="brand_downloadcode" property="brandDownloadcode"/>
+        <result column="account_id" property="accountId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="state" property="state"/>
     </resultMap>
-    
+
     <select id="selectAll" resultMap="BaseResultMap">
-        SELECT * FROM brand WHERE state = 1 AND brand_downloadcode IS NOT NULL
+        SELECT *
+        FROM brand
+        WHERE state = 1 AND brand_downloadcode IS NOT NULL
     </select>
+
+    <select id="getBrandById" resultMap="BaseResultMap">
+        SELECT *
+        FROM brand
+        WHERE state = 1 AND brand_downloadcode IS NOT NULL
+              AND brand_id = #{id}
+    </select>
+
+    <insert id="saveBrand" parameterType="com.backend.admin.entity.Brand" keyProperty="brandId" useGeneratedKeys="true">
+        INSERT INTO brand (brand_name, goods_count, brand_shortname, brand_downloadcode, create_time)
+        VALUES (#{brandName}, #{goodsCount}, #{brandName}, #{brandDownloadcode}, CURRENT_TIMESTAMP)
+    </insert>
+
+    <update id="updateBrand" parameterType="com.backend.admin.entity.Brand">
+        UPDATE brand
+        <trim prefix="SET" suffixOverrides="," suffix="WHERE brand_id = #{brandId}">
+            brand_name = #{brandName},
+            <if test="goodsCount!=null">goods_count = #{goodsCount},</if>
+            brand_shortname = #{brandName},
+            brand_downloadcode = #{brandDownloadcode},
+            update_time = CURRENT_TIMESTAMP
+        </trim>
+    </update>
+
+    <update id="removeBrandById" parameterType="int">
+        UPDATE brand
+        SET state = 0
+        WHERE brand_id = #{id}
+    </update>
+
+    <update id="increaseGoodsCount" parameterType="int">
+        UPDATE brand
+        SET goods_count = goods_count + 1
+        WHERE brand_id = #{id}
+    </update>
+
+    <update id="decreaseGoodsCount" parameterType="int">
+        UPDATE brand
+        SET goods_count = goods_count - 1
+        WHERE brand_id = #{id}
+    </update>
 </mapper>
