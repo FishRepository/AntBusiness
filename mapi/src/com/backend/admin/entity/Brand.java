@@ -2,6 +2,7 @@ package com.backend.admin.entity;
 
 import java.io.Serializable;
 
+import com.api.goods.entity.AgentLevel;
 import com.baomidou.mybatisplus.enums.IdType;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableId;
@@ -9,6 +10,7 @@ import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -87,6 +89,8 @@ public class Brand extends Model<Brand> {
      * 状态0无效1有效
      */
 	private Integer state;
+
+	private List<AgentLevel> agents;
 
 
 	public Integer getBrandId() {
@@ -191,6 +195,14 @@ public class Brand extends Model<Brand> {
 
 	public void setState(Integer state) {
 		this.state = state;
+	}
+
+	public List<AgentLevel> getAgents() {
+		return agents;
+	}
+
+	public void setAgents(List<AgentLevel> agents) {
+		this.agents = agents;
 	}
 
 	@Override

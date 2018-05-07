@@ -1,7 +1,13 @@
 <#assign ctx=request.getContextPath()/>
 <!DOCTYPE html>
 <html lang="en">
-<@global.head "Tomato Admin - 品牌管理"></@global.head>
+<@global.head "Tomato Admin - 品牌管理">
+    <style type="text/css">
+        .margin-left {
+            margin-left: 15px;
+        }
+    </style>
+</@global.head>
 <body class="app sidebar-mini rtl">
 <@global.navbar></@global.navbar>
 <@global.sidebar 2></@global.sidebar>
@@ -60,6 +66,9 @@
                             <div class="col-md-8">
                                 <input name="brandDownloadcode" class="form-control" type="text" placeholder="请输入下载码">
                             </div>
+                        </div>
+                        <div class="form-group row">
+                            <button class="btn btn-primary margin-left" type="button" onclick="addAgent()">新增代理</button>
                         </div>
                     </form>
                 </div>
@@ -127,6 +136,12 @@
                 id: id
             },
             success: function (result) {
+                var agents = result.agents;
+                if (agents) {
+                    $.each(agents, function (i, agent) {
+                        addAgent(agent);
+                    });
+                }
                 $('#form-data').fill(result);
                 $('.modal').modal('show');
             }
@@ -162,6 +177,7 @@
     $('.modal').on('hidden.bs.modal', function () {
         var $form = $('#form-data');
         $form.clear();
+        clearAgent();
     });
 
     // 关闭弹出框
@@ -194,6 +210,50 @@
                     });
                 }
         );
+    }
+
+    function addAgent(agent) {
+        var agentName = agent ? agent.agentlevel_name : '';
+        var $form = $('#form-data');
+        $form.append('<div class="form-group row js-agent">' +
+                '<input name="agents[' + $form.find('.js-agent').length + '].agentlevel_name" class="form-control col-md-8 margin-left" type="text" placeholder="请输入代理名称" value="' + agentName + '">' +
+                '<button class="btn btn-primary margin-left" type="button" onclick="removeRow()">删除</button>' +
+                '</div>')
+    }
+
+    function removeRow() {
+        $(getEventTarget()).parent('.js-agent').remove();
+        formatAgentName();
+    }
+
+    function clearAgent() {
+        $('#form-data').find('.js-agent').remove();
+    }
+
+    function formatAgentName() {
+        $('#form-data').find('.js-agent').each(function (i, item) {
+            $(item).find('input').attr('name', 'agents[' + i + '].agentlevel_name');
+        });
+    }
+
+    function getEvent() {
+        if (document.all) return window.event;
+        func = getEvent.caller;
+        while (func !== null) {
+            var arg0 = func.arguments[0];
+            if (arg0) {
+                if ((arg0.constructor === Event || arg0.constructor === MouseEvent) || (typeof (arg0) === "object" && arg0.preventDefault && arg0.stopPropagation)) {
+                    return arg0;
+                }
+            }
+            func = func.caller;
+        }
+        return null;
+    }
+
+    function getEventTarget() {
+        event = getEvent();
+        return event.srcElement || event.target;
     }
 </script>
 </@global.script>

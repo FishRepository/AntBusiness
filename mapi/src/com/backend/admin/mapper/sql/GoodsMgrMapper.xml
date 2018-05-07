@@ -54,7 +54,7 @@
         <trim prefix="SET" suffixOverrides="," suffix="WHERE goods_id = #{goodsId}">
             goods_name = #{goodsName},
             goods_price = #{goodsPrice},
-            brand_id = #{brandId},
+            <if test="brandId!=null and brandId!=0">brand_id = #{brandId},</if>
             update_time = CURRENT_TIMESTAMP
         </trim>
     </update>

@@ -1,9 +1,11 @@
 package com.backend.admin.controller;
 
+import com.api.goods.entity.AgentLevel;
 import com.backend.admin.entity.Brand;
 import com.backend.admin.entity.Goods;
 import com.backend.admin.entity.Introduction;
 import com.backend.admin.entity.IntroductionType;
+import com.backend.admin.mapper.AgentLevelMapper;
 import com.backend.admin.service.BrandMgrService;
 import com.backend.admin.service.GoodsMgrService;
 import com.backend.admin.service.IntroductionService;
@@ -36,6 +38,9 @@ public class AdminController {
 
     @Autowired
     private GoodsMgrService goodsMgrService;
+
+    @Autowired
+    private AgentLevelMapper agentLevelMapper;
 
     @RequestMapping("/introduction")
     public ModelAndView index() {
@@ -263,5 +268,11 @@ public class AdminController {
             vo.error(ErrorEnums.DbError);
         }
         return vo;
+    }
+
+    @ResponseBody
+    @RequestMapping("/listAgentLevelByBrandId")
+    public List<AgentLevel> listAgentLevelByBrandId(int brandId) {
+        return agentLevelMapper.listAgentLevelByBrandId(brandId);
     }
 }

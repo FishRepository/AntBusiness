@@ -4,11 +4,12 @@ import java.io.Serializable;
 
 import com.baomidou.mybatisplus.enums.IdType;
 import java.util.Date;
+import java.util.List;
+
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
-import java.io.Serializable;
 
 /**
  * <p>
@@ -44,6 +45,7 @@ public class Goods extends Model<Goods> {
 	@TableField("brand_id")
 	private Integer brandId;
 	private String brandName;
+	private List<GoodsPrice> goodsPriceList;
     /**
      * 商品库存
      */
@@ -199,6 +201,14 @@ public class Goods extends Model<Goods> {
 
 	public void setState(Integer state) {
 		this.state = state;
+	}
+
+	public List<GoodsPrice> getGoodsPriceList() {
+		return goodsPriceList;
+	}
+
+	public void setGoodsPriceList(List<GoodsPrice> goodsPriceList) {
+		this.goodsPriceList = goodsPriceList;
 	}
 
 	@Override

@@ -99,6 +99,32 @@
         reloadDataTable();
     });
 
+    // 弹出框品牌下拉框change事件，初始化选项
+    $('#form-data').find('[name="brandId"]').change(function () {
+        var brandId = $(this).val();
+        $.ajax({
+            url: '${ctx}/admin/listAgentLevelByBrandId',
+            type: 'get',
+            dataType: 'json',
+            data: {
+                brandId: brandId
+            },
+            success: function (agents) {
+                clearGoodsPrice();
+                var goodsPrices = [];
+                if (agents) {
+                    $.each(agents, function (i, agent) {
+                        goodsPrices.push({
+                            agentlevel_id: agent.agentlevel_id,
+                            agentlevel_name: agent.agentlevel_name
+                        });
+                    });
+                    initGoodsPrice(goodsPrices);
+                }
+            }
+        })
+    });
+
     $(function () {
         // 初始化品牌下拉框
         $.ajax({
@@ -176,9 +202,31 @@
             },
             success: function (result) {
                 $('#form-data').fill(result);
+                initGoodsPrice(result.goodsPriceList);
                 $('.modal').modal('show');
+                $('#form-data').find('[name="brandId"]').prop('disabled', true);
             }
         });
+    }
+
+    function initGoodsPrice(goodsPrices) {
+        if (goodsPrices) {
+            $.each(goodsPrices, function (i, goodsPrice) {
+                $('#form-data').append('<div class="form-group row js-goods-price">' +
+                        '<input name="goodsPriceList[' + i + '].goodsprice_id" type="text" value="' + (goodsPrice.goodsprice_id ? goodsPrice.goodsprice_id : '') + '" hidden/>' +
+                        '<input name="goodsPriceList[' + i + '].goods_id" type="text" value="' + (goodsPrice.goods_id ? goodsPrice.goods_id : '') + '" hidden/>' +
+                        '<input name="goodsPriceList[' + i + '].agentlevel_id" type="text" value="' + (goodsPrice.agentlevel_id ? goodsPrice.agentlevel_id : '') + '" hidden/>' +
+                        '<label class="control-label col-md-3">' + goodsPrice.agentlevel_name + '&nbsp;：</label>' +
+                        '<div class="col-md-8">' +
+                        '<input name="goodsPriceList[' + i + '].goods_price" class="form-control" type="text" placeholder="请输入价格" value="' + (goodsPrice.goods_price ? goodsPrice.goods_price : '') + '">' +
+                        '</div>' +
+                        '</div>');
+            });
+        }
+    }
+
+    function clearGoodsPrice() {
+        $('#form-data').find('.js-goods-price').remove();
     }
 
     // 保存栏目
@@ -210,6 +258,8 @@
     $('.modal').on('hidden.bs.modal', function () {
         var $form = $('#form-data');
         $form.clear();
+        clearGoodsPrice();
+        $form.find('[name="brandId"]').prop('disabled', false);
     });
 
     // 关闭弹出框
