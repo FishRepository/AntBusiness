@@ -51,6 +51,7 @@ public class BrandMgrService {
 
     @Transactional(rollbackFor = Exception.class)
     public boolean saveBrand(Brand brand) {
+        initBrandShortname(brand);
         brandMgrMapper.saveBrand(brand);
         if (!CollectionUtils.isEmpty(brand.getAgents())) {
             for (AgentLevel level : brand.getAgents()) {
@@ -58,7 +59,6 @@ public class BrandMgrService {
             }
             agentLevelMapper.saveAgentLevelByBrandId(brand.getAgents());
         }
-        initBrandShortname(brand);
         if (brand.getBrandPrice() != null) {
             brandPriceMapper.saveBrandPrice(brand.getBrandId(), brand.getBrandPrice());
         }
@@ -90,7 +90,6 @@ public class BrandMgrService {
             }
             agentLevelMapper.saveAgentLevelByBrandId(brand.getAgents());
         }
-        initBrandShortname(brand);
         if (brand.getBrandPrice() != null) {
             Double oldPrice = brandPriceMapper.getPriceByBrandId(brand.getBrandId());
             if (oldPrice == null) {
@@ -99,6 +98,7 @@ public class BrandMgrService {
                 brandPriceMapper.updateBrandPriceByBrandId(brand.getBrandId(), brand.getBrandPrice());
             }
         }
+        initBrandShortname(brand);
         return brandMgrMapper.updateBrand(brand) > 0;
     }
 
