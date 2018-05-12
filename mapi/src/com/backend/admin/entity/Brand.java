@@ -92,6 +92,15 @@ public class Brand extends Model<Brand> {
 
 	private List<AgentLevel> agents;
 
+	private Double brandPrice;
+
+	public Double getBrandPrice() {
+		return brandPrice;
+	}
+
+	public void setBrandPrice(Double brandPrice) {
+		this.brandPrice = brandPrice;
+	}
 
 	public Integer getBrandId() {
 		return brandId;

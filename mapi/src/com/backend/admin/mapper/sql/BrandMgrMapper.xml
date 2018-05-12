@@ -34,7 +34,7 @@
 
     <insert id="saveBrand" parameterType="com.backend.admin.entity.Brand" keyProperty="brandId" useGeneratedKeys="true">
         INSERT INTO brand (brand_name, goods_count, brand_shortname, brand_downloadcode, create_time)
-        VALUES (#{brandName}, #{goodsCount}, #{brandName}, #{brandDownloadcode}, CURRENT_TIMESTAMP)
+        VALUES (#{brandName}, #{goodsCount}, #{brandShortname}, #{brandDownloadcode}, CURRENT_TIMESTAMP)
     </insert>
 
     <update id="updateBrand" parameterType="com.backend.admin.entity.Brand">
@@ -42,7 +42,7 @@
         <trim prefix="SET" suffixOverrides="," suffix="WHERE brand_id = #{brandId}">
             brand_name = #{brandName},
             <if test="goodsCount!=null">goods_count = #{goodsCount},</if>
-            brand_shortname = #{brandName},
+            brand_shortname = #{brandShortname},
             brand_downloadcode = #{brandDownloadcode},
             update_time = CURRENT_TIMESTAMP
         </trim>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.backend.admin.mapper.BrandPriceMapper">
+
+    <select id="getPriceByBrandId" resultType="double">
+        SELECT brand_price
+        FROM brandprice
+        WHERE brand_id = #{brandId}
+    </select>
+
+    <update id="updateBrandPriceByBrandId">
+        UPDATE brandprice
+        SET brand_price = #{price}
+        WHERE brand_id = #{brandId}
+    </update>
+
+    <insert id="saveBrandPrice">
+        INSERT INTO brandprice (brand_id, brand_price, create_time, update_time)
+        VALUES (#{brandId}, #{price}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    </insert>
+
+    <update id="removeBrandPriceByBrandId">
+        UPDATE brandprice
+        SET state = 0, update_time = CURRENT_TIMESTAMP
+        WHERE brand_id = #{brandId}
+    </update>
+</mapper>

@@ -62,9 +62,21 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            <label class="control-label col-md-3">搜索名称&nbsp;：</label>
+                            <div class="col-md-8">
+                                <input name="brandShortname" class="form-control" type="text" placeholder="搜索词，多个逗号隔开">
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label class="control-label col-md-3">下载码&nbsp;：</label>
                             <div class="col-md-8">
                                 <input name="brandDownloadcode" class="form-control" type="text" placeholder="请输入下载码">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">番茄币&nbsp;：</label>
+                            <div class="col-md-8">
+                                <input name="brandPrice" class="form-control" type="text" placeholder="请输入下载价">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -124,6 +136,7 @@
     });
 
     $('#addNew').click(function () {
+        addAgent({agentlevel_name: '零售价'});
         $('.modal').modal('show');
     });
 
@@ -152,6 +165,8 @@
     function saveItem() {
         var $form = $('#form-data');
         var url = '${ctx}/admin/saveBrand';
+        // 清空disabled属性，防止未提交至后台
+        $form.find('[disabled]').prop('disabled', false);
         $form.ajaxSubmit({
             url: url,
             type: 'POST',
@@ -215,10 +230,15 @@
     function addAgent(agent) {
         var agentName = agent ? agent.agentlevel_name : '';
         var $form = $('#form-data');
-        $form.append('<div class="form-group row js-agent">' +
+        var $row = $('<div class="form-group row js-agent">' +
                 '<input name="agents[' + $form.find('.js-agent').length + '].agentlevel_name" class="form-control col-md-8 margin-left" type="text" placeholder="请输入代理名称" value="' + agentName + '">' +
                 '<button class="btn btn-primary margin-left" type="button" onclick="removeRow()">删除</button>' +
-                '</div>')
+                '</div>');
+        if (agentName === '零售价') {
+            $row.find('input').prop('disabled', true);
+            $row.find('button').prop('disabled', true);
+        }
+        $form.append($row);
     }
 
     function removeRow() {
