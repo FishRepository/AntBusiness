@@ -9,10 +9,10 @@
     </select>
 
     <insert id="saveAgentLevelByBrandId" parameterType="com.api.goods.entity.AgentLevel">
-        INSERT INTO agentlevel (agentlevel_name, brand_id, create_time, update_time)
+        INSERT INTO agentlevel (agentlevel_name, agentlevel_default, brand_id, create_time, update_time)
         VALUES
         <foreach collection="list" item="item" separator=",">
-            (#{item.agentlevel_name}, #{item.brand_id}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+            (#{item.agentlevel_name}, 1, #{item.brand_id}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
         </foreach>
     </insert>
 
