@@ -229,15 +229,17 @@
 
     function addAgent(agent) {
         var agentName = agent ? agent.agentlevel_name : '';
+        var agentDefault = agent ? agent.agentlevel_default : '';
         var $form = $('#form-data');
         var $row = $('<div class="form-group row js-agent">' +
-                '<input name="agents[' + $form.find('.js-agent').length + '].agentlevel_name" class="form-control col-md-8 margin-left" type="text" placeholder="请输入代理名称" value="' + agentName + '">' +
+                '<input name="agents[' + $form.find('.js-agent').length + '].agentlevel_name" class="form-control col-md-6 margin-left" type="text" placeholder="请输入代理名称" value="' + agentName + '">' +
+                '<label><input name="agents[' + $form.find('.js-agent').length + '].agentlevel_default" type="checkbox" value="1" ' + (agentDefault ? 'checked' : '') + '/>用币下载</label>' +
                 '<button class="btn btn-primary margin-left" type="button" onclick="removeRow()">删除</button>' +
                 '</div>');
-        if (agentName === '零售价') {
-            $row.find('input').prop('disabled', true);
-            $row.find('button').prop('disabled', true);
-        }
+        // if (agentName === '零售价') {
+        //     $row.find('input').prop('disabled', true);
+        //     $row.find('button').prop('disabled', true);
+        // }
         $form.append($row);
     }
 
@@ -252,7 +254,8 @@
 
     function formatAgentName() {
         $('#form-data').find('.js-agent').each(function (i, item) {
-            $(item).find('input').attr('name', 'agents[' + i + '].agentlevel_name');
+            $(item).find('input[type="text"]').attr('name', 'agents[' + i + '].agentlevel_name');
+            $(item).find('input[type="checkbox"]').attr('name', 'agents[' + i + '].agentlevel_default');
         });
     }
 
