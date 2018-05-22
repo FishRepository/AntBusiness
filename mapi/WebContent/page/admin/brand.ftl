@@ -233,7 +233,7 @@
         var agentDefault = agent ? agent.agentlevel_default : '';
         var $form = $('#form-data');
         var $row = $('<div class="form-group row js-agent">' +
-                '<input class="js-id" name="agents[' + $form.find('.js-agent').length + '].agentlevel_id" type="text" value="' + id + '" hidden>' +
+                '<input class="js-id" name="agents[' + $form.find('.js-agent').length + '].agentlevel_id" type="text" value="' + (id ? id : '') + '" hidden>' +
                 '<input name="agents[' + $form.find('.js-agent').length + '].agentlevel_name" class="form-control col-md-6 margin-left js-name" type="text" placeholder="请输入代理名称" value="' + agentName + '">' +
                 '<label><input class="js-default" name="agents[' + $form.find('.js-agent').length + '].agentlevel_default" type="checkbox" value="1" ' + (agentDefault ? 'checked' : '') + '/>用币下载</label>' +
                 '<button class="btn btn-primary margin-left" type="button" onclick="removeRow()">删除</button>' +
