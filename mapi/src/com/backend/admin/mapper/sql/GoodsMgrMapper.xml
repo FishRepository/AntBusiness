@@ -26,6 +26,7 @@
             g.brand_id,
             b.brand_name,
             g.goods_name,
+            g.goods_scale,
             g.goods_price,
             g.create_time,
             g.update_time
@@ -45,8 +46,8 @@
     </select>
 
     <insert id="saveGoods" parameterType="com.backend.admin.entity.Goods" keyProperty="goodsId" useGeneratedKeys="true">
-        INSERT INTO goods (goods_name, goods_price, brand_id, create_time, update_time)
-        VALUES (#{goodsName}, #{goodsPrice}, #{brandId}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+        INSERT INTO goods (goods_name, goods_price, goods_scale, brand_id, create_time, update_time)
+        VALUES (#{goodsName}, #{goodsPrice}, #{goodsScale}, #{brandId}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
     </insert>
 
     <update id="updateGoods" parameterType="com.backend.admin.entity.Goods">
@@ -54,6 +55,7 @@
         <trim prefix="SET" suffixOverrides="," suffix="WHERE goods_id = #{goodsId}">
             goods_name = #{goodsName},
             goods_price = #{goodsPrice},
+            goods_scale = #{goodsScale},
             <if test="brandId!=null and brandId!=0">brand_id = #{brandId},</if>
             update_time = CURRENT_TIMESTAMP
         </trim>

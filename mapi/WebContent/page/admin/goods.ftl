@@ -75,6 +75,12 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            <label class="control-label col-md-3">箱/个 比&nbsp;：</label>
+                            <div class="col-md-8">
+                                <input name="goodsScale" class="form-control" type="text" placeholder="请输入名称">
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label class="control-label col-md-3">价格&nbsp;：</label>
                             <div class="col-md-8">
                                 <input name="goodsPrice" class="form-control" type="text" placeholder="请输入价格">
