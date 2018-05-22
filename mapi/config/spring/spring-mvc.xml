@@ -101,10 +101,10 @@
         <property name="contentType" value="text/html;charset=UTF-8"/>
     </bean>
 
-    <!--<mvc:interceptors>-->
-        <!--<mvc:interceptor>-->
-            <!--<mvc:mapping path="/admin/**"/>-->
-            <!--<bean class="com.backend.intercepter.LoginIntercepter"/>-->
-        <!--</mvc:interceptor>-->
-    <!--</mvc:interceptors>-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/admin/**"/>
+            <bean class="com.backend.intercepter.LoginIntercepter"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
 </beans>
