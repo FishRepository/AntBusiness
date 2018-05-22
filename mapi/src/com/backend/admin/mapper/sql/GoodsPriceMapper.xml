@@ -4,19 +4,19 @@
 
     <select id="listGoodsPriceByGoodsId" resultType="com.backend.admin.entity.GoodsPrice">
         SELECT
+            a.agentlevel_id,
+            a.agentlevel_name,
             g.goodsprice_id,
             g.goods_id,
-            g.agentlevel_id,
             g.goods_price,
             g.create_time,
             g.update_time,
-            g.state,
-            a.agentlevel_name
-        FROM goodsprice AS g LEFT JOIN agentlevel AS a ON g.agentlevel_id = a.agentlevel_id
-        WHERE g.state = 1 AND g.goods_id = #{goodsId}
+            g.state
+        FROM agentlevel AS a INNER JOIN goodsprice AS g ON g.agentlevel_id = a.agentlevel_id
+        WHERE a.state = 1 AND g.goods_id = #{goodsId}
     </select>
 
-    <insert id="saveGoodsPrice" parameterType="com.backend.admin.entity.GoodsPrice">
+    <insert id="saveGoodsPriceBatch" parameterType="com.backend.admin.entity.GoodsPrice">
         INSERT INTO goodsprice (goods_id, agentlevel_id, goods_price, create_time, update_time)
         VALUES
         <foreach collection="list" item="item" separator=",">
@@ -39,5 +39,22 @@
         UPDATE goodsprice
         SET state = 0, update_time = CURRENT_TIMESTAMP
         WHERE goods_id = #{goodsId}
+    </update>
+
+    <select id="checkGoodsPrice" resultType="int">
+        SELECT COUNT(*)
+        FROM goodsprice
+        WHERE goods_id = #{goodsId} AND agentlevel_id = #{agentLevelId}
+    </select>
+
+    <insert id="saveGoodsPrice" parameterType="com.backend.admin.entity.GoodsPrice">
+        INSERT INTO goodsprice (goods_id, agentlevel_id, goods_price, create_time, update_time)
+        VALUES (#{goods_id}, #{agentlevel_id}, #{goods_price}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    </insert>
+
+    <update id="updateGoodsPrice" parameterType="com.backend.admin.entity.GoodsPrice">
+        UPDATE goodsprice
+        SET goods_price = #{goods_price}, update_time = CURRENT_TIMESTAMP
+        WHERE goodsprice_id = #{goodsprice_id}
     </update>
 </mapper>

@@ -228,12 +228,14 @@
     }
 
     function addAgent(agent) {
+        var id = agent ? agent.agentlevel_id : '';
         var agentName = agent ? agent.agentlevel_name : '';
         var agentDefault = agent ? agent.agentlevel_default : '';
         var $form = $('#form-data');
         var $row = $('<div class="form-group row js-agent">' +
-                '<input name="agents[' + $form.find('.js-agent').length + '].agentlevel_name" class="form-control col-md-6 margin-left" type="text" placeholder="请输入代理名称" value="' + agentName + '">' +
-                '<label><input name="agents[' + $form.find('.js-agent').length + '].agentlevel_default" type="checkbox" value="1" ' + (agentDefault ? 'checked' : '') + '/>用币下载</label>' +
+                '<input class="js-id" name="agents[' + $form.find('.js-agent').length + '].agentlevel_id" type="text" value="' + id + '" hidden>' +
+                '<input name="agents[' + $form.find('.js-agent').length + '].agentlevel_name" class="form-control col-md-6 margin-left js-name" type="text" placeholder="请输入代理名称" value="' + agentName + '">' +
+                '<label><input class="js-default" name="agents[' + $form.find('.js-agent').length + '].agentlevel_default" type="checkbox" value="1" ' + (agentDefault ? 'checked' : '') + '/>用币下载</label>' +
                 '<button class="btn btn-primary margin-left" type="button" onclick="removeRow()">删除</button>' +
                 '</div>');
         // if (agentName === '零售价') {
@@ -254,8 +256,9 @@
 
     function formatAgentName() {
         $('#form-data').find('.js-agent').each(function (i, item) {
-            $(item).find('input[type="text"]').attr('name', 'agents[' + i + '].agentlevel_name');
-            $(item).find('input[type="checkbox"]').attr('name', 'agents[' + i + '].agentlevel_default');
+            $(item).find('.js-id').attr('name', 'agents[' + i + '].agentlevel_id');
+            $(item).find('.js-name').attr('name', 'agents[' + i + '].agentlevel_name');
+            $(item).find('.js-default').attr('name', 'agents[' + i + '].agentlevel_default');
         });
     }
 

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -83,13 +84,29 @@ public class BrandMgrService {
 
     @Transactional(rollbackFor = Exception.class)
     public boolean updateBrand(Brand brand) {
-        agentLevelMapper.removeAgentLevelByBrandId(brand.getBrandId());
+//        agentLevelMapper.removeAgentLevelByBrandId(brand.getBrandId());
+        List<Integer> curAgentLevelIds = agentLevelMapper.listAgentLevelIdByBrandId(brand.getBrandId());
+        List<Integer> updateIds = new ArrayList<>();
         if (!CollectionUtils.isEmpty(brand.getAgents())) {
             for (AgentLevel level : brand.getAgents()) {
                 level.setBrand_id(brand.getBrandId());
+                if (level.getAgentlevel_id() != null) {
+                    updateIds.add(level.getAgentlevel_id());
+                    // 更新代理
+                    agentLevelMapper.updateAgentById(level);
+                } else {
+                    // 新增代理
+                    agentLevelMapper.saveAgentLevel(level);
+                }
             }
-            agentLevelMapper.saveAgentLevelByBrandId(brand.getAgents());
+//            agentLevelMapper.saveAgentLevelByBrandId(brand.getAgents());
         }
+        // 获取需要删除的ID集合
+        curAgentLevelIds.removeAll(updateIds);
+        if (!CollectionUtils.isEmpty(curAgentLevelIds)) {
+            agentLevelMapper.removeAgentLevelByIds(curAgentLevelIds);
+        }
+
         if (brand.getBrandPrice() != null) {
             Double oldPrice = brandPriceMapper.getPriceByBrandId(brand.getBrandId());
             if (oldPrice == null) {

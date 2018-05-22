@@ -40,7 +40,7 @@ public class GoodsMgrService {
             for (GoodsPrice goodsPrice : goods.getGoodsPriceList()) {
                 goodsPrice.setGoods_id(goods.getGoodsId());
             }
-            goodsPriceMapper.saveGoodsPrice(goods.getGoodsPriceList());
+            goodsPriceMapper.saveGoodsPriceBatch(goods.getGoodsPriceList());
         }
         return goods.getGoodsId() > 0;
     }
@@ -48,6 +48,13 @@ public class GoodsMgrService {
     @Transactional(rollbackFor = Exception.class)
     public boolean updateGoods(Goods goods) {
         if (!CollectionUtils.isEmpty(goods.getGoodsPriceList())) {
+//            for (GoodsPrice goodsPrice : goods.getGoodsPriceList()) {
+//                if (goodsPriceMapper.checkGoodsPrice(goods.getGoodsId(), goodsPrice.getAgentlevel_id()) > 0) {
+//                    goodsPriceMapper.updateGoodsPrice(goodsPrice);
+//                } else {
+//                    goodsPriceMapper.saveGoodsPrice(goodsPrice);
+//                }
+//            }
             goodsPriceMapper.updateGoodsPriceBatch(goods.getGoodsPriceList());
         }
         return goodsMgrMapper.updateGoods(goods) > 0;

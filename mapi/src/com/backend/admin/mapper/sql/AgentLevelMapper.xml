@@ -8,6 +8,12 @@
         WHERE state = 1 AND brand_id = #{brandId}
     </select>
 
+    <select id="listAgentLevelIdByBrandId" resultType="int">
+        SELECT agentlevel_id
+        FROM agentlevel
+        WHERE state = 1 AND brand_id = #{brandId}
+    </select>
+
     <insert id="saveAgentLevelByBrandId" parameterType="com.api.goods.entity.AgentLevel">
         INSERT INTO agentlevel (agentlevel_name, agentlevel_default, brand_id, create_time, update_time)
         VALUES
@@ -21,4 +27,27 @@
         SET state = 0, update_time = CURRENT_TIMESTAMP
         WHERE brand_id = #{brandId}
     </update>
+
+
+
+
+    <update id="removeAgentLevelByIds" parameterType="int">
+        UPDATE agentlevel
+        SET state = 0, update_time = CURRENT_TIMESTAMP
+        WHERE agentlevel_id IN
+        <foreach collection="list" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="updateAgentById" parameterType="com.api.goods.entity.AgentLevel">
+        UPDATE agentlevel
+        SET agentlevel_name = #{agentlevel_name}, agentlevel_default = #{agentlevel_default}, update_time = CURRENT_TIMESTAMP
+        WHERE agentlevel_id = #{agentlevel_id}
+    </update>
+
+    <insert id="saveAgentLevel" parameterType="com.api.goods.entity.AgentLevel">
+        INSERT INTO agentlevel (agentlevel_name, agentlevel_default, brand_id, create_time, update_time)
+        VALUES (#{agentlevel_name}, #{agentlevel_default}, #{brand_id}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    </insert>
 </mapper>
