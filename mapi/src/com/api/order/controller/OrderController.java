@@ -1,5 +1,6 @@
 package com.api.order.controller;
 
+import com.api.common.entity.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -137,5 +138,11 @@ public class OrderController {
     @ResponseBody
 	public Object deleteOrder(Order order){
 		return orderService.deleteOrder(order);
+	}
+
+	@RequestMapping(value = "/editStatus")
+	@ResponseBody
+	public Result editStatus(Order order){
+		return orderService.editStatus(order);
 	}
 }

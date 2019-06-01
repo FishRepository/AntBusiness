@@ -28,7 +28,7 @@ public class Order{
 	private Integer account_id;
 	private Date create_time;
 	private Date update_time;
-	private Integer state;//状态0未处理1已处理
+	private Integer state;//状态0未处理1已处理，      0待付款、1待收款、2已付定价、3已发货
 	
 	public Integer getOrder_id() {
 		return order_id;

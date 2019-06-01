@@ -16,6 +16,7 @@ import com.aliyun.mns.model.MessageAttributes;
 import com.aliyun.mns.model.RawTopicMessage;
 
 public class SmsUtil {
+
 	/**
 	 * 发送短信
 	 * @param mobile 手机号码
@@ -87,9 +88,10 @@ public class SmsUtil {
 		try {
 			HttpClient client = new HttpClient();
 			client.getParams().setContentCharset("UTF-8");
-			content = URLEncoder.encode(PropertiesUtil.getKeyValue("smscontent").replace("{code}", content),"UTF-8");
+			content = URLEncoder.encode(PropertiesUtil.getKeyValue("smscontent").replace("@", content),"UTF-8");
 			//old ip and port 120.24.161.220:8800  apis.laidx.com  apis.dxlaile.com
-			GetMethod method = new GetMethod("http://apis.laidx.com/SMS/Send?account=065AC22E711B41A3AE0A5000A41CFC42&token=65f9bc9ba3f04afe944ac02522802825&mobile="+mobile+"&content="+content+"&type=0");
+//			GetMethod method = new GetMethod("http://apis.laidx.com/SMS/Send?account=065AC22E711B41A3AE0A5000A41CFC42&token=65f9bc9ba3f04afe944ac02522802825&mobile="+mobile+"&content="+content+"&type=0");
+			GetMethod method = new GetMethod("http://apis.xntdx.com/SMS/Send?account=2CEDB85FB8C34DAEB4580527616ACEFE&token=f4cad4cb2db640ceac3a6fd0aa63b69b&mobile="+mobile+"&content="+content+"&responseType=0");
 			int i = 0;
 			while(!result && (i<3)){
 				try {

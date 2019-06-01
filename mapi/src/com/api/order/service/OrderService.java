@@ -1443,4 +1443,22 @@ public class OrderService {
 		}
 		return result;
 	}
+
+	public Result editStatus(Order order){
+		Result result = new Result();
+		if(order==null || order.getOrder_id()==null || order.getState()==null){
+			result.setCode(1);
+			result.setMsg("修改失败");
+			return result;
+		}
+		int i = orderMapper.updateOrder(order);
+		if(i>0){
+			result.setCode(0);
+			result.setMsg("修改成功");
+		}else{
+			result.setCode(1);
+			result.setMsg("删除失败");
+		}
+		return result;
+	}
 }
