@@ -2,11 +2,15 @@ package com.backend.admin.controller;
 
 import com.api.common.entity.Images;
 import com.api.common.service.ImagesService;
+import com.backend.admin.entity.AdImg;
 import com.backend.admin.entity.Introduction;
 import com.backend.admin.entity.IntroductionType;
+import com.backend.admin.service.AdImgService;
 import com.backend.admin.service.IntroductionService;
 import com.backend.admin.service.IntroductionTypeService;
 import com.backend.admin.service.UpdateService;
+import com.backend.common.PayUtil;
+import com.baomidou.mybatisplus.toolkit.CollectionUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
@@ -15,16 +19,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.util.*;
 
 @Controller
 @RequestMapping("/v2")
-public class ApiController {
+public class ApiController extends BaseController{
 
     @Autowired
     private ImagesService imagesService;
@@ -37,6 +43,9 @@ public class ApiController {
 
     @Autowired
     private UpdateService updateService;
+
+    @Autowired
+    private AdImgService adImgService;
 
     @ResponseBody
     @RequestMapping("/upload")
@@ -107,6 +116,42 @@ public class ApiController {
         return updateService.updateOrderTime(order_id, new Date(updateTime*1000));
     }
 
+    /**
+     * 获取广告图list
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/getAdList")
+    public Object getAdList(){
+        List<AdImg> adList = adImgService.getAdList();
+        if(CollectionUtils.isNotEmpty(adList)){
+            return successData(adList);
+        }
+        return error();
+    }
 
+    @RequestMapping(params="method=payMoney", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> payMoney(HttpServletRequest request) throws Exception{
+        Map<String, Object> resultMap = new HashMap<>();
+
+        String payClass = request.getParameter("payClass");
+        String payMoney = request.getParameter("payMoney");
+        String openid = request.getParameter("openid");
+        String ipString = request.getRemoteAddr();
+//		ipString = "119.97.231.230";
+        PayUtil payUtil = new PayUtil();
+
+        String orderNumb = payUtil.returnOrderNumb();
+        String orderTime = payUtil.returnOrderTime();
+
+        resultMap.put("result", payUtil.returnPackage(payClass, payMoney , orderNumb, orderTime, openid, ipString));
+        resultMap.put("orderNumber", orderNumb);
+        resultMap.put("payMoney", payMoney);
+        resultMap.put("orderType", payClass);
+        resultMap.put("orderTime", orderTime);
+
+        return resultMap;
+    }
 
 }

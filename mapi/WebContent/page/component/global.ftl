@@ -35,6 +35,10 @@
     <script type="text/javascript" src="${ctx}/js/jquery.form.js"></script>
     <script type="text/javascript" src="${ctx}/js/peppa.form.js"></script>
     <script type="text/javascript" src="${ctx}/js/date-format.js"></script>
+    <!-- fileinput-->
+    <link href="${ctx}/css/fileinput.css" media="all" rel="stylesheet" type="text/css"/>
+    <script src="${ctx}/js/fileinput.js" type="text/javascript"></script>
+    <script src="${ctx}/js/local/zh.js" type="text/javascript"></script>
     <#nested>
 </#macro>
 
@@ -186,6 +190,11 @@
         <li>
             <a class="app-menu__item<#if index==3> active</#if>" href="${ctx}/admin/goods">
                 <i class="app-menu__icon fa fa-list"></i><span class="app-menu__label">商品管理</span>
+            </a>
+        </li>
+        <li>
+            <a class="app-menu__item<#if index==4> active</#if>" href="${ctx}/adImg">
+                <i class="app-menu__icon fa fa-list"></i><span class="app-menu__label">广告管理</span>
             </a>
         </li>
     </ul>

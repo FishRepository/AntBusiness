@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.backend.admin.mapper.AdImgMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.backend.admin.entity.AdImg">
+        <id column="id" property="id"/>
+        <result column="img_url" property="imgUrl"/>
+        <result column="link_url" property="linkUrl"/>
+        <result column="create_time" property="createTime"/>
+        <result column="description" property="description"/>
+        <result column="status" property="status"/>
+        <result column="sort" property="sort"/>
+        <result column="del" property="del"/>
+        <result column="cyclic" property="cyclic"/>
+    </resultMap>
+
+    <select id="getAdImgs" resultMap="BaseResultMap">
+        SELECT
+            ai.id,
+            ai.img_url,
+            ai.link_url,
+            ai.create_time,
+            ai.description,
+            ai.status,
+            ai.sort,
+            ai.del,
+            ai.cyclic
+        FROM ad_img ai
+        WHERE del = 0
+        ORDER BY ai.sort DESC
+    </select>
+
+    <insert id="saveAdImg" parameterType="com.backend.admin.entity.AdImg" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO ad_img (img_url, link_url, create_time, description, sort, cyclic)
+        VALUES (#{imgUrl}, #{linkUrl}, CURRENT_TIMESTAMP, #{description}, #{sort}, #{cyclic})
+    </insert>
+
+    <select id="getById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT
+            ai.id,
+            ai.img_url,
+            ai.link_url,
+            ai.create_time,
+            ai.description,
+            ai.status,
+            ai.sort,
+            ai.del,
+            ai.cyclic
+        FROM ad_img ai
+        WHERE ai.id = #{id}
+    </select>
+
+    <update id="updateById" parameterType="com.backend.admin.entity.AdImg">
+        UPDATE ad_img
+        <set>
+            <if test="imgUrl != null">img_url=#{imgUrl},</if>
+            <if test="linkUrl != null">link_url=#{linkUrl},</if>
+            <if test="description != null">description=#{description},</if>
+            <if test="status != null">status=#{status},</if>
+            <if test="sort != null">sort=#{sort},</if>
+            <if test="del != null">del=#{del},</if>
+        </set>
+        where id=#{id}
+    </update>
+
+</mapper>

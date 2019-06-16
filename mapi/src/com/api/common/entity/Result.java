@@ -1,9 +1,10 @@
 package com.api.common.entity;
 
 
-public class Result {
+public class Result<T> {
 	private Integer code;  //结果编号
 	private String msg;  //结果描述
+	private T data;
 	
 	public Integer getCode() {
 		return code;
@@ -16,5 +17,13 @@ public class Result {
 	}
 	public void setMsg(String msg) {
 		this.msg = msg;
+	}
+
+	public T getData() {
+		return data;
+	}
+
+	public void setData(T data) {
+		this.data = data;
 	}
 }
