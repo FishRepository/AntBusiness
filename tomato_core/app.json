@@ -10,6 +10,7 @@
     "pages/shop/shopDetail/shopDetail",
     "pages/shop/shopProductOperate/shopProductOperate",
     "pages/shop/shopProductDetail/shopProductDetail",
+    "pages/report/report",
     "pages/mine/mine",
     "pages/forget/forget",
     "pages/regist/regist"
@@ -19,5 +20,6 @@
     "navigationBarBackgroundColor": "#e64663",
     "navigationBarTitleText": "番茄管家",
     "navigationBarTextStyle": "white"
-  }
+  },
+  "sitemapLocation": "sitemap.json"
 }

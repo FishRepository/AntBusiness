@@ -1,0 +1,85 @@
+<!--pages/report/report.wxml-->
+<view class='main-back'>
+  <text class='main-font-small main-back-top'>今日销售(元)</text>
+  <view class='main-back-middle'>
+    <text class='main-font-big'>{{todayData.xiaoshou}}</text>
+    <image class='main-back-middle-icon' src='/images/report/icon_right.png'></image>
+  </view>
+  <view class='main-back-bottom'>
+    <text class='main-font-small'>今日收益(元)</text>
+    <text class='main-font-middle'>{{see?todayData.shouyi:star}}</text>
+    <image wx:if="{{see}}" class='main-back-bottom-icon' src='/images/report/icon_see_on.png' bindtap='switchSee'></image>
+    <image wx:if="{{!see}}" class='main-back-bottom-icon' src='/images/report/icon_see_off.png' bindtap='switchSee'></image>
+  </view>
+</view>
+
+<view class='main-front'>
+  <view class='report-one'>
+    <view class='report-one-item'>
+      <view class='report-one-item-top'>
+        <text class='red'>•</text>
+        <text class='report-one-title'>累计销售额</text>
+      </view>
+      <view class='report-one-money red'>{{see?leiji.xiaoshou:star}}</view>
+    </view>
+    <view class='report-one-item'>
+      <view class='report-one-item-top'>
+        <text class='blue'>•</text>
+        <text class='report-one-title'>累计收益</text>
+      </view>
+      <view class='report-one-money blue'>{{see?leiji.shouyi:star}}</view>
+    </view>
+  </view>
+  <view class='report-two'>
+    <view class='report-two-top'>
+      <text>本月客户销售排行</text>
+      <image class='report-two-title-icon' src='/images/report/icon_right_blue.png'></image>
+    </view>
+    <view class='report-two-bottom'>
+      <view class='report-two-user' wx:for="{{users}}" wx:key="{{name}}">
+        <image class='report-two-user-rank' src='/images/report/icon-rank-{{item.rank}}.png'></image>
+        <image class='report-two-user-pic' src='{{item.url}}'></image>
+        <text class='report-two-user-name'>{{item.name}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class='report-two'>
+    <view class='report-two-top'>
+      <text>本月商品销售排行</text>
+      <image class='report-two-title-icon' src='/images/report/icon_right_blue.png'></image>
+    </view>
+    <view class='report-two-bottom-pro'>
+      <view class='report-two-pro' wx:for="{{pros}}" wx:key="{{name}}">
+        <view class='report-two-pro-first'>
+          <image class='report-two-pro-rank' src='/images/report/icon-gold-{{item.rank}}.png'></image>
+          <text class='report-two-pro-text'>{{item.name}}</text>
+        </view>
+        <text class='report-two-pro-text'>{{item.brand}}</text>
+        <text class='report-two-pro-text'>{{item.num}}件</text>
+      </view>
+    </view>
+  </view>
+
+  <view class='report-two'>
+    <view class='report-two-top'>
+      <text>收益趋势</text>
+    </view>
+    <view class='echart_panel'>
+      <ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ ec }}"></ec-canvas>
+    </view>
+  </view>
+
+  <view class='report-two'>
+    <view class='report-two-top'>
+      <text>心灵鸡汤</text>
+    </view>
+    <view class='word-item' wx:for="{{words}}" wx:key="{{name}}">
+      <view class='word-item-top'>
+        <text class='word-item-top-mark {{item.color}}'>●</text>
+        <text class='word-item-text'>{{item.ch}}</text>
+      </view>
+      <text class='word-item-bottom'>{{item.en}}</text>
+    </view>
+  </view>
+</view>

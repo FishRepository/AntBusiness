@@ -1,0 +1,235 @@
+/* pages/report/report.wxss */
+
+page {
+  background-color: #f5f5f5;
+  padding-bottom: 5px;
+}
+
+.main-back {
+  background-color: #e64663;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.main-back-top {
+  margin-top: 10px;
+}
+
+.main-back-middle {
+  padding: 10px 0;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+
+.main-font-big {
+  font-size: 30pt;
+}
+
+.main-back-middle-icon {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  right: 10px;
+}
+
+.main-font-middle {
+  font-size: 10pt;
+  margin: 0 5px;
+  width: 60px;
+}
+
+.main-font-small {
+  color: #f7d2d9;
+  font-size: 8pt;
+}
+
+.main-back-bottom {
+  padding-top: 10px;
+  padding-bottom: 45px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+
+.main-back-bottom-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.main-front{
+  position: absolute;
+  width: 100%;
+  top: 130px;
+}
+
+.report-one {
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: space-between;
+  margin: 10px;
+  border-radius: 5px;
+  top: 25%;
+}
+
+.report-one-item {
+  width: 50%;
+  margin: 10px 0;
+}
+
+.report-one-item-top {
+  margin: 5px 0;
+}
+
+.report-one-title {
+  font-size: 10pt;
+  color: #bdbdbd;
+  margin-left: 5px;
+}
+
+.report-one-money {
+  font-size: 12pt;
+  margin: 5px 0;
+}
+
+.red {
+  color: #e64663;
+}
+
+.blue {
+  color: #2196f3;
+}
+
+.report-two {
+  background-color: #fff;
+  margin: 10px;
+  border-radius: 5px;
+  top: 45%;
+}
+
+.report-two-top {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  margin: 0 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.report-two-top text {
+  font-size: 10pt;
+  font-weight: bold;
+}
+
+.report-two-title-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.report-two-bottom {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.report-two-user {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin: 0 10px;
+}
+
+.report-two-user-rank {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  margin-top: -5px;
+  margin-left: -22px;
+}
+
+.report-two-user-pic {
+  width: 50px;
+  height: 50px;
+  margin-top: 10px;
+}
+
+.report-two-user-name {
+  font-size: 8pt;
+  margin-top: 5px;
+}
+
+.report-two-pro-rank {
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
+}
+
+.report-two-bottom-pro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 10px 15px;
+}
+
+.report-two-pro-first {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+
+.report-two-pro {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.report-two-pro-text {
+  font-size: 10pt;
+}
+
+.word-item {
+  padding: 10px 15px;
+  font-size: 10pt;
+}
+
+.word-item-top-mark {
+  width: 10px;
+  margin-right: 5px;
+}
+
+.word-item-top {
+  margin-bottom: 5px;
+}
+
+.word-item-bottom {
+  margin-left: 15px;
+}
+
+.echart_panel{
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+ec-canvas {
+  width: 100%;
+  height: 280px;
+}
