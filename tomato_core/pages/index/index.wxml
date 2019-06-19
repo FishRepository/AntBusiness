@@ -6,6 +6,9 @@
       <text class='top-left-button' wx:if="{{orderTypeName&&orderTypeName>0}}">{{orderTypeName==1?'进货订单':'出货订单'}}</text>
     </view>
     <view class='top-right'>
+      <navigator class='top-navigator' url='/pages/report/report'>
+        <image class='top-right-img' src='/images/index/icon_report.png'></image>
+      </navigator>
       <navigator class='top-navigator' url='/pages/shop/shop'>
         <image class='top-right-img' src='/images/index/icon_top_1.png'></image>
       </navigator>
