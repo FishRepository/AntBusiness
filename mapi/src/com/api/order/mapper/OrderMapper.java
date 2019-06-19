@@ -7,6 +7,7 @@ import com.api.order.entity.Order;
 import com.api.order.entity.OrderDetail;
 import com.api.order.entity.OrderGoods;
 import com.api.order.entity.OrderList;
+import org.apache.ibatis.annotations.Param;
 
 public interface OrderMapper {
 	public int insertOrder(Order order);
@@ -38,4 +39,6 @@ public interface OrderMapper {
 	public int deleteOrderGoodsById(OrderGoods ordergoods);
 	
 	public int deleteOrderGoods(Order order);
+
+	public int updateTag(Order order);
 }

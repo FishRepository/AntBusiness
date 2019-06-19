@@ -17,6 +17,8 @@ public class OrderList{
 	private String brand_names;
 	private Date create_time;
 	private Integer state;//状态0未处理1已处理
+	private String tag_name;
+	private String tag_color;
 	
 	public Integer getOrder_id() {
 		return order_id;
@@ -85,5 +87,21 @@ public class OrderList{
 	}
 	public void setState(Integer state) {
 		this.state = state;
+	}
+
+	public String getTag_name() {
+		return tag_name;
+	}
+
+	public void setTag_name(String tag_name) {
+		this.tag_name = tag_name;
+	}
+
+	public String getTag_color() {
+		return tag_color;
+	}
+
+	public void setTag_color(String tag_color) {
+		this.tag_color = tag_color;
 	}
 }

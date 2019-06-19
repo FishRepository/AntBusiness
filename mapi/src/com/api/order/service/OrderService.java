@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -1457,7 +1458,26 @@ public class OrderService {
 			result.setMsg("修改成功");
 		}else{
 			result.setCode(1);
-			result.setMsg("删除失败");
+			result.setMsg("修改失败");
+		}
+		return result;
+	}
+
+	public Result updateTag(Order order){
+		Result result = new Result();
+		if(order==null || order.getOrder_id()==null || order.getAccount_id()==null ||
+				StringUtils.isBlank(order.getTag_name()) || StringUtils.isBlank(order.getTag_color())){
+			result.setCode(1);
+			result.setMsg("修改失败");
+			return result;
+		}
+		int i = orderMapper.updateTag(order);
+		if(i>0){
+			result.setCode(0);
+			result.setMsg("修改成功");
+		}else{
+			result.setCode(1);
+			result.setMsg("修改失败");
 		}
 		return result;
 	}

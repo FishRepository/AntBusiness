@@ -125,7 +125,7 @@ public class ApiController extends BaseController{
     public Object getAdList(){
         List<AdImg> adList = adImgService.getAdList();
         if(CollectionUtils.isNotEmpty(adList)){
-            return successData(adList);
+            return successData(adList.get(0));
         }
         return error();
     }
