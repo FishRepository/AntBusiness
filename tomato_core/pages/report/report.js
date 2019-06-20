@@ -21,10 +21,6 @@ function getOption(sevendayList, saleList) {
       position: ['50%', '50%'],
       axisPointer:{
         type:'shadow'
-      },
-      backgroundColor:'#e64663',
-      textStyle:{
-        color:'#fff'
       }
     },
     xAxis: {
