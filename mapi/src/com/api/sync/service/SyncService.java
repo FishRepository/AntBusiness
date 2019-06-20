@@ -1,28 +1,18 @@
 package com.api.sync.service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
+import com.api.account.entity.Account;
+import com.api.common.utils.EncryptUtil;
+import com.api.common.utils.StringUtil;
+import com.api.sync.entity.*;
+import com.api.sync.mapper.SyncMapper;
+import com.baomidou.mybatisplus.toolkit.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.api.account.entity.Account;
-import com.api.common.utils.EncryptUtil;
-import com.api.common.utils.StringUtil;
-import com.api.sync.entity.AccountDay;
-import com.api.sync.entity.AccountSync;
-import com.api.sync.entity.AppVersion;
-import com.api.sync.entity.CustomerOrGoodsTop;
-import com.api.sync.entity.NoticeList;
-import com.api.sync.entity.ProfitList;
-import com.api.sync.entity.ProfitTotal;
-import com.api.sync.entity.StatisticsResult;
-import com.api.sync.entity.TimeResult;
-import com.api.sync.entity.TopResult;
-import com.api.sync.mapper.SyncMapper;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -374,10 +364,40 @@ public class SyncService {
 		TopResult goodsTop = queryGoodsTop(customerOrGoodsTop);
 		NoticeList noticeList = queryNotice(account_id);
 		Map<String, Object> result = new HashMap<>();
+		List<String> sevendayList = new ArrayList<>();
+		List<Float> saleList = new ArrayList<>();
+		if(totalprofit.getCode().equals(0)){
+			SevenDay sevenday = totalprofit.getSevenday();
+			sevendayList.add(0, sevenday.getToday6());
+			sevendayList.add(1, sevenday.getToday5());
+			sevendayList.add(2, sevenday.getToday4());
+			sevendayList.add(3, sevenday.getToday3());
+			sevendayList.add(4, sevenday.getToday2());
+			sevendayList.add(5, sevenday.getToday1());
+			sevendayList.add(6, sevenday.getToday());
+			List<Profit> profitlist = totalprofit.getProfitlist();
+			if(CollectionUtils.isEmpty(profitlist)){
+				for(int i=0;i<7;i++){
+					saleList.add(0f);
+				}
+			}else{
+				//组装7天销售数据
+				Map<String, Float> salesMap = new HashMap<>();
+				for (Profit profit: profitlist) {
+					salesMap.put(profit.getTotal_time(), profit.getTotal_sales());
+				}
+				for (String day: sevendayList) {
+					saleList.add(salesMap.getOrDefault(day, 0f));
+				}
+			}
+			result.put("sevendayList", sevendayList);
+			result.put("saleList", saleList);
+		}
 		result.put("totalprofit", totalprofit);
 		result.put("customerTop", customerTop);
 		result.put("goodsTop", goodsTop);
 		result.put("noticeList", noticeList);
 		return result;
 	}
+
 }

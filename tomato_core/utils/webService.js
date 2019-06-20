@@ -13,6 +13,9 @@ const FORGET_PASSWD_URL = '/mapi/account/resetpwd.do';
 //手机密码注册
 const MOBILE_REGIST_URL = '/mapi/account/reg.do';
 
+//用户统计
+const USER_REPORT_URL = '/mapi/sync/getReport.do';
+
 //手机端标识
 const ACCOUNT_IMEI = '111111';
 
@@ -26,5 +29,6 @@ module.exports = {
   LOGIN_PHONE_URL: LOGIN_PHONE_URL,
   FORGET_PASSWD_URL: FORGET_PASSWD_URL,
   MOBILE_REGIST_URL: MOBILE_REGIST_URL,
+  USER_REPORT_URL: USER_REPORT_URL,
   USERINFO_STORAGE_KEY: USERINFO_STORAGE_KEY
 }

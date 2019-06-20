@@ -38,8 +38,8 @@
     <view class='report-two-bottom'>
       <view class='report-two-user' wx:for="{{users}}" wx:key="{{name}}">
         <image class='report-two-user-rank' src='/images/report/icon-rank-{{item.rank}}.png'></image>
-        <image class='report-two-user-pic' src='{{item.url}}'></image>
-        <text class='report-two-user-name'>{{item.name}}</text>
+        <image class='report-two-user-pic' src='{{item.customer_icon==null?"/images/report/kedaya.jpg":item.customer_icon}}'></image>
+        <text class='report-two-user-name'>{{item.customer_username}}</text>
       </view>
     </view>
   </view>
@@ -50,13 +50,13 @@
       <image class='report-two-title-icon' src='/images/report/icon_right_blue.png'></image>
     </view>
     <view class='report-two-bottom-pro'>
-      <view class='report-two-pro' wx:for="{{pros}}" wx:key="{{name}}">
+      <view class='report-two-pro' wx:for="{{pros}}" wx:key="{{goods_name}}">
         <view class='report-two-pro-first'>
           <image class='report-two-pro-rank' src='/images/report/icon-gold-{{item.rank}}.png'></image>
-          <text class='report-two-pro-text'>{{item.name}}</text>
+          <text class='report-two-pro-text'>{{item.goods_name}}</text>
         </view>
-        <text class='report-two-pro-text'>{{item.brand}}</text>
-        <text class='report-two-pro-text'>{{item.num}}件</text>
+        <text class='report-two-pro-text'>{{item.brand_name}}</text>
+        <text class='report-two-pro-text'>{{item.total}}件</text>
       </view>
     </view>
   </view>
@@ -74,12 +74,12 @@
     <view class='report-two-top'>
       <text>心灵鸡汤</text>
     </view>
-    <view class='word-item' wx:for="{{words}}" wx:key="{{name}}">
+    <view class='word-item' wx:for="{{words}}" wx:key="{{notice_name}}">
       <view class='word-item-top'>
-        <text class='word-item-top-mark {{item.color}}'>●</text>
-        <text class='word-item-text'>{{item.ch}}</text>
+        <text class='word-item-top-mark {{item.color==null?"blue":item.color}}'>●</text>
+        <text class='word-item-text'>{{item.notice_name}}</text>
       </view>
-      <text class='word-item-bottom'>{{item.en}}</text>
+      <!-- <text class='word-item-bottom'>{{item.en}}</text> -->
     </view>
   </view>
 </view>

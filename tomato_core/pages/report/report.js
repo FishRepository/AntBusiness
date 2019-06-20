@@ -1,13 +1,11 @@
 // pages/report/report.js
 import * as echarts from '../../ec-canvas/echarts';
+const WebService = require('../../utils/webService.js');
+var Base64 = require('../../utils/base64.modified.js'); 
+const app = getApp();
+var chartLine= null;
 
-function initChart(canvas, width, height) {
-  const chart = echarts.init(canvas, null, {
-    width: width,
-    height: height
-  });
-  canvas.setChart(chart);
-
+function getOption(sevendayList, saleList) {
   var option = {
     color: ["#F50057"],
     grid: {
@@ -32,7 +30,7 @@ function initChart(canvas, width, height) {
     xAxis: {
       type: 'category',
       boundaryGap: false,
-      data: ['07-01', '07-02', '07-03', '07-04', '07-05', '07-06', '07-07'],
+      data: sevendayList,
       axisLabel: {
         color: '#BDBDBD',
         fontFamily: 'Microsoft YaHei',
@@ -116,11 +114,10 @@ function initChart(canvas, width, height) {
           global: false
         }
       },
-      data: [2000, 2500, 2600, 3000, 3100, 3200, 3300, 2400, 3600, 3300, 3500, 3400, 3500, 3700, 3900, 4000]
+      data: saleList
     }]
   };
-  chart.setOption(option);
-  return chart;
+  return option;
 }
 
 Page({
@@ -130,68 +127,32 @@ Page({
    */
   data: {
     todayData: {
-      xiaoshou: '1785.00',
-      shouyi: '3245.00'
+      xiaoshou: '',
+      shouyi: ''
     },
     star: '******',
     see: true,
     leiji: {
-      xiaoshou: '57,820.00',
-      shouyi: '22,463.00'
+      xiaoshou: '',
+      shouyi: ''
     },
-    users: [{
-        name: '王小明',
-        url: 'http://p1.music.126.net/Jxp3emWQRhmrTu351qdIog==/109951163556000475.jpg?param=180y180',
-        rank: 1
-      },
-      {
-        name: '王大明',
-        url: 'http://p2.music.126.net/wPxtWY5brcMVEhrb1_g0-A==/109951163005504470.jpg?param=180y180',
-        rank: 2
-      },
-      {
-        name: '王二明',
-        url: 'http://p1.music.126.net/H-Pmcv52PPD9bNAyc2oeog==/109951163899937962.jpg?param=180y180',
-        rank: 3
-      }
-    ],
-    pros: [{
-        name: '面膜',
-        brand: 'A.T',
-        num: 20,
-        rank: 1
-      },
-      {
-        name: '肥皂',
-        brand: 'YSL',
-        num: 15,
-        rank: 2
-      },
-      {
-        name: '牙膏',
-        brand: 'A.T',
-        num: 10,
-        rank: 3
-      }
-    ],
-    words: [{
-        color: 'red',
-        ch: '今天的开始，就是日后的成功。O(∩_∩)O',
-        en: 'Tomorrow will be better'
-      },
-      {
-        color: 'blue',
-        ch: '今天的开始，就是日后的成功。O(∩_∩)O',
-        en: 'Tomorrow will be better'
-      },
-      {
-        color: 'red',
-        ch: '今天的开始，就是日后的成功。O(∩_∩)O',
-        en: 'Tomorrow will be better'
-      }
-    ],
+    // {
+    // customer_username: '王小明',
+    // customer_icon: 'http://p1.music.126.net/Jxp3emWQRhmrTu351qdIog==/109951163556000475.jpg?param=180y180',
+    // rank: 1
+    // }
+    users: [],
+    pros: [],
+    words: [],
     ec: {
-      onInit: initChart
+      onInit: function (canvas, width, height) {
+        //初始化echarts元素，绑定到全局变量，方便更改数据
+        chartLine = echarts.init(canvas, null, {
+          width: width,
+          height: height
+        });
+        canvas.setChart(chartLine);
+      }
     }
   },
 
@@ -199,14 +160,87 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
+    var _that = this;
+    wx.showLoading({
+      title: '加载中...',
+      mask: true
+    })
+    wx.request({
+      url: WebService.HOST + WebService.USER_REPORT_URL,
+      data: {
+        account_id: app.globalData.userInfo.account_id,
+        account_userphone: Base64.encode(app.globalData.userInfo.account_userphone)
+      },
+      success: function (res) {
+        wx.hideLoading();
+        const totalprofit = res.data.totalprofit;
+        if (totalprofit && totalprofit.code == 0) {
+          //今日销售  累计销售
+          _that.setData({
+            todayData: {
+              xiaoshou: totalprofit.today_sales,
+              shouyi: totalprofit.today_profit
+            },
+            leiji: {
+              xiaoshou: totalprofit.total_sales,
+              shouyi: totalprofit.total_profit
+            },
+          });
+          //七日销售数据
+          const sevendayList = res.data.sevendayList;
+          const saleList = res.data.saleList;
+        }
+        //销售榜用户
+        const customerTop = res.data.customerTop;
+        if (customerTop && customerTop.code == 0) {
+          if (customerTop.list && customerTop.list.length > 0) {
+            for (var i = 0; i < 3; i++) {
+              customerTop.list[i].rank = i + 1;
+            }
+          }
+          _that.setData({
+            users: customerTop.list
+          });
+        }
+        //本月商品销售排行
+        const goodsTop = res.data.goodsTop;
+        if (goodsTop && goodsTop.code == 0) {
+          if (goodsTop.list && goodsTop.list.length > 0) {
+            for (var i = 0; i < 3; i++) {
+              goodsTop.list[i].rank = i + 1;
+            }
+          }
+          _that.setData({
+            pros: goodsTop.list
+          });
+        }
+        //心灵鸡汤
+        const noticeList = res.data.noticeList;
+        if (noticeList && noticeList.code == 0) {
+          _that.setData({
+            words: noticeList.list
+          });
+        }
+        //收益趋势
+        const sevendayList = res.data.sevendayList;
+        const saleList = res.data.saleList;
+        if (sevendayList && saleList.length>0 && saleList && saleList.length>0){
+          var option = getOption(sevendayList, saleList);
+          chartLine.setOption(option);
+        }
 
+      },
+      fail: function () {
+        wx.hideLoading();
+      }
+    })
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function() {
-
+    
   },
 
   /**
