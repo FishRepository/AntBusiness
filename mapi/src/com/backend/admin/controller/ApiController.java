@@ -130,6 +130,12 @@ public class ApiController extends BaseController{
         return error();
     }
 
+    /**
+     * 获取预支付订单号或预支付ID
+     * @param request
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(params="method=payMoney", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> payMoney(HttpServletRequest request) throws Exception{

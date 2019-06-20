@@ -1,13 +1,12 @@
 package com.api.sync.controller;
 
+import com.api.sync.entity.AccountDay;
+import com.api.sync.entity.CustomerOrGoodsTop;
+import com.api.sync.service.SyncService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.api.sync.entity.AccountDay;
-import com.api.sync.entity.CustomerOrGoodsTop;
-import com.api.sync.service.SyncService;
 
 @Controller
 @RequestMapping("/sync")
@@ -73,5 +72,11 @@ public class SyncController {
     @ResponseBody
 	public Object appversion(Integer app_type){
 		return syncService.appversion(app_type);
+	}
+
+	@RequestMapping(value = "/getReport")
+	@ResponseBody
+	public Object getReport(Integer account_id,String account_userphone){
+		return syncService.getReport(account_id, account_userphone);
 	}
 }

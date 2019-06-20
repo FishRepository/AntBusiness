@@ -2,6 +2,8 @@ package com.api.sync.service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -360,6 +362,22 @@ public class SyncService {
 			result.setCode(1);
 			result.setMsg("查询失败");
 		}
+		return result;
+	}
+
+	public Object getReport(Integer account_id,String account_userphone){
+		ProfitTotal totalprofit = totalprofit(account_id, account_userphone);
+		CustomerOrGoodsTop customerOrGoodsTop = new CustomerOrGoodsTop();
+		customerOrGoodsTop.setAccount_id(account_id);
+		customerOrGoodsTop.setShowcount(3);
+		TopResult customerTop = queryCustomerTop(customerOrGoodsTop);
+		TopResult goodsTop = queryGoodsTop(customerOrGoodsTop);
+		NoticeList noticeList = queryNotice(account_id);
+		Map<String, Object> result = new HashMap<>();
+		result.put("totalprofit", totalprofit);
+		result.put("customerTop", customerTop);
+		result.put("goodsTop", goodsTop);
+		result.put("noticeList", noticeList);
 		return result;
 	}
 }
