@@ -3,117 +3,134 @@ import * as echarts from '../../ec-canvas/echarts';
 const WebService = require('../../utils/webService.js');
 var Base64 = require('../../utils/base64.modified.js'); 
 const app = getApp();
-var chartLine= null;
 
-function getOption(sevendayList, saleList) {
-  var option = {
-    color: ["#F50057"],
-    grid: {
-      left: "5%",
-      right: "10%",
-      bottom: "5%",
-      containLabel: true,
-      top: "20%"
+function initChart(canvas, width, height) {
+  const chart = echarts.init(canvas, null, {
+    width: width,
+    height: height
+  });
+  canvas.setChart(chart);
+
+  wx.request({
+    url: WebService.HOST + WebService.USER_REPORT_URL,
+    data: {
+      account_id: app.globalData.userInfo.account_id,
+      account_userphone: Base64.encode(app.globalData.userInfo.account_userphone)
     },
-    tooltip: {
-      show: true,
-      trigger: 'axis',
-      position: ['50%', '50%'],
-      axisPointer:{
-        type:'shadow'
-      }
-    },
-    xAxis: {
-      type: 'category',
-      boundaryGap: false,
-      data: sevendayList,
-      axisLabel: {
-        color: '#BDBDBD',
-        fontFamily: 'Microsoft YaHei',
-        fontSize: 10
-      },
-      axisLine: {
-        show: false
-      },
-      axisTick: {
-        show: false
-      },
-      splitArea: {
-        show: false
-      },
-      splitLine: {
-        show: false
-      }
-    },
-    yAxis: {
-      name: '七日收益趋势(元)',
-      nameTextStyle: {
-        color: '#BDBDBD',
-        fontFamily: 'Microsoft YaHei',
-        fontWeight: 'bold',
-        padding: [10, 0, 10, 20]
-      },
-      type: 'value',
-      axisLabel: {
-        color: '#BDBDBD',
-        fontFamily: 'Microsoft YaHei',
-        fontSize: 10
-      },
-      axisLine: {
-        show: false
-      },
-      axisTick: {
-        show: false
-      },
-      splitArea: {
-        show: false
-      },
-      splitLine: {
-        show: false
-      }
-    },
-    series: [{
-      type: 'line',
-      smooth: true,
-      showSymbol:false,
-      lineStyle: {
-        color: {
-          type: 'linear',
-          x: 0,
-          y: 0,
-          x2: 0,
-          y2: 1,
-          colorStops: [{
-            offset: 0,
-            color: '#e64663'
-          }, {
-            offset: 1,
-            color: '#fbdbdb'
-          }],
-          global: false
-        }
-      },
-      areaStyle:{
-        color: {
-          type: 'linear',
-          x: 0,
-          y: 0,
-          x2: 0,  
-          y2: 1,
-          colorStops: [{
-            offset: 0,
-            color: '#e64663'
-          }, {
-            offset: 1,
-              color: '#fff'
-          }],
-          global: false
-        }
-      },
-      data: saleList
-    }]
-  };
-  return option;
+    success: function (res) {
+      // console.log(res.data.sevendayList)
+      // console.log(res.data.saleList)
+      var option = {
+        color: ["#F50057"],
+        grid: {
+          left: "5%",
+          right: "10%",
+          bottom: "5%",
+          containLabel: true,
+          top: "20%"
+        },
+        tooltip: {
+          show: true,
+          trigger: 'axis',
+          position: ['50%', '50%'],
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: res.data.sevendayList,
+          axisLabel: {
+            color: '#BDBDBD',
+            fontFamily: 'Microsoft YaHei',
+            fontSize: 10
+          },
+          axisLine: {
+            show: false
+          },
+          axisTick: {
+            show: false
+          },
+          splitArea: {
+            show: false
+          },
+          splitLine: {
+            show: false
+          }
+        },
+        yAxis: {
+          name: '七日收益趋势(元)',
+          nameTextStyle: {
+            color: '#BDBDBD',
+            fontFamily: 'Microsoft YaHei',
+            fontWeight: 'bold',
+            padding: [10, 0, 10, 20]
+          },
+          type: 'value',
+          axisLabel: {
+            color: '#BDBDBD',
+            fontFamily: 'Microsoft YaHei',
+            fontSize: 10
+          },
+          axisLine: {
+            show: false
+          },
+          axisTick: {
+            show: false
+          },
+          splitArea: {
+            show: false
+          },
+          splitLine: {
+            show: false
+          }
+        },
+        series: [{
+          type: 'line',
+          smooth: true,
+          showSymbol: false,
+          lineStyle: {
+            color: {
+              type: 'linear',
+              x: 0,
+              y: 0,
+              x2: 0,
+              y2: 1,
+              colorStops: [{
+                offset: 0,
+                color: '#e64663'
+              }, {
+                offset: 1,
+                color: '#fbdbdb'
+              }],
+              global: false
+            }
+          },
+          areaStyle: {
+            color: {
+              type: 'linear',
+              x: 0,
+              y: 0,
+              x2: 0,
+              y2: 1,
+              colorStops: [{
+                offset: 0,
+                color: '#e64663'
+              }, {
+                offset: 1,
+                color: '#fff'
+              }],
+              global: false
+            }
+          },
+          data: res.data.saleList
+        }]
+      };
+      chart.setOption(option);
+    }
+  })
+  return chart;
 }
 
 Page({
@@ -141,14 +158,7 @@ Page({
     pros: [],
     words: [],
     ec: {
-      onInit: function (canvas, width, height) {
-        //初始化echarts元素，绑定到全局变量，方便更改数据
-        chartLine = echarts.init(canvas, null, {
-          width: width,
-          height: height
-        });
-        canvas.setChart(chartLine);
-      }
+      onInit: initChart
     }
   },
 
@@ -217,14 +227,13 @@ Page({
             words: noticeList.list
           });
         }
-        //收益趋势
-        const sevendayList = res.data.sevendayList;
-        const saleList = res.data.saleList;
-        if (sevendayList && saleList.length>0 && saleList && saleList.length>0){
-          var option = getOption(sevendayList, saleList);
-          chartLine.setOption(option);
-        }
-
+        // //收益趋势
+        // const sevendayList = res.data.sevendayList;
+        // const saleList = res.data.saleList;
+        // if (sevendayList && saleList.length>0 && saleList && saleList.length>0){
+        //   var option = getOption(sevendayList, saleList);
+        //   chartLine.setOption(option);
+        // }
       },
       fail: function () {
         wx.hideLoading();
