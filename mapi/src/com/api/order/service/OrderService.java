@@ -1,19 +1,5 @@
 package com.api.order.service;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.api.common.entity.Result;
 import com.api.common.utils.PropertiesUtil;
 import com.api.common.utils.StringUtil;
@@ -26,26 +12,14 @@ import com.api.goods.entity.Goods;
 import com.api.goods.entity.GoodsPrice;
 import com.api.goods.mapper.GoodsMapper;
 import com.api.goods.service.GoodsService;
-import com.api.order.entity.InsertMoreOrder;
-import com.api.order.entity.InsertOrder;
-import com.api.order.entity.ListPageOrder;
-import com.api.order.entity.Order;
-import com.api.order.entity.OrderAllDetailResult;
-import com.api.order.entity.OrderAndGoods;
-import com.api.order.entity.OrderBrandGoods;
-import com.api.order.entity.OrderDetailResult;
-import com.api.order.entity.OrderGoods;
-import com.api.order.entity.OrderGoodsResult;
-import com.api.order.entity.OrderList;
-import com.api.order.entity.OrderListResult;
-import com.api.order.entity.OrderMonth;
-import com.api.order.entity.OrderMonthListResult;
-import com.api.order.entity.OrderReportResult;
-import com.api.order.entity.OrderResult;
-import com.api.order.entity.UpdateMoreOrder;
-import com.api.order.entity.UpdateOrder;
-import com.api.order.entity.UpdateOrderRemark;
+import com.api.order.entity.*;
 import com.api.order.mapper.OrderMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 @Transactional
@@ -1465,12 +1439,6 @@ public class OrderService {
 
 	public Result updateTag(Order order){
 		Result result = new Result();
-		if(order==null || order.getOrder_id()==null || order.getAccount_id()==null ||
-				StringUtils.isBlank(order.getTag_name()) || StringUtils.isBlank(order.getTag_color())){
-			result.setCode(1);
-			result.setMsg("修改失败");
-			return result;
-		}
 		int i = orderMapper.updateTag(order);
 		if(i>0){
 			result.setCode(0);

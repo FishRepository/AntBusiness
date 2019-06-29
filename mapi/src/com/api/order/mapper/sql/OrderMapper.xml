@@ -6,10 +6,10 @@
 	<insert id="insertOrder" useGeneratedKeys="true" keyProperty="order_id" parameterType="com.api.order.entity.Order">
 	    insert into accountorder(order_type,goods_count,order_sales,order_cost,order_profit,order_premium,premium_id,premium_name,
 	    order_goodssales,order_goodscost,order_goodsprofit,customer_id,customer_username,customer_icon,customer_phone,customer_phoneid,customer_address,
-	    customer_addressid,order_remark,brand_names,account_id,create_time,update_time,state,tag_name,tag_color) values
+	    customer_addressid,order_remark,brand_names,account_id,create_time,update_time,state) values
 	    (#{order_type},#{goods_count},#{order_sales},#{order_cost},#{order_profit},#{order_premium},#{premium_id},#{premium_name},
 	    #{order_goodssales},#{order_goodscost},#{order_goodsprofit},#{customer_id},#{customer_username},#{customer_icon},#{customer_phone},#{customer_phoneid},#{customer_address},
-	    #{customer_addressid},#{order_remark},#{brand_names},#{account_id},#{create_time},#{update_time},#{state},#{tag_name},#{tag_color});
+	    #{customer_addressid},#{order_remark},#{brand_names},#{account_id},#{create_time},#{update_time},#{state});
 	</insert>
 	
 	<update id="updateOrder" parameterType="com.api.order.entity.Order">
@@ -187,6 +187,22 @@
 	</update>
 
 	<update id="updateTag" parameterType="com.api.order.entity.Order">
-		UPDATE accountorder set tag_name = #{tag_name}, tag_color = #{tag_color} WHERE order_id = #{order_id} and account_id = #{account_id}
+		UPDATE accountorder SET
+		<trim  suffixOverrides=",">
+			<if test="tag_id != null">
+				tag_id = #{tag_id},
+			</if>
+			<if test="tag_name != null">
+				tag_name = #{tag_name},
+			</if>
+			<if test="tag_color != null">
+				tag_color = #{tag_color},
+			</if>
+			<if test="order_remark != null">
+				order_remark = #{order_remark},
+			</if>
+			update_time = now()
+		</trim>
+		WHERE order_id = #{order_id} and account_id = #{account_id}
 	</update>
 </mapper>

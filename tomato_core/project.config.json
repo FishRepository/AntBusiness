@@ -8,7 +8,7 @@
 		"newFeature": true
 	},
 	"compileType": "miniprogram",
-	"libVersion": "1.9.93",
+	"libVersion": "2.7.1",
 	"appid": "wxa0ffcecabf8f96dc",
 	"projectname": "tomato_core",
 	"isGameTourist": false,

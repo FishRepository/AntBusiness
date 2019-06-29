@@ -31,7 +31,8 @@ public class Order{
 	private Integer state;//状态0未处理1已处理，      0待付款、1待收款、2已付定价、3已发货
 	private String tag_name;
 	private String tag_color;
-	
+	private Integer tag_id;
+
 	public Integer getOrder_id() {
 		return order_id;
 	}
@@ -197,5 +198,13 @@ public class Order{
 
 	public void setTag_color(String tag_color) {
 		this.tag_color = tag_color;
+	}
+
+	public Integer getTag_id() {
+		return tag_id;
+	}
+
+	public void setTag_id(Integer tag_id) {
+		this.tag_id = tag_id;
 	}
 }

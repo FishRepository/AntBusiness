@@ -2,13 +2,12 @@ package com.backend.admin.controller;
 
 import com.api.common.entity.Images;
 import com.api.common.service.ImagesService;
+import com.api.order.entity.Order;
 import com.backend.admin.entity.AdImg;
 import com.backend.admin.entity.Introduction;
 import com.backend.admin.entity.IntroductionType;
-import com.backend.admin.service.AdImgService;
-import com.backend.admin.service.IntroductionService;
-import com.backend.admin.service.IntroductionTypeService;
-import com.backend.admin.service.UpdateService;
+import com.backend.admin.entity.Tag;
+import com.backend.admin.service.*;
 import com.backend.common.PayUtil;
 import com.baomidou.mybatisplus.toolkit.CollectionUtils;
 import net.sf.json.JSONArray;
@@ -46,6 +45,9 @@ public class ApiController extends BaseController{
 
     @Autowired
     private AdImgService adImgService;
+
+    @Autowired
+    private TagService tagService;
 
     @ResponseBody
     @RequestMapping("/upload")
@@ -158,6 +160,66 @@ public class ApiController extends BaseController{
         resultMap.put("orderTime", orderTime);
 
         return resultMap;
+    }
+
+    /**
+     * 保存自定义标签
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/saveTag")
+    public Object saveTag(Tag tag){
+        if(tag==null){
+            return error();
+        }
+        tag.setTag_type(2);
+        tag = tagService.saveTag(tag);
+        if(tag!=null){
+            return successData(tag);
+        }
+        return error();
+    }
+
+    /**
+     * 查询用户标签列表
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/getUserTagList")
+    public Object getUserTagList(Tag tag){
+        if(tag==null||tag.getAccount_id()==null||tag.getOrder_type()==null){
+            return error();
+        }
+        Tag defaultTag = new Tag();
+        defaultTag.setOrder_type(tag.getOrder_type());
+        defaultTag.setTag_type(1);
+        List<Tag> defaultTags = tagService.queryAll(defaultTag);
+        if(CollectionUtils.isEmpty(defaultTags)){
+            return error();
+        }
+        List<Tag> tags = tagService.queryAll(tag);
+        if(CollectionUtils.isNotEmpty(tags)){
+            defaultTags.addAll(tags);
+        }
+        return successData(defaultTags);
+    }
+
+
+    /**
+     * 查询用户标签列表
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/saveOrderTag")
+    public Object saveOrderTag(Order order){
+        if(order==null||order.getOrder_id()==null||order.getAccount_id()==null){
+            return error();
+        }
+        boolean result = tagService.saveOrderTag(order);
+        if(result){
+           return success();
+        }
+        return error();
     }
 
 }

@@ -146,9 +146,5 @@ public class OrderController {
 		return orderService.editStatus(order);
 	}
 
-	@RequestMapping(value = "/saveTag")
-	@ResponseBody
-	public Result saveTag(Order order){
-		return orderService.updateTag(order);
-	}
+	
 }

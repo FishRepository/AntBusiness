@@ -302,4 +302,17 @@ Page({
       })
     }
   },
+
+  gotoCustomerTop: function() {
+    wx.navigateTo({
+      url: '/pages/report/customerTop/customerTop'
+    })
+  },
+
+  gotoGoodsTop: function() {
+    wx.navigateTo({
+      url: '/pages/report/goodsTop/goodsTop'
+    })
+  }
+
 })

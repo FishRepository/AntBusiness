@@ -3,7 +3,7 @@
   <text class='main-font-small main-back-top'>今日销售(元)</text>
   <view class='main-back-middle'>
     <text class='main-font-big'>{{todayData.xiaoshou}}</text>
-    <image class='main-back-middle-icon' src='/images/report/icon_right.png'></image>
+    <!-- <image class='main-back-middle-icon' src='/images/report/icon_right.png'></image> -->
   </view>
   <view class='main-back-bottom'>
     <text class='main-font-small'>今日收益(元)</text>
@@ -33,7 +33,7 @@
   <view class='report-two'>
     <view class='report-two-top'>
       <text>本月客户销售排行</text>
-      <image class='report-two-title-icon' src='/images/report/icon_right_blue.png'></image>
+      <image class='report-two-title-icon' src='/images/report/icon_right_blue.png' catchtap='gotoCustomerTop'></image>
     </view>
     <view class='report-two-bottom'>
       <view class='report-two-user' wx:for="{{users}}" wx:key="{{name}}">
@@ -47,7 +47,7 @@
   <view class='report-two'>
     <view class='report-two-top'>
       <text>本月商品销售排行</text>
-      <image class='report-two-title-icon' src='/images/report/icon_right_blue.png'></image>
+      <image class='report-two-title-icon' src='/images/report/icon_right_blue.png' catchtap='gotoGoodsTop'></image>
     </view>
     <view class='report-two-bottom-pro'>
       <view class='report-two-pro' wx:for="{{pros}}" wx:key="{{goods_name}}">
