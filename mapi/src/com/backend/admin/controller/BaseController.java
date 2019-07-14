@@ -13,6 +13,13 @@ public abstract class BaseController {
         return result;
     }
 
+    public <T> AjaxResult errorData(T data){
+        AjaxResult result=new AjaxResult();
+        result.setCode(Constant.ERROR_CODE);
+        result.setData(data);
+        return result;
+    }
+
     public AjaxResult success(){
         AjaxResult result=new AjaxResult();
         result.setCode(Constant.SUCCESS_CODE);

@@ -3,12 +3,9 @@ package com.backend.admin.controller;
 import com.api.common.entity.Images;
 import com.api.common.service.ImagesService;
 import com.api.order.entity.Order;
-import com.backend.admin.entity.AdImg;
-import com.backend.admin.entity.Introduction;
-import com.backend.admin.entity.IntroductionType;
-import com.backend.admin.entity.Tag;
+import com.backend.admin.entity.*;
 import com.backend.admin.service.*;
-import com.backend.common.PayUtil;
+import com.backend.common.IpUtil;
 import com.baomidou.mybatisplus.toolkit.CollectionUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -48,6 +45,9 @@ public class ApiController extends BaseController{
 
     @Autowired
     private TagService tagService;
+
+    @Autowired
+    private PayService payService;
 
     @ResponseBody
     @RequestMapping("/upload")
@@ -93,7 +93,7 @@ public class ApiController extends BaseController{
         return introductionService.getIntroductionById(id);
     }
 
-    public static String TimeStamp2Date(String timestampString, String formats){
+    private static String TimeStamp2Date(String timestampString, String formats){
         Long timestamp = Long.parseLong(timestampString)*1000;
         String date = new java.text.SimpleDateFormat(formats).format(new java.util.Date(timestamp));
         return date;
@@ -108,7 +108,7 @@ public class ApiController extends BaseController{
     }
 
     public static void main(String[] args) {
-        System.out.printf(TimeStamp2Date(String.valueOf(1524994998),"yyyy-MM-dd HH:mm:ss"));
+        System.out.print(TimeStamp2Date(String.valueOf(1524994998), "yyyy-MM-dd HH:mm:ss"));
     }
 
     @ResponseBody
@@ -133,33 +133,27 @@ public class ApiController extends BaseController{
     }
 
     /**
-     * 获取预支付订单号或预支付ID
-     * @param request
+     * 获取微信预支付订单号或预支付ID
+     * @param payRequest
      * @return
      * @throws Exception
      */
-    @RequestMapping(params="method=payMoney", method = RequestMethod.POST)
+    @RequestMapping(value="getPayOrderId", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> payMoney(HttpServletRequest request) throws Exception{
-        Map<String, Object> resultMap = new HashMap<>();
-
-        String payClass = request.getParameter("payClass");
-        String payMoney = request.getParameter("payMoney");
-        String openid = request.getParameter("openid");
-        String ipString = request.getRemoteAddr();
-//		ipString = "119.97.231.230";
-        PayUtil payUtil = new PayUtil();
-
-        String orderNumb = payUtil.returnOrderNumb();
-        String orderTime = payUtil.returnOrderTime();
-
-        resultMap.put("result", payUtil.returnPackage(payClass, payMoney , orderNumb, orderTime, openid, ipString));
-        resultMap.put("orderNumber", orderNumb);
-        resultMap.put("payMoney", payMoney);
-        resultMap.put("orderType", payClass);
-        resultMap.put("orderTime", orderTime);
-
-        return resultMap;
+    public Object getPayOrderId(PayRequest payRequest, HttpServletRequest request){
+        String remoteIp = IpUtil.getRemoteIp(request);
+        if(StringUtils.isBlank(remoteIp)){
+            return errorMsg("can not get client ip");
+        }
+        payRequest.setIp(remoteIp);
+        PayResponse payResponse = payService.doPay(payRequest);
+        if(null == payResponse){
+            return error();
+        }
+        if(!payResponse.isResult()){
+            return errorData(payResponse);
+        }
+        return successData(payResponse);
     }
 
     /**
@@ -220,6 +214,11 @@ public class ApiController extends BaseController{
            return success();
         }
         return error();
+    }
+
+    @RequestMapping("/payNotify")
+    public void payNotify(){
+
     }
 
 }
