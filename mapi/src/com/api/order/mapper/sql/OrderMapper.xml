@@ -78,12 +78,12 @@
 	</update>
 	
 	<select id="queryOrderByIdAndType" parameterType="com.api.order.entity.Order" resultType="com.api.order.entity.Order">
-		select order_id,order_type,account_id,goods_count,order_sales,order_cost,order_profit,order_premium,order_goodssales,order_goodscost,order_goodsprofit,tag_name,tag_color from accountorder where order_id = #{order_id} and order_type = #{order_type} and account_id = #{account_id}
+		select order_id,order_type,account_id,goods_count,order_sales,order_cost,order_profit,order_premium,order_goodssales,order_goodscost,order_goodsprofit,tag_name,tag_color,tag_id from accountorder where order_id = #{order_id} and order_type = #{order_type} and account_id = #{account_id}
 	</select>
 	
 	<select id="queryOrderById" parameterType="com.api.order.entity.Order" resultType="com.api.order.entity.OrderDetail">
 		select order_id,order_type,goods_count,order_sales,order_profit,order_premium,premium_id,premium_name,
-		customer_id,customer_username,customer_icon,customer_phone,customer_phoneid,customer_address,customer_addressid,brand_names,order_remark,create_time,state,tag_name,tag_color
+		customer_id,customer_username,customer_icon,customer_phone,customer_phoneid,customer_address,customer_addressid,brand_names,order_remark,create_time,state,tag_name,tag_color,tag_id
 		from accountorder where order_id = #{order_id} and account_id = #{account_id} 
 	</select>
 	
@@ -92,7 +92,7 @@
 	</select>
 	
 	<select id="listPageOrder" parameterType="com.api.order.entity.ListPageOrder" resultType="com.api.order.entity.OrderList">
-		select order_id,order_type,goods_count,order_sales,customer_id,customer_username,customer_icon,brand_names,create_time,state,tag_name,tag_color
+		select order_id,order_type,goods_count,order_sales,customer_id,customer_username,customer_icon,brand_names,create_time,state,tag_name,tag_color,tag_id
 		from accountorder where account_id = #{account_id} 
 		<if test="customer_id != null">
 			and customer_id = #{customer_id} 
