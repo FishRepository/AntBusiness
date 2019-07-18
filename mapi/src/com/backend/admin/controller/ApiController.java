@@ -236,7 +236,7 @@ public class ApiController extends BaseController{
     }
 
     /**
-     * 支付宝回调请求notify
+     * 微信回调请求notify
      * @param request
      * @return
      */
@@ -248,5 +248,20 @@ public class ApiController extends BaseController{
             return AlipayConfig.SUCCESS;
         }
         return AlipayConfig.FAILURE;
+    }
+
+    /**
+     * 苹果内购交易验证
+     * @param iosPayVerifyRequest
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/iosPayVerify")
+    public Object iosPayVerify(IOSPayVerifyRequest iosPayVerifyRequest){
+        boolean result = payService.iosPayVerify(iosPayVerifyRequest);
+        if(result){
+            return success();
+        }
+        return error();
     }
 }
