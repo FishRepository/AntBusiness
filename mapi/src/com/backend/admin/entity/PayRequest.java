@@ -19,6 +19,8 @@ public class PayRequest implements Serializable {
     //客户端ip
     private String ip;
 
+    private String orderNo;
+
     public String getIp() {
         return ip;
     }
@@ -57,5 +59,13 @@ public class PayRequest implements Serializable {
 
     public void setOrder_type(Integer order_type) {
         this.order_type = order_type;
+    }
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
     }
 }

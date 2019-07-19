@@ -104,7 +104,7 @@ public class WxPayUtil {
         StringBuilder sb = new StringBuilder();
         String nonce_str = generateString(24);
         String payType = OrderType.getDescByType(payRequest.getOrder_type());
-        String orderNo = UUID.randomUUID().toString();
+        String orderNo = payRequest.getOrderNo();
         String orderTime = returnOrderTime();
         String sign = returnSign(nonce_str, body+payType, orderNo, payRequest.getOrder_money().toString(), orderTime, trade_type, payRequest.getIp());
         sb.append("<xml>");
