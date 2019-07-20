@@ -1,6 +1,8 @@
 package com.backend.admin.service;
 
 import com.backend.admin.entity.PayOrder;
+import com.backend.admin.mapper.PayOrderMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +14,9 @@ import java.util.List;
 @Service
 public class PayOrderService {
 
+    @Autowired
+    private PayOrderMapper payOrderMapper;
+
     /**
      * 通过ID查询单条数据
      *
@@ -19,7 +24,7 @@ public class PayOrderService {
      * @return 实例对象
      */
     public PayOrder queryById(String orderNo){
-        return null;
+        return payOrderMapper.queryById(orderNo);
     }
 
     /**
@@ -39,8 +44,8 @@ public class PayOrderService {
      * @param payOrder 实例对象
      * @return 实例对象
      */
-    public PayOrder insert(PayOrder payOrder){
-        return null;
+    public int insert(PayOrder payOrder){
+        return payOrderMapper.insert(payOrder);
     }
 
     /**
@@ -49,8 +54,8 @@ public class PayOrderService {
      * @param payOrder 实例对象
      * @return 实例对象
      */
-    public PayOrder update(PayOrder payOrder){
-        return null;
+    public int update(PayOrder payOrder){
+        return payOrderMapper.update(payOrder);
     }
 
     /**

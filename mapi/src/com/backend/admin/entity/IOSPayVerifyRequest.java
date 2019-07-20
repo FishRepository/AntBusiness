@@ -2,31 +2,33 @@ package com.backend.admin.entity;
 
 import java.io.Serializable;
 
-/**
- * 支付请求
- */
-public class PayRequest implements Serializable {
-
-    private static final long serialVersionUID = -4364637175111297952L;
-    //支付方式(1 支付宝、2微信)
-    private Integer pay_type;
+public class IOSPayVerifyRequest implements Serializable {
+    private static final long serialVersionUID = -1044757904518081535L;
+    //苹果内购交易ID
+    String transaction_id;
+    //payload 校验体
+    String payload;
     //订单金额,单位分
     private Integer order_money;
     //用户id
     private Integer account_id;
     //订单类型：1年费;2连续包月;3月付费
     private Integer order_type;
-    //客户端ip
-    private String ip;
 
-    private String orderNo;
-
-    public String getIp() {
-        return ip;
+    public String getTransaction_id() {
+        return transaction_id;
     }
 
-    public void setIp(String ip) {
-        this.ip = ip;
+    public void setTransaction_id(String transaction_id) {
+        this.transaction_id = transaction_id;
+    }
+
+    public String getPayload() {
+        return payload;
+    }
+
+    public void setPayload(String payload) {
+        this.payload = payload;
     }
 
     public Integer getOrder_money() {
@@ -45,27 +47,11 @@ public class PayRequest implements Serializable {
         this.account_id = account_id;
     }
 
-    public Integer getPay_type() {
-        return pay_type;
-    }
-
-    public void setPay_type(Integer pay_type) {
-        this.pay_type = pay_type;
-    }
-
     public Integer getOrder_type() {
         return order_type;
     }
 
     public void setOrder_type(Integer order_type) {
         this.order_type = order_type;
-    }
-
-    public String getOrderNo() {
-        return orderNo;
-    }
-
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
     }
 }

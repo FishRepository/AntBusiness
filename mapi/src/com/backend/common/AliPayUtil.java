@@ -63,24 +63,23 @@ public class AliPayUtil {
     }
 
 
-//    {
-//        "alipay_trade_app_pay_response": {
-//        "code": "10000",
-//                "msg": "Success",
-//                "out_trade_no": "70501111111S001111119",
-//                "trade_no": "2014112400001000340011111118",
-//                "total_amount": "9.00",
-//                "seller_id": "2088111111116894",
-//                "merchant_order_no": "20161008001"
-//    },
-//        "sign": "ERITJKEIJKJHKKKKKKKHJEREEEEEEEEEEE"
-//    }
-    //请求微信支付统一下单接口 返回payResponse
+    //    {
+    //        "alipay_trade_app_pay_response": {
+    //        "code": "10000",
+    //                "msg": "Success",
+    //                "out_trade_no": "70501111111S001111119",
+    //                "trade_no": "2014112400001000340011111118",
+    //                "total_amount": "9.00",
+    //                "seller_id": "2088111111116894",
+    //                "merchant_order_no": "20161008001"
+    //    },
+    //        "sign": "ERITJKEIJKJHKKKKKKKHJEREEEEEEEEEEE"
+    //    }
+    //请求支付宝支付统一下单接口 返回payResponse
     public static PayResponse doPay(PayRequest payRequest){
         PayResponse payResponse = new PayResponse();
-        String orderNo = UUID.randomUUID().toString();
         double orderAmount = new BigDecimal((float)payRequest.getOrder_money()/100).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-        String signJson = getsign(String.valueOf(orderAmount), orderNo);
+        String signJson = getsign(String.valueOf(orderAmount), payRequest.getOrderNo());
         if(StringUtils.isBlank(signJson)){
             return null;
         }
@@ -105,4 +104,9 @@ public class AliPayUtil {
         return payResponse;
     }
 
+    public static void main(String[] args) {
+        String uuid = UUID.randomUUID().toString().replaceAll("-","");
+        String uuid_ = uuid.replaceAll("-","");
+        System.out.println(uuid+"  "+uuid_);
+    }
 }

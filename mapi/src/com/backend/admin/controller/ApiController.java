@@ -5,6 +5,7 @@ import com.api.common.service.ImagesService;
 import com.api.order.entity.Order;
 import com.backend.admin.entity.*;
 import com.backend.admin.service.*;
+import com.backend.common.AlipayConfig;
 import com.backend.common.IpUtil;
 import com.baomidou.mybatisplus.toolkit.CollectionUtils;
 import net.sf.json.JSONArray;
@@ -48,6 +49,9 @@ public class ApiController extends BaseController{
 
     @Autowired
     private PayService payService;
+
+    @Autowired
+    private AliPayService aliPayService;
 
     @ResponseBody
     @RequestMapping("/upload")
@@ -216,9 +220,48 @@ public class ApiController extends BaseController{
         return error();
     }
 
-    @RequestMapping("/payNotify")
-    public void payNotify(){
-
+    /**
+     * 支付宝回调请求notify
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/alipayCallback")
+    public String alipayCallback(HttpServletRequest request){
+        boolean callback = aliPayService.callback(request);
+        if(callback){
+            return AlipayConfig.SUCCESS;
+        }
+        return AlipayConfig.FAILURE;
     }
 
+    /**
+     * 微信回调请求notify
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/wxpayCallback")
+    public String wxpayCallback(HttpServletRequest request){
+        boolean callback = aliPayService.callback(request);
+        if(callback){
+            return AlipayConfig.SUCCESS;
+        }
+        return AlipayConfig.FAILURE;
+    }
+
+    /**
+     * 苹果内购交易验证
+     * @param iosPayVerifyRequest
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/iosPayVerify")
+    public Object iosPayVerify(IOSPayVerifyRequest iosPayVerifyRequest){
+        boolean result = payService.iosPayVerify(iosPayVerifyRequest);
+        if(result){
+            return success();
+        }
+        return error();
+    }
 }
