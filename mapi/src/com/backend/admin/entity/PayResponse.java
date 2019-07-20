@@ -12,9 +12,9 @@ public class PayResponse implements Serializable {
 
     private String sign_type;//signType
 
-    private String order_number;
+    private String order_number;//番茄后台订单号(用于调起支付宝支付)
 
-    private String prepay_id;
+    private String prepay_id;//微信预支付id,调起微信支付需要
 
     private String err_code;
 

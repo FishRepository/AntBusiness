@@ -45,12 +45,14 @@ public class PayService {
                     PayResponse aliPayResponse = AliPayUtil.doPay(payRequest);
                     if(aliPayResponse!=null && aliPayResponse.isResult()){
                         saveOrder(payRequest);
+                        aliPayResponse.setOrder_number(orderNo);
                     }
                     return aliPayResponse;
                 case 2:
                     PayResponse wxPayResponse = WxPayUtil.doPay(payRequest);
                     if(wxPayResponse!=null && wxPayResponse.isResult()){
                         saveOrder(payRequest);
+                        wxPayResponse.setOrder_number(orderNo);
                     }
                     return wxPayResponse;
                 default:

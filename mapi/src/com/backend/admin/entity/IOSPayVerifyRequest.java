@@ -5,9 +5,9 @@ import java.io.Serializable;
 public class IOSPayVerifyRequest implements Serializable {
     private static final long serialVersionUID = -1044757904518081535L;
     //苹果内购交易ID
-    String transaction_id;
+    private String transaction_id;
     //payload 校验体
-    String payload;
+    private String payload;
     //订单金额,单位分
     private Integer order_money;
     //用户id
