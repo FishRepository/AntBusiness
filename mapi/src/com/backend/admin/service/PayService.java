@@ -1,13 +1,8 @@
 package com.backend.admin.service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.backend.admin.entity.IOSPayVerifyRequest;
-import com.backend.admin.entity.PayOrder;
-import com.backend.admin.entity.PayRequest;
-import com.backend.admin.entity.PayResponse;
-import com.backend.common.AliPayUtil;
-import com.backend.common.IosVerifyUtil;
-import com.backend.common.WxPayUtil;
+import com.backend.admin.entity.*;
+import com.backend.common.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,10 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import javax.servlet.http.HttpServletRequest;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Service
 public class PayService {
@@ -27,6 +25,8 @@ public class PayService {
     private PayOrderService payOrderService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PayService.class);
+
+    private ExecutorService executorService = Executors.newFixedThreadPool(20);
 
     /**
      * 处理微信支付宝支付请求
@@ -73,6 +73,11 @@ public class PayService {
         payOrderService.insert(payOrder);
     }
 
+    /**
+     * iosPay 校验
+     * @param iosPayVerifyRequest
+     * @return
+     */
     public boolean iosPayVerify(IOSPayVerifyRequest iosPayVerifyRequest){
         if(StringUtils.isBlank(iosPayVerifyRequest.getTransaction_id())||
                 StringUtils.isBlank(iosPayVerifyRequest.getPayload())||
@@ -128,6 +133,102 @@ public class PayService {
         return false;
     }
 
+
+    /**
+     * 微信支付回调
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    public String wxpayCallback(HttpServletRequest request) {
+        LOGGER.info("微信支付回调");
+        Map<String,String> return_data = new HashMap<>();
+        try {
+            InputStream inStream = request.getInputStream();
+            ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int len = 0;
+            while ((len = inStream.read(buffer)) != -1) {
+                outSteam.write(buffer, 0, len);
+            }
+            String resultxml = new String(outSteam.toByteArray(), StandardCharsets.UTF_8);
+            Map<String, String> params = PayCommonUtil.doXMLParse(resultxml);
+            outSteam.close();
+            inStream.close();
+            if (!PayCommonUtil.isTenpaySign(params)) {
+                // 支付失败
+                return_data.put("return_code", "FAIL");
+                return_data.put("return_msg", "return_code不正确");
+                return GetMapToXML(return_data);
+            }
+            System.out.println("===============付款成功==============");
+            String total_fee = params.get("total_fee");
+            double v = Double.valueOf(total_fee) / 100;
+            String out_trade_no = String.valueOf(Long.parseLong(params.get("out_trade_no").split("O")[0]));
+            Date accountTime = DateUtil.stringtoDate(params.get("time_end"), "yyyyMMddHHmmss");
+            String ordertime = DateUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss");
+            String totalAmount = String.valueOf(v);
+            String appId = params.get("appid");
+            String tradeNo = params.get("transaction_id");
+            // 另起线程处理业务
+            executorService.execute(new Runnable() {
+                @Override
+                public void run() {
+                    // 支付成功
+                    // 处理支付成功逻辑
+                    try {
+                        if(StringUtils.isNotBlank(out_trade_no)){
+                            PayOrder payOrder = payOrderService.queryById(out_trade_no);
+                            if(payOrder!=null){
+                                payOrder.setState(1);
+                                payOrderService.update(payOrder);
+                            }else {
+                                LOGGER.error("支付宝回调返回订单查询为空,params:" + params);
+                            }
+                        }else {
+                            LOGGER.error("支付宝回调返回订单号为空,params:" + params);
+                        }
+                    } catch (Exception e) {
+                        LOGGER.error("支付宝回调业务处理报错,params:" + params, e);
+                    }
+
+                }
+            });
+            executorService.shutdown();
+        }catch (Exception e){
+            return_data.put("return_code", "FAIL");
+            return_data.put("return_msg", "SYSTEM ERROR");
+            return GetMapToXML(return_data);
+        }
+        return_data.put("return_code", "SUCCESS");
+        return_data.put("return_msg", "OK");
+        return GetMapToXML(return_data);
+    }
+
+    private static String GetMapToXML(Map<String,String> param){
+        StringBuffer sb = new StringBuffer();
+        sb.append("<xml>");
+        for (Map.Entry<String,String> entry : param.entrySet()) {
+            sb.append("<"+ entry.getKey() +">");
+            sb.append(entry.getValue());
+            sb.append("</"+ entry.getKey() +">");
+        }
+        sb.append("</xml>");
+        return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        ExecutorService ex = Executors.newFixedThreadPool(20);
+        ex.execute(new Runnable() {
+            @Override
+            public void run() {
+                System.out.printf("1111111");
+                Thread.interrupted();
+                System.out.printf("222222");
+            }
+        });
+        ex.shutdown();
+    }
 
 
 }

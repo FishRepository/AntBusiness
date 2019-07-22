@@ -70,7 +70,11 @@ public class AliPayService {
                                     // 处理业务逻辑。。。
                                     myService.process(param);
                                 */
-
+                                PayOrder payOrder = payOrderService.queryById(param.getOutTradeNo());
+                                if(payOrder!=null){
+                                    payOrder.setState(1);
+                                    payOrderService.update(payOrder);
+                                }
                             } catch (Exception e) {
                                 LOGGER.error("支付宝回调业务处理报错,params:" + paramsJson, e);
                             }
@@ -94,7 +98,7 @@ public class AliPayService {
 
     // 将request中的参数转换成Map
     private static Map<String, String> convertRequestParamsToMap(HttpServletRequest request) {
-        Map<String, String> retMap = new HashMap<String, String>();
+        Map<String, String> retMap = new HashMap<>();
 
         Set<Map.Entry<String, String[]>> entrySet = request.getParameterMap().entrySet();
 
