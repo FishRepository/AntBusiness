@@ -105,4 +105,6 @@ public interface AccountMapper{
 	public List<String> queryTimeAccount(@Param(value="startdate")String startdate,@Param(value="enddate")String enddate);
 	
 	public List<String> queryTimeNoLoginAccount(@Param(value="startdate")String startdate,@Param(value="enddate")String enddate);
+
+	public Account getVIPTime(Integer account_id);
 }

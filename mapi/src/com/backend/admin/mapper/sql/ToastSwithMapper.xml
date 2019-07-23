@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.backend.admin.mapper.ToastSwithMapper">
+
+    <resultMap type="com.backend.admin.entity.ToastSwith" id="ToastSwithMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="isShow" column="is_show" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="ToastSwithMap">
+        select
+          id, is_show
+        from fqgj.toast_swith
+        where  id= #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="ToastSwithMap">
+        select
+          id, is_show
+        from fqgj.toast_swith
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="ToastSwithMap">
+        select
+          id, is_show
+        from fqgj.toast_swith
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="isShow != null">
+                and is_show = #{isShow}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="" useGeneratedKeys="true">
+        insert into fqgj.toast_swith(id, is_show)
+        values (#{id}, #{isShow})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update fqgj.toast_swith
+        <set>
+            <if test="id != null">
+                id = #{id},
+            </if>
+            <if test="isShow != null">
+                is_show = #{isShow},
+            </if>
+        </set>
+        where  = #{}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from fqgj.toast_swith where  id= #{id}
+    </delete>
+
+</mapper>

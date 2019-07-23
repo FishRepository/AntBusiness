@@ -10,6 +10,7 @@
         <result property="vip_time" column="vip_time" jdbcType="INTEGER"/>
         <result property="remain_time" column="remain_time" jdbcType="TIMESTAMP"/>
         <result property="state" column="state" jdbcType="INTEGER"/>
+        <result property="account_id" column="account_id" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <!--查询单个-->
@@ -18,6 +19,14 @@
           order_no, order_type, create_time, order_amount, vip_time, remain_time, state
         from fqgj.pay_order
         where order_no = #{order_no}
+    </select>
+
+    <!--查询单个-->
+    <select id="queryByAccountId" resultMap="PayOrderMap">
+        select
+          order_no, order_type, create_time, order_amount, vip_time, remain_time, state, account_id
+        from fqgj.pay_order
+        where account_id = #{account_id}
     </select>
 
     <!--查询指定行数据-->
@@ -60,8 +69,8 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="orderNo" useGeneratedKeys="true">
-        insert into fqgj.pay_order(order_type, create_time, order_amount, vip_time, remain_time, state)
-        values (#{order_type}, now(), #{order_amount}, #{vip_time}, #{remain_time}, #{state})
+        insert into fqgj.pay_order(order_type, create_time, order_amount, vip_time, remain_time, state, account_id)
+        values (#{order_type}, now(), #{order_amount}, #{vip_time}, #{remain_time}, #{state}, account_id)
     </insert>
 
     <!--通过主键修改数据-->

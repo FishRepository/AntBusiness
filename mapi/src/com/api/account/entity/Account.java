@@ -18,6 +18,10 @@ public class Account{
 	private Date create_time;// 创建时间
 	private Date update_time;// 更新时间
 	private Integer state;// 状态0无效1有效
+	private Date vip_time;//vip到期时间
+	private Integer is_vip;//是否vip 0不是,1是
+	private Integer vip_type;//1，月费会员2，年费会员
+
 	
 	public Integer getAccount_id() {
 		return account_id;
@@ -106,5 +110,29 @@ public class Account{
 	}
 	public void setState(Integer state) {
 		this.state = state;
+	}
+
+	public Date getVip_time() {
+		return vip_time;
+	}
+
+	public void setVip_time(Date vip_time) {
+		this.vip_time = vip_time;
+	}
+
+	public Integer getIs_vip() {
+		return is_vip;
+	}
+
+	public void setIs_vip(Integer is_vip) {
+		this.is_vip = is_vip;
+	}
+
+	public Integer getVip_type() {
+		return vip_type;
+	}
+
+	public void setVip_type(Integer vip_type) {
+		this.vip_type = vip_type;
 	}
 }

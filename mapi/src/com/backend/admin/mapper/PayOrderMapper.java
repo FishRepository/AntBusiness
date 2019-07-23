@@ -19,6 +19,13 @@ public interface PayOrderMapper {
     PayOrder queryById(String orderNo);
 
     /**
+     * 通过account_id 查询用户订单记录
+     * @param account_id
+     * @return
+     */
+    List<PayOrder> queryByAccountId(Integer account_id);
+
+    /**
      * 查询指定行数据
      *
      * @param offset 查询起始位置

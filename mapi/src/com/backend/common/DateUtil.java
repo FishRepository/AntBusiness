@@ -3,6 +3,8 @@ package com.backend.common;
 import java.text.DateFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Pattern;
@@ -342,7 +344,7 @@ public class DateUtil {
 
     /*****
      * 时间 增加、减少 n个小时以后时间
-     * @param date
+     * @param d
      *          YYYY-mm-dd HH:mm:ss
      * @param num>0  小时
      * @param type  增加和减少标志
@@ -385,35 +387,36 @@ public class DateUtil {
         return Cal.getTime();
     }
 
+    /**
+     * 计算两个日期之间的间隔天数
+     * @param startDate
+     * @param endDate
+     * @return
+     */
+    public static long startToEnd(Date startDate, Date endDate){
+        String[] startStr = new SimpleDateFormat("yyyy-MM-dd").format(startDate).split("-");
+        String[] endStr = new SimpleDateFormat("yyyy-MM-dd").format(endDate).split("-");
+        int startYear = Integer.parseInt(startStr[0]);
+        int startMonth = Integer.parseInt(startStr[1]);
+        int startDay = Integer.parseInt(startStr[2]);
+        int endYear = Integer.parseInt(endStr[0]);
+        int endMonth = Integer.parseInt(endStr[1]);
+        int endDay = Integer.parseInt(endStr[2]);
+        LocalDate endLocalDate = LocalDate.of(endYear,endMonth,endDay);
+        LocalDate startLocalDate = LocalDate.of(startYear,startMonth,startDay);
+        return startLocalDate.until(endLocalDate, ChronoUnit.DAYS);
+    }
+
     public static void main(String[] args){
-//    	String dateStr = DateUtil.yearthDate("2017-05-30");
-//    	System.out.println(dateStr);
-//    	long min = DateUtil.timeSub("2017-04-12 00:00:00", "2017-04-13 00:00:00")/60;
-//    	System.out.println(min);
-        String settlementDate = DateUtil.dateToString(new Date(), "yyyy-MM-dd");
-        long day = DateUtil.dayDiff(DateUtil.stringtoDate("2017-06-22", "yyyy-MM-dd"),DateUtil.stringtoDate(settlementDate, "yyyy-MM-dd"));
-        if(day >= 0){
-            System.out.println(day);
-        }
+        Date now = new Date();
 
-        String goodsArriveTime = "2017-04-02 17:00-18:00";
-        int space_index = goodsArriveTime.indexOf(" ");
-        String arrive_date = goodsArriveTime.substring(0, space_index);
-        String arrive_time = goodsArriveTime.substring(space_index+1, goodsArriveTime.length());
-
-        System.out.println(arrive_date);
-        System.out.println(arrive_time);
-        String arrive_start_time = arrive_time.substring(0, 2);
-        String arrive_end_time = arrive_time.substring(6,8);
-
-        System.out.println(arrive_start_time);
-        System.out.println(arrive_end_time);
-
-        String Time = DateUtil.getCurrDate("HH");
-        System.out.println(Time);
-
-        String Time2 = DateUtil.getCurrDate("mm");
-        System.out.println(Time2);
+        Date date = stringtoDate("2019-07-20", LONG_DATE_FORMAT);//取时间
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(calendar.DATE,-1);
+        Date yesterday = new Date();
+        long days = startToEnd(yesterday, now);
+        System.out.printf("days: "+days);
     }
 
 }

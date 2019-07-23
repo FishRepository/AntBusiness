@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,6 +53,9 @@ public class ApiController extends BaseController{
 
     @Autowired
     private AliPayService aliPayService;
+
+    @Autowired
+    private AccountV2Service accountV2Service;
 
     @ResponseBody
     @RequestMapping("/upload")
@@ -243,11 +247,7 @@ public class ApiController extends BaseController{
     @ResponseBody
     @RequestMapping("/wxpayCallback")
     public String wxpayCallback(HttpServletRequest request){
-        boolean callback = aliPayService.callback(request);
-        if(callback){
-            return AlipayConfig.SUCCESS;
-        }
-        return AlipayConfig.FAILURE;
+        return payService.wxpayCallback(request);
     }
 
     /**
@@ -264,4 +264,91 @@ public class ApiController extends BaseController{
         }
         return error();
     }
+
+    /**
+     * 查询用户VIP剩余时间
+     * @param account_id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/getVIPTime")
+    public Object getVIPTime(Integer account_id){
+        Integer remain_time = accountV2Service.getVipTime(account_id);
+        if(remain_time==null){
+            return error();
+        }
+        return successData(remain_time);
+    }
+
+    /**
+     * 查询vip付费列表
+     * @param os_type
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/getVipPayList")
+    public Object getVipPayList(Integer os_type){
+        List<VipPay> vipPayList = accountV2Service.getVipPayList();
+        if(CollectionUtils.isEmpty(vipPayList)){
+            return error();
+        }
+        return successData(vipPayList);
+    }
+
+    /**
+     * 查询系统开关
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/getSwitch")
+    public Object getSwitch(Integer id){
+        Integer is_show = accountV2Service.getSwitchById(id);
+        if(is_show==null){
+            return error();
+        }
+        return successData(is_show);
+    }
+
+    /**
+     * 查询用户订单记录
+     * @param account_id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/getConsumList")
+    public Object getConsumList(Integer account_id){
+        List<PayOrder> payOrders = accountV2Service.queryByAccountId(account_id);
+        if(CollectionUtils.isEmpty(payOrders)){
+            return error();
+        }
+        return successData(payOrders);
+    }
+
+    /**
+     * 查询订单状态接口
+     * @param order_no
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/getConsumList")
+    public Object getOrderState(String order_no){
+        Integer state = accountV2Service.getOrderState(order_no);
+        if(state==null){
+            return error();
+        }
+        return successData(state);
+    }
+
+    /**
+     * 品牌图片上传
+     * @param file
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/uploadBrandIcon")
+    public Object uploadBrandIcon(MultipartFile file){
+        return imagesService.uploadImages(file,"brand",null);
+    }
+
 }

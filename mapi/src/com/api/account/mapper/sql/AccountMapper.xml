@@ -34,6 +34,15 @@
 	    <if test="account_imei != null and account_imei !=''">
 	 	    account_imei = #{account_imei},
 	    </if>
+		<if test="vip_time != null and vip_time !=''">
+			vip_time = #{vip_time},
+		</if>
+		<if test="is_vip != null and is_vip !=''">
+			is_vip = #{is_vip},
+		</if>
+		<if test="vip_type != null and vip_type !=''">
+			vip_type = #{vip_type},
+		</if>
 	    update_time = now() 
 		</trim>
 		where state = 1 and account_id = #{account_id}
@@ -233,5 +242,9 @@
 	
 	<select id="queryTimeNoLoginAccount" resultType="String">
 		select account_userphone from account where state = 1 and last_time is null and date_format(create_time,'%Y%m%d') &gt;= #{startdate} and date_format(create_time,'%Y%m%d') &lt;= #{enddate} 
+	</select>
+	
+	<select id="getVIPTime" parameterType="int" resultType="com.api.account.entity.Account">
+		select account_id,account_userphone,account_username,account_icon,vip_time,is_vip,vip_time from account where state = 1 and account_id = #{account_id}
 	</select>
 </mapper>

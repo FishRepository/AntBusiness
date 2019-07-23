@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.backend.admin.mapper.VipPayMapper">
+
+    <resultMap type="com.backend.admin.entity.VipPay" id="VipPayMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="type" column="type" jdbcType="INTEGER"/>
+        <result property="oriPrice" column="ori_price" jdbcType="INTEGER"/>
+        <result property="disPrice" column="dis_price" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="VipPayMap">
+        select
+          id, type, ori_price, dis_price
+        from fqgj.vip_pay
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="VipPayMap">
+        select
+          id, type, ori_price, dis_price
+        from fqgj.vip_pay
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="VipPayMap">
+        select
+          id, type, ori_price, dis_price
+        from fqgj.vip_pay
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="type != null">
+                and type = #{type}
+            </if>
+            <if test="oriPrice != null">
+                and ori_price = #{oriPrice}
+            </if>
+            <if test="disPrice != null">
+                and dis_price = #{disPrice}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into fqgj.vip_pay(type, ori_price, dis_price)
+        values (#{type}, #{oriPrice}, #{disPrice})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update fqgj.vip_pay
+        <set>
+            <if test="type != null">
+                type = #{type},
+            </if>
+            <if test="oriPrice != null">
+                ori_price = #{oriPrice},
+            </if>
+            <if test="disPrice != null">
+                dis_price = #{disPrice},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from fqgj.vip_pay where id = #{id}
+    </delete>
+
+</mapper>

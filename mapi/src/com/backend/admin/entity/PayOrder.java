@@ -23,6 +23,9 @@ public class PayOrder implements Serializable {
     private Date remain_time;
     //0等待支付;1交易成功;2交易取消
     private Integer state;
+    //会员id
+    private Integer account_id;
+
 
     public String getOrder_no() {
         return order_no;
@@ -78,5 +81,13 @@ public class PayOrder implements Serializable {
 
     public void setState(Integer state) {
         this.state = state;
+    }
+
+    public Integer getAccount_id() {
+        return account_id;
+    }
+
+    public void setAccount_id(Integer account_id) {
+        this.account_id = account_id;
     }
 }
