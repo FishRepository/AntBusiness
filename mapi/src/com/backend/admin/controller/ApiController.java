@@ -331,7 +331,7 @@ public class ApiController extends BaseController{
      * @return
      */
     @ResponseBody
-    @RequestMapping("/getConsumList")
+    @RequestMapping("/getOrderState")
     public Object getOrderState(String order_no){
         Integer state = accountV2Service.getOrderState(order_no);
         if(state==null){
