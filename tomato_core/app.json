@@ -11,7 +11,7 @@
     "pages/shop/shopProductOperate/shopProductOperate",
     "pages/shop/shopProductDetail/shopProductDetail",
     "pages/report/report",
-    "pages/report/customerTop/customerTop",
+    // "pages/report/customerTop/customerTop",
     "pages/report/goodsTop/goodsTop",
     "pages/mine/mine",
     "pages/forget/forget",
