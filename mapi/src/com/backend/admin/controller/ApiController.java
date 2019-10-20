@@ -57,6 +57,9 @@ public class ApiController extends BaseController{
     @Autowired
     private AccountV2Service accountV2Service;
 
+    @Autowired
+    private BrandMgrService brandMgrService;
+
     @ResponseBody
     @RequestMapping("/upload")
     public Object upload(MultipartRequest request, String imgdir) {
@@ -347,8 +350,9 @@ public class ApiController extends BaseController{
      */
     @ResponseBody
     @RequestMapping("/uploadBrandIcon")
-    public Object uploadBrandIcon(MultipartFile file){
-        return imagesService.uploadImages(file,"brand",null);
+    public Object uploadBrandIcon(MultipartFile file, Integer brand_id, Integer account_id){
+        return brandMgrService.uploadBrandIcon(file, brand_id, account_id);
+//        return imagesService.uploadImages(file,"brand",null);
     }
 
 }

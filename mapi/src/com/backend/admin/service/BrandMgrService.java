@@ -1,15 +1,22 @@
 package com.backend.admin.service;
 
+import com.api.common.entity.Images;
+import com.api.common.service.ImagesService;
 import com.api.goods.entity.AgentLevel;
+import com.api.goods.entity.BrandImages;
+import com.api.goods.mapper.GoodsMapper;
 import com.backend.admin.entity.Brand;
 import com.backend.admin.mapper.AgentLevelMapper;
 import com.backend.admin.mapper.BrandMgrMapper;
 import com.backend.admin.mapper.BrandPriceMapper;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +32,14 @@ public class BrandMgrService {
 
     @Autowired
     private BrandPriceMapper brandPriceMapper;
+
+    @Autowired
+    private ImagesService imagesService;
+
+    @Autowired
+    private GoodsMapper goodsMapper;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(BrandMgrService.class);
 
     public List<Brand> selectAll() {
         return brandMgrMapper.selectAll();
@@ -126,11 +141,37 @@ public class BrandMgrService {
         return brandMgrMapper.removeBrandById(id) > 0;
     }
 
-    public boolean increaseGoodsCount(int id) {
-        return brandMgrMapper.increaseGoodsCount(id) > 0;
+    void increaseGoodsCount(int id) {
+        brandMgrMapper.increaseGoodsCount(id);
     }
 
-    public boolean decreaseGoodsCount(int id) {
-        return brandMgrMapper.decreaseGoodsCount(id) > 0;
+    void decreaseGoodsCount(int id) {
+        brandMgrMapper.decreaseGoodsCount(id);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public Images uploadBrandIcon(MultipartFile file, Integer brand_id, Integer account_id){
+        Images images;
+        try {
+            if(brand_id==null || file==null || account_id==null){
+                return null;
+            }
+            images = imagesService.uploadImages(file, "brand", null);
+            if(images==null){
+                return null;
+            }
+            //保存品牌图片信息
+            if(images.getCode()==0){
+                BrandImages brandImages = new BrandImages();
+                brandImages.setAccount_id(account_id);
+                brandImages.setBrand_id(brand_id);
+                brandImages.setBrandimages_url(images.getUrlPath());
+                goodsMapper.insertBrandImages(brandImages);
+            }
+        } catch (Exception e) {
+            LOGGER.error("BrandMgrService uploadBrandIcon error: "+e.getMessage());
+            return null;
+        }
+        return images;
     }
 }
