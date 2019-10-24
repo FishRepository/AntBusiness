@@ -4,6 +4,7 @@ import com.api.common.entity.Images;
 import com.api.common.service.ImagesService;
 import com.api.goods.entity.AgentLevel;
 import com.api.goods.entity.BrandImages;
+import com.api.goods.entity.BrandImagesResult;
 import com.api.goods.mapper.GoodsMapper;
 import com.backend.admin.entity.Brand;
 import com.backend.admin.mapper.AgentLevelMapper;
@@ -162,6 +163,19 @@ public class BrandMgrService {
             }
             //保存品牌图片信息
             if(images.getCode()==0){
+                com.api.goods.entity.Brand brand = new com.api.goods.entity.Brand();
+                brand.setAccount_id(account_id);
+                brand.setBrand_id(brand_id);
+                //覆盖旧的品牌图片
+                List<BrandImagesResult> brandImagesResults = goodsMapper.queryBrandImages(brand);
+                if(!CollectionUtils.isEmpty(brandImagesResults)){
+                    //删除旧的品牌图片
+                    BrandImages brandImages = new BrandImages();
+                    brandImages.setAccount_id(account_id);
+                    brandImages.setBrand_id(brand_id);
+                    goodsMapper.deleteBrandImages(brandImages);
+                }
+                //插入新的品牌图片
                 BrandImages brandImages = new BrandImages();
                 brandImages.setAccount_id(account_id);
                 brandImages.setBrand_id(brand_id);
