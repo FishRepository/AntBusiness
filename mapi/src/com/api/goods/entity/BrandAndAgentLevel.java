@@ -13,6 +13,7 @@ public class BrandAndAgentLevel{
 	private Integer brand_index;
 	private Integer account_id;//所属账号0表示推荐品牌
 	private List<AgentLevel> agentlevellist;
+	private String brandimages_url;
 	
 	public Integer getBrand_id() {
 		return brand_id;
@@ -67,5 +68,13 @@ public class BrandAndAgentLevel{
 	}
 	public void setAgentlevellist(List<AgentLevel> agentlevellist) {
 		this.agentlevellist = agentlevellist;
+	}
+
+	public String getBrandimages_url() {
+		return brandimages_url;
+	}
+
+	public void setBrandimages_url(String brandimages_url) {
+		this.brandimages_url = brandimages_url;
 	}
 }
