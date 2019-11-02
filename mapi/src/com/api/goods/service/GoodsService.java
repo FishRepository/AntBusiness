@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.api.goods.entity.*;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,60 +16,9 @@ import com.api.common.entity.Result;
 import com.api.common.utils.JPushUtil;
 import com.api.common.utils.PropertiesUtil;
 import com.api.common.utils.StringUtil;
-import com.api.goods.entity.AgentLevel;
-import com.api.goods.entity.Brand;
-import com.api.goods.entity.BrandAndAgentLevel;
-import com.api.goods.entity.BrandAndAgentLevelResult;
-import com.api.goods.entity.BrandAndImages;
-import com.api.goods.entity.BrandAndImagesResult;
-import com.api.goods.entity.BrandHotListResult;
-import com.api.goods.entity.BrandImages;
-import com.api.goods.entity.BrandImagesId;
-import com.api.goods.entity.BrandRecommendListResult;
-import com.api.goods.entity.BrandRecommendResult;
-import com.api.goods.entity.BrandResult;
-import com.api.goods.entity.Goods;
-import com.api.goods.entity.GoodsAgentLevelPriceResult;
-import com.api.goods.entity.GoodsAndGoodsPrice;
-import com.api.goods.entity.GoodsInfoResult;
-import com.api.goods.entity.GoodsPrice;
-import com.api.goods.entity.GoodsPriceQuery;
-import com.api.goods.entity.GoodsResult;
-import com.api.goods.entity.GoodsScaleResult;
-import com.api.goods.entity.GoodsStock;
-import com.api.goods.entity.GoodsStockListResult;
-import com.api.goods.entity.GoodsStockResult;
-import com.api.goods.entity.GoodsStockTotal;
-import com.api.goods.entity.GoodsStockTotalResult;
-import com.api.goods.entity.IndexAgentLevelList;
-import com.api.goods.entity.IndexBrandList;
-import com.api.goods.entity.IndexGoodsList;
-import com.api.goods.entity.IndexId;
-import com.api.goods.entity.InsertAgentLevelResult;
-import com.api.goods.entity.InsertBrand;
-import com.api.goods.entity.InsertBrandImagesResult;
-import com.api.goods.entity.InsertBrandResult;
-import com.api.goods.entity.InsertGoods;
-import com.api.goods.entity.InsertGoodsResult;
-import com.api.goods.entity.ListPageRecommendBrand;
-import com.api.goods.entity.Share;
-import com.api.goods.entity.ShareAgentLevel;
-import com.api.goods.entity.ShareBrand;
-import com.api.goods.entity.ShareCreate;
-import com.api.goods.entity.ShareCreateBrand;
-import com.api.goods.entity.ShareCreateResult;
-import com.api.goods.entity.ShareDownload;
-import com.api.goods.entity.ShareDownloadBrand;
-import com.api.goods.entity.ShareDownloadResult;
-import com.api.goods.entity.ShareDownloadShare;
-import com.api.goods.entity.ShareQuery;
-import com.api.goods.entity.ShareQueryAgentLevel;
-import com.api.goods.entity.ShareQueryBrand;
-import com.api.goods.entity.ShareQueryResult;
-import com.api.goods.entity.ShareUse;
-import com.api.goods.entity.UpdateGoods;
 import com.api.goods.mapper.GoodsMapper;
 import com.api.order.entity.OrderGoods;
+import org.springframework.util.CollectionUtils;
 
 @Service
 @Transactional
@@ -236,6 +187,21 @@ public class GoodsService {
 				}
 			}else{//名称
 				result.setList(goodsMapper.queryBrandName(account_id));
+			}
+			List<BrandAndAgentLevel> brandAndAgentLevels = result.getList();
+			//遍历品牌及代理集合，插入brandimages
+			if(!CollectionUtils.isEmpty(brandAndAgentLevels)){
+				for (BrandAndAgentLevel brandAndAgentLevel:brandAndAgentLevels) {
+					Integer brand_id = brandAndAgentLevel.getBrand_id();
+					Brand brand = new Brand();
+					brand.setAccount_id(account_id);
+					brand.setBrand_id(brand_id);
+					List<BrandImagesResult> brandImagesResults = goodsMapper.queryBrandImages(brand);
+					if(!CollectionUtils.isEmpty(brandImagesResults) && brandImagesResults.get(0)!=null
+							&& StringUtils.isNotBlank(brandImagesResults.get(0).getBrandimages_url())){
+						brandAndAgentLevel.setBrandimages_url(brandImagesResults.get(0).getBrandimages_url());
+					}
+				}
 			}
 			result.setCode(0);
 			result.setMsg("查询成功");
@@ -452,6 +418,11 @@ public class GoodsService {
 				}
 			}else{//等级
 				result.setList(goodsMapper.queryAgentLevel(brand));
+			}
+			List<BrandImagesResult> brandImagesResults = goodsMapper.queryBrandImages(brand);
+			//设置品牌图片
+			if(!CollectionUtils.isEmpty(brandImagesResults)){
+				result.setBrandImagesResult(brandImagesResults.get(0));
 			}
 			result.setCode(0);
 			result.setMsg("查询成功");
