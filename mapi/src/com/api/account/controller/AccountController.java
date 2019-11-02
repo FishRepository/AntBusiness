@@ -60,6 +60,12 @@ public class AccountController {
 	public Object insertBrand(Account account){
 		return accountService.login(account);
 	}
+
+	@RequestMapping(value = "/stopNewAccount")
+	@ResponseBody
+	public Object stopNewAccount(Account account){
+		return accountService.stopNew(account);
+	}
 	
 	@RequestMapping(value = "/updateaccount")
     @ResponseBody

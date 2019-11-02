@@ -1310,4 +1310,20 @@ public class AccountService {
 		}
 		return result;
 	}
+
+	public Object stopNew(Account account) {
+		Result result;
+		try {
+			account.setIs_new(0);
+			accountMapper.updateAccount(account);
+			result = new Result();
+			result.setCode(0);
+			result.setMsg("设置成功");
+		} catch (Exception e) {
+			result = new Result();
+			result.setCode(1);
+			result.setMsg("设置失败");
+		}
+		return result;
+	}
 }
