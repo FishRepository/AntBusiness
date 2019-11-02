@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.backend.common.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -185,6 +186,12 @@ public class AccountService {
 				AccountCode accountcode = new AccountCode();
 				accountcode.setAccount_userphone(account.getAccount_userphone());
 				accountcode.setAccount_code(account_code);
+				account.setIs_new(1);
+				account.setIs_vip(1);
+				//注册送一个月VIP日期
+				Date vipTime = DateUtil.adjustDateByHour(new Date() ,30,1);
+				account.setVip_time(DateUtil.setEnd(vipTime,1));
+				account.setVip_type(1);
 				if(accountMapper.checkAccountCode(accountcode) > 0){
 					accountMapper.deleteAccountCode(account.getAccount_userphone());
 					if(StringUtil.isValid(account.getAccount_wechat())){

@@ -21,6 +21,7 @@ public class Account{
 	private Date vip_time;//vip到期时间
 	private Integer is_vip;//是否vip 0不是,1是
 	private Integer vip_type;//1，月费会员2，年费会员
+	private Integer is_new;//是否新用户 1是 2不是
 
 	
 	public Integer getAccount_id() {
@@ -134,5 +135,13 @@ public class Account{
 
 	public void setVip_type(Integer vip_type) {
 		this.vip_type = vip_type;
+	}
+
+	public Integer getIs_new() {
+		return is_new;
+	}
+
+	public void setIs_new(Integer is_new) {
+		this.is_new = is_new;
 	}
 }

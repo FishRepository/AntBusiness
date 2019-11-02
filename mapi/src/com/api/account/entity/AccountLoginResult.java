@@ -20,6 +20,10 @@ public class AccountLoginResult extends Result{
 	private Integer ischange = 0;//imei是否已经改变  0未改变 1已改变
 	private Integer isboss = 0;//是否老板账号，用于显示问题反馈还是显示反馈列表
 	private Integer login_integral;//登录积分
+	private Date vip_time;//vip到期时间
+	private Integer is_vip;//是否vip 0不是,1是
+	private Integer vip_type;//1，月费会员2，年费会员
+	private Integer is_new;//是否新用户 1是 2不是
 	
 	public Integer getAccount_id() {
 		return account_id;
@@ -108,5 +112,37 @@ public class AccountLoginResult extends Result{
 	}
 	public void setLogin_integral(Integer login_integral) {
 		this.login_integral = login_integral;
+	}
+
+	public Date getVip_time() {
+		return vip_time;
+	}
+
+	public void setVip_time(Date vip_time) {
+		this.vip_time = vip_time;
+	}
+
+	public Integer getIs_vip() {
+		return is_vip;
+	}
+
+	public void setIs_vip(Integer is_vip) {
+		this.is_vip = is_vip;
+	}
+
+	public Integer getVip_type() {
+		return vip_type;
+	}
+
+	public void setVip_type(Integer vip_type) {
+		this.vip_type = vip_type;
+	}
+
+	public Integer getIs_new() {
+		return is_new;
+	}
+
+	public void setIs_new(Integer is_new) {
+		this.is_new = is_new;
 	}
 }

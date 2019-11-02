@@ -90,8 +90,8 @@
 <@global.script>
 <script type="text/javascript">
     $(function(){
-        <#--initFileInput("uploadImg", "${ctx}/adImg/uploadImg");-->
-        initFileInput("uploadImg", "${ctx}/images/uploadimages");
+        initFileInput("uploadImg", "${ctx}/adImg/uploadImg");
+        <#--initFileInput("uploadImg", "${ctx}/images/uploadimages");-->
     });
 
     //初始化fileinput控件（第一次初始化）

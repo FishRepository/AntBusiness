@@ -309,6 +309,21 @@ public class DateUtil {
     }
 
     /**
+     * 为一个日期添加23:59:59 或 00:00:00
+     * @param day
+     * @param type 1 23:59:59    0 00:00:00
+     * @return
+     */
+    public static Date setEnd(Date day,int type){
+        Calendar onday = Calendar.getInstance();
+        onday.setTime(day);
+        onday.add(Calendar.HOUR,type==1?23:00);
+        onday.add(Calendar.MINUTE,type==1?59:00);
+        onday.add(Calendar.SECOND,type==1?59:00);
+        return onday.getTime();
+    }
+
+    /**
      * 获得当前日期字符串，格式"yyyy-MM-dd HH:mm:ss"
      *
      * @return
