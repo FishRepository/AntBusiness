@@ -18,10 +18,12 @@ public class Account{
 	private Date create_time;// 创建时间
 	private Date update_time;// 更新时间
 	private Integer state;// 状态0无效1有效
+	private Date last_time;//上次登录时间
 	private Date vip_time;//vip到期时间
 	private Integer is_vip;//是否vip 0不是,1是
 	private Integer vip_type;//1，月费会员2，年费会员
 	private Integer is_new;//是否新用户 1是 2不是
+	private Integer remain_time;//剩余vip天数
 
 	
 	public Integer getAccount_id() {
@@ -143,5 +145,21 @@ public class Account{
 
 	public void setIs_new(Integer is_new) {
 		this.is_new = is_new;
+	}
+
+	public Date getLast_time() {
+		return last_time;
+	}
+
+	public void setLast_time(Date last_time) {
+		this.last_time = last_time;
+	}
+
+	public Integer getRemain_time() {
+		return remain_time;
+	}
+
+	public void setRemain_time(Integer remain_time) {
+		this.remain_time = remain_time;
 	}
 }

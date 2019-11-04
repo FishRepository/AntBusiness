@@ -1,5 +1,6 @@
 package com.backend.admin.controller;
 
+import com.api.account.entity.Account;
 import com.api.common.entity.Images;
 import com.api.common.service.ImagesService;
 import com.api.order.entity.Order;
@@ -269,18 +270,18 @@ public class ApiController extends BaseController{
     }
 
     /**
-     * 查询用户VIP剩余时间
+     * 查询用户信息
      * @param account_id
      * @return
      */
     @ResponseBody
-    @RequestMapping("/getVIPTime")
-    public Object getVIPTime(Integer account_id){
-        Integer remain_time = accountV2Service.getVipTime(account_id);
-        if(remain_time==null){
+    @RequestMapping("/getAccountInfo")
+    public Object getAccountInfo(Integer account_id){
+        Account account = accountV2Service.getAccountInfo(account_id);
+        if(account==null){
             return error();
         }
-        return successData(remain_time);
+        return successData(account);
     }
 
     /**

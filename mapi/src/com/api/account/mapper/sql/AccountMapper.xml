@@ -270,7 +270,7 @@
 		select account_userphone from account where state = 1 and last_time is null and date_format(create_time,'%Y%m%d') &gt;= #{startdate} and date_format(create_time,'%Y%m%d') &lt;= #{enddate} 
 	</select>
 	
-	<select id="getVIPTime" parameterType="int" resultType="com.api.account.entity.Account">
-		select account_id,account_userphone,account_username,account_icon,vip_time,is_vip,vip_time from account where state = 1 and account_id = #{account_id}
+	<select id="getAccountInfo" parameterType="int" resultType="com.api.account.entity.Account">
+		select account_id,account_userphone,account_username,account_address,account_icon,account_qq,account_wechat,account_imei,account_integral,last_time,create_time,vip_time,is_vip,vip_type,is_new from account where state = 1 and account_id = #{account_id}
 	</select>
 </mapper>

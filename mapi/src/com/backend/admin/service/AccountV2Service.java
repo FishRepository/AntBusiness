@@ -40,24 +40,27 @@ public class AccountV2Service {
      * @param account_id
      * @return
      */
-    public Integer getVipTime(Integer account_id) {
+    public Account getAccountInfo(Integer account_id) {
         if(account_id==null || account_id==0){
             return null;
         }
-        Integer remain_time = null;
+        Integer remain_time;
+        Account account=null;
         try {
-            Account account = accountMapper.getVIPTime(account_id);
+            account = accountMapper.getAccountInfo(account_id);
             if(account==null){
-                return remain_time;
+                return null;
             }
             if(account.getIs_vip()==0){
-                return 0;
+                account.setRemain_time(0);
+                return account;
             }
             remain_time = Math.toIntExact(DateUtil.startToEnd(new Date(), account.getVip_time()));
+            account.setRemain_time(remain_time);
         }catch (Exception e){
             LOGGER.error("query account error: "+e);
         }
-        return remain_time;
+        return account;
     }
 
     /**
