@@ -314,11 +314,11 @@ public class GoodsService {
 	public BrandAndImagesResult queryBrandImages(Integer account_id){
 		BrandAndImagesResult result = new BrandAndImagesResult();
 		if(account_id!=null && account_id > 0){
-			List<BrandAndImages> list = new ArrayList<BrandAndImages>();
+			List<BrandAndImages> list = new ArrayList<>();
 			List<BrandAndAgentLevel> brandlist = goodsMapper.queryBrandNameAndImagesCount(account_id);
 			if(brandlist!=null && !brandlist.isEmpty()){
-				BrandAndImages brandAndImages = null;
-				Brand brand = null;
+				BrandAndImages brandAndImages;
+				Brand brand;
 				for(BrandAndAgentLevel brandandagentlevel:brandlist){
 					brandAndImages = new BrandAndImages();
 					brandAndImages.setBrand(brandandagentlevel);
@@ -326,6 +326,7 @@ public class GoodsService {
 					brand.setAccount_id(account_id);
 					brand.setBrand_id(brandandagentlevel.getBrand_id());
 					brandAndImages.setImageslist(goodsMapper.queryBrandImages(brand));
+					brandAndImages.setBrandGoodsInfo(goodsMapper.queryBrandGoods(brand));
 					list.add(brandAndImages);
 				}
 			}

@@ -2,33 +2,8 @@ package com.api.goods.mapper;
 
 import java.util.List;
 
+import com.api.goods.entity.*;
 import org.apache.ibatis.annotations.Param;
-
-import com.api.goods.entity.AgentLevel;
-import com.api.goods.entity.Brand;
-import com.api.goods.entity.BrandAndAgentLevel;
-import com.api.goods.entity.BrandImages;
-import com.api.goods.entity.BrandImagesResult;
-import com.api.goods.entity.BrandPrice;
-import com.api.goods.entity.BrandRecommend;
-import com.api.goods.entity.Goods;
-import com.api.goods.entity.GoodsAgentLevelPrice;
-import com.api.goods.entity.GoodsAndGoodsPrice;
-import com.api.goods.entity.GoodsAndGoodsStock;
-import com.api.goods.entity.GoodsPrice;
-import com.api.goods.entity.GoodsPriceQuery;
-import com.api.goods.entity.GoodsPriceResult;
-import com.api.goods.entity.GoodsStock;
-import com.api.goods.entity.GoodsStockList;
-import com.api.goods.entity.GoodsStockTotal;
-import com.api.goods.entity.ListPageRecommendBrand;
-import com.api.goods.entity.Share;
-import com.api.goods.entity.ShareAgentLevel;
-import com.api.goods.entity.ShareBrand;
-import com.api.goods.entity.ShareQuery;
-import com.api.goods.entity.ShareQueryAgentLevel;
-import com.api.goods.entity.ShareQueryBrand;
-import com.api.goods.entity.ShareUse;
 
 public interface GoodsMapper {
 	public int insertBrand(Brand brand);
@@ -206,4 +181,6 @@ public interface GoodsMapper {
 	public List<String> queryAllHotBrand();
 	
 	public String queryNowdate();
+
+	public BrandGoodsInfo queryBrandGoods(Brand brand);
 }

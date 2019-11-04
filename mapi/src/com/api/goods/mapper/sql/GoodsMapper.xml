@@ -416,4 +416,14 @@
 	<select id="queryNowdate" resultType="String">
 		select date_format(now(), '%Y%m') as nowtime 
 	</select>
+
+	<select id="queryBrandGoods" parameterType="com.api.goods.entity.Brand" resultType="com.api.goods.entity.BrandGoodsInfo">
+		SELECT COUNT(1) as goodsCates,
+  			   SUM (goods_price*goods_stock) as stockPrice,
+  			   SUM(goods_stock) as goodsNum
+		FROM goods g
+		WHERE state = 1
+		AND account_id = #{account_id} and brand_id = #{brand_id}
+		order by goods_index,goods_id
+	</select>
 </mapper>
