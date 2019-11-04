@@ -273,4 +273,23 @@
 	<select id="getAccountInfo" parameterType="int" resultType="com.api.account.entity.Account">
 		select account_id,account_userphone,account_username,account_address,account_icon,account_qq,account_wechat,account_imei,account_integral,last_time,create_time,vip_time,is_vip,vip_type,is_new from account where state = 1 and account_id = #{account_id}
 	</select>
+
+	<select id="getAllAccount" resultType="com.api.account.entity.Account">
+		select account_id,vip_time,is_vip,vip_type,is_new from account where state = 1
+	</select>
+
+	<update id="batchUpdateVipState" parameterType="java.util.List">
+		UPDATE
+		account
+		SET is_vip = 0
+		WHERE account_id IN
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+
+	<update id="stopNew" parameterType="java.lang.Integer">
+		update account set is_new = 0 where account_id = #{account_id}
+	</update>
+
 </mapper>

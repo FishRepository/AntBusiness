@@ -107,4 +107,11 @@ public interface AccountMapper{
 	public List<String> queryTimeNoLoginAccount(@Param(value="startdate")String startdate,@Param(value="enddate")String enddate);
 
 	public Account getAccountInfo(Integer account_id);
+
+	public List<Account> getAllAccount();
+
+	public int batchUpdateVipState(List<Integer> list);
+
+	void stopNew(Integer account_id);
+
 }

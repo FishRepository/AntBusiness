@@ -1313,9 +1313,15 @@ public class AccountService {
 
 	public Object stopNew(Account account) {
 		Result result;
+		if(account==null || account.getAccount_id()==null){
+			result = new Result();
+			result.setCode(1);
+			result.setMsg("设置失败");
+			return result;
+		}
 		try {
 			account.setIs_new(0);
-			accountMapper.updateAccount(account);
+			accountMapper.stopNew(account.getAccount_id());
 			result = new Result();
 			result.setCode(0);
 			result.setMsg("设置成功");
