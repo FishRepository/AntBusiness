@@ -396,7 +396,7 @@
 	<update id="deleteAllShareUse" parameterType="Integer">
 		update share_use set state = 0,update_time = now() where state = 1 and account_id = #{account_id}
 	</update>
-	
+
 	<update id="deleteShareUse" parameterType="com.api.goods.entity.ShareUse">
 		update share_use set state = 0,update_time = now() where state = 1 and share_id = #{share_id} and account_id = #{account_id}
 	</update>
@@ -418,12 +418,13 @@
 	</select>
 
 	<select id="queryBrandGoods" parameterType="com.api.goods.entity.Brand" resultType="com.api.goods.entity.BrandGoodsInfo">
-		SELECT COUNT(1) as goodsCates,
-  			   SUM (goods_price*goods_stock) as stockPrice,
-  			   SUM(goods_stock) as goodsNum
-		FROM goods g
-		WHERE state = 1
-		AND account_id = #{account_id} and brand_id = #{brand_id}
+		select count(1) as goodscates,
+  			   sum(goods_price*goods_stock) as stockprice,
+  			   sum(goods_stock) as goodsnum
+		from goods g
+		where state = 1
+		and goods_stock
+		and account_id = #{account_id} and brand_id = #{brand_id}
 		order by goods_index,goods_id
 	</select>
 </mapper>
