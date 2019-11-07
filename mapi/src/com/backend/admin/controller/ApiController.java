@@ -150,7 +150,7 @@ public class ApiController extends BaseController{
      * @return
      * @throws Exception
      */
-    @RequestMapping(value="getPayOrderId", method = RequestMethod.POST)
+    @RequestMapping(value="getPayOrderId")
     @ResponseBody
     public Object getPayOrderId(PayRequest payRequest, HttpServletRequest request){
         String remoteIp = IpUtil.getRemoteIp(request);

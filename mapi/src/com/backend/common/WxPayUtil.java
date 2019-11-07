@@ -5,6 +5,8 @@ import com.backend.admin.entity.PayResponse;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
 import java.io.BufferedReader;
@@ -19,18 +21,21 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class WxPayUtil {
-    private static String keyString = "7f86b2d529779abf05543da15be00eb5";
-    private static String appid = "wx9989621fbe68b03b";
-    private static String secret = "e7084d91bead78acebbd3cfe3f025040";
-    private static String mch_id = "1541127161";  //商户号1481599512
-    private static String body = "番茄科技-"; //
-    private static String spbill_create_ip = "172.18.36.67"; //172.18.36.67
-    private static String notify_url = "https://www.ta521.com/mapi/payNotify";
-    private static String trade_type = "JSAPI";
-    private static String apiUrlStr = "https://api.weixin.qq.com/sns/jscode2session?appid="+appid+"&secret="+secret+"&grant_type=authorization_code&js_code=";
+    private final static String keyString = "7f86b2d529779abf05543da15be00eb5";
+    private final static String appid = "wx9989621fbe68b03b";
+    private final static String secret =    "e7084d91bead78acebbd3cfe3f025040";
+    private final static String mch_id = "1541127161";  //商户号1481599512
+    private final static String body = "番茄科技-"; //
+    private final static String spbill_create_ip = "172.18.36.67"; //172.18.36.67
+    private final static String notify_url = "https://www.ta521.com/mapi/payNotify";
+    private final static String trade_type = "APP";//JSAPI  NATIVE  APP
+    private final static String apiUrlStr = "https://api.weixin.qq.com/sns/jscode2session?appid="+appid+"&secret="+secret+"&grant_type=authorization_code&js_code=";
 
     //生成25位随机字符串
     private static final String allChar = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(WxPayUtil.class);
+
     private static String generateString(int length){
         StringBuilder stringBuilder = new StringBuilder();
         Random random = new Random();
@@ -83,6 +88,7 @@ public class WxPayUtil {
                 "&trade_type="+trade_type;
         String stringSignTemp = parmString+"&key="+keyString;
         return MD5Util.MD5(stringSignTemp).toUpperCase();
+//        return HMACSHA256.sha256_HMAC(stringSignTemp,keyString).toUpperCase();
     }
 
     //生成订单号
@@ -129,7 +135,7 @@ public class WxPayUtil {
             URL url = new URL(urlStr);
             URLConnection con = url.openConnection();
             con.setDoOutput(true);
-            con.setRequestProperty("Pragma:", "no-cache");
+            con.setRequestProperty("Pragma", "no-cache");
             con.setRequestProperty("Cache-Control", "no-cache");
             con.setRequestProperty("Content-Type", "text/xml");
             OutputStreamWriter out = new OutputStreamWriter(con.getOutputStream());
@@ -142,7 +148,7 @@ public class WxPayUtil {
                 reStr.append(line);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("WxPay error: "+e.getMessage());
         }
         return reStr.toString();
     }
@@ -159,7 +165,7 @@ public class WxPayUtil {
                 resMap.put(user.getName(), user.getText());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("xml2map error: "+e.getMessage());
         }
         return resMap;
     }
@@ -178,19 +184,15 @@ public class WxPayUtil {
             return null;
         }
         //返回错误码
-        if(!resultMap.get("return_code").equals("SUCCESS")){
-            payResponse.setErr_code(resultMap.get("err_code").toString());
-            String err_code_des = resultMap.get("err_code_des").toString();
-            payResponse.setErr_code_des(err_code_des);
-            System.out.print("return_code error and err_code_des:"+err_code_des);
-            payResponse.setResult(false);
-            return payResponse;
-        }
-        if(!resultMap.get("result_code").equals("SUCCESS")){
-            payResponse.setErr_code(resultMap.get("err_code").toString());
-            String err_code_des = resultMap.get("err_code_des").toString();
-            payResponse.setErr_code_des(err_code_des);
-            System.out.print("result_code error and err_code_des:"+err_code_des);
+        if(!resultMap.get("return_code").equals("SUCCESS") || !resultMap.get("result_code").equals("SUCCESS")){
+            if(resultMap.containsKey("err_code")){
+                payResponse.setErr_code(resultMap.get("err_code").toString());
+            }
+            if(resultMap.containsKey("err_code_des")){
+                String err_code_des = resultMap.get("err_code_des").toString();
+                payResponse.setErr_code_des(err_code_des);
+                LOGGER.error("return_code error and err_code_des: "+err_code_des);
+            }
             payResponse.setResult(false);
             return payResponse;
         }
