@@ -86,7 +86,7 @@ public class WxPayUtil {
                 "&time_start="+time_start +
                 "&total_fee="+total_fee +
                 "&trade_type="+trade_type;
-        String stringSignTemp = parmString+"&key="+keyString;
+        String stringSignTemp = parmString+"&key="+secret;
         return MD5Util.MD5(stringSignTemp).toUpperCase();
 //        return HMACSHA256.sha256_HMAC(stringSignTemp,keyString).toUpperCase();
     }
