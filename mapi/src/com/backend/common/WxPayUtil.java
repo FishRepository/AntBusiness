@@ -2,6 +2,7 @@ package com.backend.common;
 
 import com.backend.admin.entity.PayRequest;
 import com.backend.admin.entity.PayResponse;
+import com.backend.admin.entity.WxPayParam;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -106,7 +107,7 @@ public class WxPayUtil {
     }
 
     /*xml字符串*/
-    private static String getXmlInfo(PayRequest payRequest) throws Exception {
+    private static String getXmlInfo(PayRequest payRequest, PayResponse payResponse) throws Exception {
         StringBuilder sb = new StringBuilder();
         String nonce_str = generateString(24);
         String payType = OrderType.getDescByType(payRequest.getOrder_type());
@@ -126,6 +127,13 @@ public class WxPayUtil {
         sb.append("<trade_type>"+trade_type+"</trade_type>");  //交易类型
         sb.append("<sign>"+sign+"</sign>");  //签名
         sb.append("</xml>");
+        //组装微信支付参数给客户端
+        WxPayParam wxPayParam = new WxPayParam();
+        wxPayParam.setMchId(mch_id);
+        wxPayParam.setNonceStr(nonce_str);
+        wxPayParam.setOrderTime(orderTime);
+        wxPayParam.setSign(sign);
+        payResponse.setWxParam(wxPayParam);
         return sb.toString();
     }
     /*xml请求*/
@@ -173,12 +181,12 @@ public class WxPayUtil {
     //请求微信支付统一下单接口 返回payResponse
     public static PayResponse doPay(PayRequest payRequest) throws Exception{
         String urlAPI = "https://api.mch.weixin.qq.com/pay/unifiedorder";
-        String result = doPost(urlAPI, getXmlInfo(payRequest));
+        PayResponse payResponse = new PayResponse();
+        String result = doPost(urlAPI, getXmlInfo(payRequest,payResponse));
         Map<String, Object> resultMap = xml2map(result);
         if(CollectionUtils.isEmpty(resultMap)){
             return null;
         }
-        PayResponse payResponse = new PayResponse();
         if(!resultMap.containsKey("return_code")){
             System.out.print("no return_code");
             return null;

@@ -22,6 +22,10 @@ public class PayResponse implements Serializable {
 
     private boolean result;
 
+    private WxPayParam wxParam;
+
+    private AliPayParam aliPayParam;
+
     public String getOrder_time() {
         return order_time;
     }
@@ -84,5 +88,21 @@ public class PayResponse implements Serializable {
 
     public void setResult(boolean result) {
         this.result = result;
+    }
+
+    public WxPayParam getWxParam() {
+        return wxParam;
+    }
+
+    public void setWxParam(WxPayParam wxParam) {
+        this.wxParam = wxParam;
+    }
+
+    public AliPayParam getAliPayParam() {
+        return aliPayParam;
+    }
+
+    public void setAliPayParam(AliPayParam aliPayParam) {
+        this.aliPayParam = aliPayParam;
     }
 }

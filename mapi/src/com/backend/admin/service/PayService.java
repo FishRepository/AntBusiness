@@ -70,6 +70,7 @@ public class PayService {
         payOrder.setOrder_amount(payRequest.getOrder_money());
         payOrder.setOrder_type(payRequest.getOrder_type());
         payOrder.setState(0);
+        payOrder.setAccount_id(payRequest.getAccount_id());
         payOrderService.insert(payOrder);
     }
 
