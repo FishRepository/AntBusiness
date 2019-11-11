@@ -18,6 +18,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -92,6 +93,18 @@ public class WxPayUtil {
 //        return HMACSHA256.sha256_HMAC(stringSignTemp,keyString).toUpperCase();
     }
 
+    //统一下单接口返回正常的prepay_id重新签名
+    private static String return2Sign(String nonce_str, String prepayid, String timestamp) throws Exception{
+        String parmString = "appid=" + appid +
+                "&partnerid=" + mch_id+
+                "&prepayid=" + prepayid +
+                "&noncestr="+nonce_str +
+                "&timestamp="+timestamp;
+        String stringSignTemp = parmString+"&Sign=WXPay";
+        return MD5Util.MD5(stringSignTemp).toUpperCase();
+//        return HMACSHA256.sha256_HMAC(stringSignTemp,keyString).toUpperCase();
+    }
+
     //生成订单号
     public String returnOrderNumb() {
         String orderString = new SimpleDateFormat("yyyyMMddHH").format(new Date());
@@ -131,8 +144,8 @@ public class WxPayUtil {
         WxPayParam wxPayParam = new WxPayParam();
         wxPayParam.setMchId(mch_id);
         wxPayParam.setNonceStr(nonce_str);
-        wxPayParam.setOrderTime(orderTime);
-        wxPayParam.setSign(sign);
+        String timestamp = String.valueOf(System.currentTimeMillis());
+        wxPayParam.setTimestamp(timestamp);
         payResponse.setWxParam(wxPayParam);
         return sb.toString();
     }
@@ -210,8 +223,13 @@ public class WxPayUtil {
             payResponse.setResult(false);
             return payResponse;
         }
+        String prepayId = resultMap.get("prepay_id").toString();
+        //重新签名
+        WxPayParam wxParam = payResponse.getWxParam();
+        String return2Sign = return2Sign(payResponse.getWxParam().getNonceStr(), prepayId, payResponse.getWxParam().getTimestamp());
+        wxParam.setSign(return2Sign);
         payResponse.setResult(true);
-        payResponse.setPrepay_id(resultMap.get("prepay_id").toString());
+        payResponse.setPrepay_id(prepayId);
         return payResponse;
     }
 

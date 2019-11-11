@@ -13,7 +13,7 @@ public class WxPayParam implements Serializable {
 
     private String nonceStr;
 
-    private String orderTime;
+    private String timestamp;
 
     private String sign;
 
@@ -33,12 +33,12 @@ public class WxPayParam implements Serializable {
         this.nonceStr = nonceStr;
     }
 
-    public String getOrderTime() {
-        return orderTime;
+    public String getTimestamp() {
+        return timestamp;
     }
 
-    public void setOrderTime(String orderTime) {
-        this.orderTime = orderTime;
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 
     public String getSign() {
