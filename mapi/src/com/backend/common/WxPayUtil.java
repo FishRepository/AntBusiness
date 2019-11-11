@@ -102,7 +102,6 @@ public class WxPayUtil {
                 "&timestamp="+timestamp;
         String stringSignTemp = parmString+"&Sign=WXPay";
         return MD5Util.MD5(stringSignTemp).toUpperCase();
-//        return HMACSHA256.sha256_HMAC(stringSignTemp,keyString).toUpperCase();
     }
 
     //生成订单号
@@ -140,13 +139,6 @@ public class WxPayUtil {
         sb.append("<trade_type>"+trade_type+"</trade_type>");  //交易类型
         sb.append("<sign>"+sign+"</sign>");  //签名
         sb.append("</xml>");
-        //组装微信支付参数给客户端
-        WxPayParam wxPayParam = new WxPayParam();
-        wxPayParam.setMchId(mch_id);
-        wxPayParam.setNonceStr(nonce_str);
-        String timestamp = String.valueOf(System.currentTimeMillis());
-        wxPayParam.setTimestamp(timestamp);
-        payResponse.setWxParam(wxPayParam);
         return sb.toString();
     }
     /*xml请求*/
@@ -224,10 +216,17 @@ public class WxPayUtil {
             return payResponse;
         }
         String prepayId = resultMap.get("prepay_id").toString();
+        String nonceStr = generateString(24);
+        //组装微信支付参数给客户端
+        WxPayParam wxPayParam = new WxPayParam();
+        wxPayParam.setMchId(mch_id);
+        String timestamp = String.valueOf(System.currentTimeMillis());
+        wxPayParam.setTimestamp(timestamp);
         //重新签名
-        WxPayParam wxParam = payResponse.getWxParam();
-        String return2Sign = return2Sign(payResponse.getWxParam().getNonceStr(), prepayId, payResponse.getWxParam().getTimestamp());
-        wxParam.setSign(return2Sign);
+        String return2Sign = return2Sign(nonceStr, prepayId, timestamp);
+        wxPayParam.setSign(return2Sign);
+        wxPayParam.setNonceStr(nonceStr);
+        payResponse.setWxParam(wxPayParam);
         payResponse.setResult(true);
         payResponse.setPrepay_id(prepayId);
         return payResponse;
