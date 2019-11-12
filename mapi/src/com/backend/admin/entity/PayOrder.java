@@ -11,7 +11,7 @@ public class PayOrder implements Serializable {
     private static final long serialVersionUID = -41015129354486958L;
     //订单编号UUID
     private String order_no;
-    //消费类型1,会员充值2,商品下载
+    //消费类型1年费;2连续包月;3月付费;4兑换下载
     private Integer order_type;
     //交易时间yyyyMMddHHmmss
     private Date create_time;

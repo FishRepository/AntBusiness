@@ -189,7 +189,7 @@ public class AccountService {
 				account.setIs_new(1);
 				account.setIs_vip(1);
 				//注册送一个月VIP日期
-				Date vipTime = DateUtil.adjustDateByHour(new Date() ,30,1);
+				Date vipTime = DateUtil.adjustDateByDay(new Date() ,30,1);
 				account.setVip_time(DateUtil.setEnd(vipTime,1));
 				account.setVip_type(1);
 				if(accountMapper.checkAccountCode(accountcode) > 0){

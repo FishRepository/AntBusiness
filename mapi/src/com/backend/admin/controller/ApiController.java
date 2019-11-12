@@ -345,6 +345,21 @@ public class ApiController extends BaseController{
     }
 
     /**
+     * 客户端更新订单状态
+     * @param payOrder
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/editeState")
+    public Object editeState(PayOrder payOrder){
+        boolean result = accountV2Service.editeState(payOrder);
+        if(result){
+            return success();
+        }
+        return error();
+    }
+
+    /**
      * 品牌图片上传
      * @param file
      * @return

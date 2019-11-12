@@ -356,6 +356,29 @@ public class DateUtil {
         return p.matcher(date).matches();
     }
 
+    /*****
+     * 时间 增加、减少 n天以后时间
+     * @param d
+     *          YYYY-mm-dd HH:mm:ss
+     * @param num>0  小时
+     * @param type  增加和减少标志
+     * **/
+    public static Date adjustDateByDay(Date d ,Integer num, int  type) {
+        Calendar Cal= Calendar.getInstance();
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Cal.setTime(d);
+        if(type==0){
+            Cal.add(Calendar.DATE,-num);
+            // System.out.println("date:"+df.format(Cal.getTime()));
+
+        }else
+        {
+            Cal.add(Calendar.DATE,num);
+            //System.out.println("date:"+df.format(Cal.getTime()));
+        }
+        return Cal.getTime();
+    }
+
 
     /*****
      * 时间 增加、减少 n个小时以后时间
