@@ -109,26 +109,33 @@ public class AccountV2Service {
 
     @Transactional(rollbackFor = Exception.class)
     public boolean editeState(PayOrder payOrder) {
-        if(payOrder==null || payOrder.getAccount_id()==null || payOrder.getState()==null
-                || StringUtils.isBlank(payOrder.getOrder_no())){
+        if(payOrder==null || payOrder.getState()==null || StringUtils.isBlank(payOrder.getOrder_no())){
+            LOGGER.error("editeState error: payOrder==null");
             return false;
         }
         PayOrder payOrderLast = payOrderMapper.queryById(payOrder.getOrder_no());
         //若库中订单状态不是等待支付  返回
         if(payOrderLast==null || !payOrderLast.getState().equals(0)){
+            LOGGER.error("editeState error: payOrderLast==null");
             return false;
         }
         //订单状态修改成功后更新相应的服务
         int update = payOrderMapper.update(payOrder);
         if(update<0){
+            LOGGER.error("editeState error: payOrderMapper.update(payOrder) error");
             return false;
         }
         //交易取消，返回
         if(payOrder.getState().equals(2)){
+            LOGGER.error("editeState error: deal cancel");
             return false;
         }
         try {
-            Account account = accountMapper.queryAccountById(payOrder.getAccount_id());
+            Account account = accountMapper.queryAccountById(payOrderLast.getAccount_id());
+            if(account==null){
+                LOGGER.error("editeState error: account==null");
+                return false;
+            }
             //消费类型1年费;2连续包月;3月付费;4兑换下载
             //1年费会员2月费会员
             int days = 30;

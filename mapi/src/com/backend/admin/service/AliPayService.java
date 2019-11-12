@@ -28,6 +28,9 @@ public class AliPayService {
 
     @Autowired
     private PayOrderService payOrderService;
+
+    @Autowired
+    private AccountV2Service accountV2Service;
     /**
      * <pre>
      * 第一步:验证签名,签名通过后进行第二步
@@ -66,15 +69,10 @@ public class AliPayService {
                                 || trade_status.equals(AlipayConfig.TRADE_FINISHED)) {
                             // 处理支付成功逻辑
                             try {
-                                /*
-                                    // 处理业务逻辑。。。
-                                    myService.process(param);
-                                */
-                                PayOrder payOrder = payOrderService.queryById(param.getOutTradeNo());
-                                if(payOrder!=null){
-                                    payOrder.setState(1);
-                                    payOrderService.update(payOrder);
-                                }
+                                PayOrder payOrder = new PayOrder();
+                                payOrder.setOrder_no(param.getOutTradeNo());
+                                payOrder.setState(1);
+                                accountV2Service.editeState(payOrder);
                             } catch (Exception e) {
                                 LOGGER.error("支付宝回调业务处理报错,params:" + paramsJson, e);
                             }

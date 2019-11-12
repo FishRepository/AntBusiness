@@ -24,6 +24,9 @@ public class PayService {
     @Autowired
     private PayOrderService payOrderService;
 
+    @Autowired
+    private AccountV2Service accountV2Service;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(PayService.class);
 
     private ExecutorService executorService = Executors.newFixedThreadPool(20);
@@ -179,13 +182,10 @@ public class PayService {
                     // 处理支付成功逻辑
                     try {
                         if(StringUtils.isNotBlank(out_trade_no)){
-                            PayOrder payOrder = payOrderService.queryById(out_trade_no);
-                            if(payOrder!=null){
-                                payOrder.setState(1);
-                                payOrderService.update(payOrder);
-                            }else {
-                                LOGGER.error("支付宝回调返回订单查询为空,params:" + params);
-                            }
+                            PayOrder payOrder = new PayOrder();
+                            payOrder.setOrder_no(out_trade_no);
+                            payOrder.setState(1);
+                            accountV2Service.editeState(payOrder);
                         }else {
                             LOGGER.error("支付宝回调返回订单号为空,params:" + params);
                         }

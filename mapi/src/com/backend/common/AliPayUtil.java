@@ -26,7 +26,7 @@ public class AliPayUtil {
      * @param random
      * @return
      */
-    private static String getsign(String amount, String random){
+    private static AlipayTradeAppPayResponse getsign(String amount, String random){
         //实例化客户端
         AlipayClient alipayClient = new DefaultAlipayClient(AlipayConfig.GATE,
                 AlipayConfig.APPID,
@@ -49,7 +49,7 @@ public class AliPayUtil {
         model.setProductCode("QUICK_MSECURITY_PAY");// 销售产品码，商家和支付宝签约的产品码，为固定值QUICK_MSECURITY_PAY
         request.setBizModel(model);
         // 设置后台异步通知的地址，在手机端支付成功后支付宝会通知后台，手机端的真实支付结果依赖于此地址
-        request.setNotifyUrl("http://catering.saimark.xusage.com/catering/a/RechargeUpdateFromAlipayNotify.xml");
+        request.setNotifyUrl("https://www.ta521.com/mapi/v2/alipayCallback");
         AlipayTradeAppPayResponse response;
         try {
             //这里和普通的接口调用不同，使用的是sdkExecute
@@ -59,7 +59,7 @@ public class AliPayUtil {
             LOGGER.error("Interface call error: "+e.getMessage());
             return null;
         }
-        return response.getBody();
+        return response;
     }
 
 
@@ -79,26 +79,21 @@ public class AliPayUtil {
     public static PayResponse doPay(PayRequest payRequest){
         PayResponse payResponse = new PayResponse();
         double orderAmount = new BigDecimal((float)payRequest.getOrder_money()/100).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-        String signJson = getsign(String.valueOf(orderAmount), payRequest.getOrderNo());
-        if(StringUtils.isBlank(signJson)){
+        AlipayTradeAppPayResponse tradeAppPayResponse = getsign(String.valueOf(orderAmount), payRequest.getOrderNo());
+        if(tradeAppPayResponse==null){
             return null;
         }
         try {
-            JSONObject jsonObject = JSONObject.parseObject(signJson);
-            String payResponseStr = jsonObject.getString("alipay_trade_app_pay_response");
-            String sign = jsonObject.getString("sign");
-            AlipayTradeAppPayResponse alipayTradeAppPayResponse = JSONObject.parseObject(payResponseStr, AlipayTradeAppPayResponse.class);
-            if("10000".equals(alipayTradeAppPayResponse.getCode())){
+            if("10000".equals(tradeAppPayResponse.getCode())){
                 payResponse.setResult(true);
-                payResponse.setSign(sign);
+                payResponse.setSign(tradeAppPayResponse.getBody());
             }else {
                 payResponse.setResult(false);
-                payResponse.setErr_code(alipayTradeAppPayResponse.getSubCode());
-                payResponse.setErr_code_des(alipayTradeAppPayResponse.getSubMsg());
+                payResponse.setErr_code(tradeAppPayResponse.getSubCode());
+                payResponse.setErr_code_des(tradeAppPayResponse.getSubMsg());
             }
-
         } catch (Exception e) {
-            LOGGER.error("JSON parse error: "+e.getMessage());
+            LOGGER.error("AliPayUtil doPay error: "+e.getMessage());
             return null;
         }
         return payResponse;
