@@ -96,11 +96,12 @@ public class WxPayUtil {
     //统一下单接口返回正常的prepay_id重新签名
     private static String return2Sign(String nonce_str, String prepayid, String timestamp) throws Exception{
         String parmString = "appid=" + appid +
+                "&noncestr="+nonce_str +
+                "&package=Sign=WXPay"+
                 "&partnerid=" + mch_id+
                 "&prepayid=" + prepayid +
-                "&noncestr="+nonce_str +
                 "&timestamp="+timestamp;
-        String stringSignTemp = parmString+"&Sign=WXPay";
+        String stringSignTemp = parmString+"&key="+secret;
         return MD5Util.MD5(stringSignTemp).toUpperCase();
     }
 
