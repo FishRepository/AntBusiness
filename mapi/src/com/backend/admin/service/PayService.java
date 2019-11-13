@@ -169,7 +169,8 @@ public class PayService {
             System.out.println("===============付款成功==============");
             String total_fee = params.get("total_fee");
             double v = Double.valueOf(total_fee) / 100;
-            String out_trade_no = String.valueOf(Long.parseLong(params.get("out_trade_no").split("O")[0]));
+            String out_trade_no = params.get("out_trade_no").split("O")[0];
+            LOGGER.info("out_trade_no: "+out_trade_no);
             Date accountTime = DateUtil.stringtoDate(params.get("time_end"), "yyyyMMddHHmmss");
             String ordertime = DateUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss");
             String totalAmount = String.valueOf(v);
