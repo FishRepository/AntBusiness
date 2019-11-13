@@ -1,7 +1,6 @@
 package com.backend.common;
 
 
-import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
@@ -9,7 +8,6 @@ import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.backend.admin.entity.PayRequest;
 import com.backend.admin.entity.PayResponse;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,14 +82,14 @@ public class AliPayUtil {
             return null;
         }
         try {
-            if("10000".equals(tradeAppPayResponse.getCode())){
+//            if("10000".equals(tradeAppPayResponse.getCode())){
                 payResponse.setResult(true);
                 payResponse.setSign(tradeAppPayResponse.getBody());
-            }else {
-                payResponse.setResult(false);
-                payResponse.setErr_code(tradeAppPayResponse.getSubCode());
-                payResponse.setErr_code_des(tradeAppPayResponse.getSubMsg());
-            }
+//            }else {
+//                payResponse.setResult(false);
+//                payResponse.setErr_code(tradeAppPayResponse.getSubCode());
+//                payResponse.setErr_code_des(tradeAppPayResponse.getSubMsg());
+//            }
         } catch (Exception e) {
             LOGGER.error("AliPayUtil doPay error: "+e.getMessage());
             return null;
