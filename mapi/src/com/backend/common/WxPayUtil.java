@@ -23,15 +23,15 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class WxPayUtil {
-    private final static String keyString = "7f86b2d529779abf05543da15be00eb5";
-    private final static String appid = "wx9989621fbe68b03b";
-    private final static String secret =    "e7084d91bead78acebbd3cfe3f025040";//商户号后台已设置
-    private final static String mch_id = "1541127161";  //商户号1481599512
-    private final static String body = "番茄科技-"; //
-    private final static String spbill_create_ip = "172.18.36.67"; //172.18.36.67
-    private final static String notify_url = "https://www.ta521.com/mapi/v2/wxpayCallback";
-    private final static String trade_type = "APP";//JSAPI  NATIVE  APP
-    private final static String apiUrlStr = "https://api.weixin.qq.com/sns/jscode2session?appid="+appid+"&secret="+secret+"&grant_type=authorization_code&js_code=";
+    public final static String keyString = "7f86b2d529779abf05543da15be00eb5";
+    public final static String appid = "wx9989621fbe68b03b";
+    public final static String secret =    "e7084d91bead78acebbd3cfe3f025040";//商户号后台已设置
+    public final static String mch_id = "1541127161";  //商户号1481599512
+    public final static String body = "番茄科技-"; //
+    public final static String spbill_create_ip = "172.18.36.67"; //172.18.36.67
+    public final static String notify_url = "https://www.ta521.com/mapi/v2/wxpayCallback";
+    public final static String trade_type = "APP";//JSAPI  NATIVE  APP
+    public final static String apiUrlStr = "https://api.weixin.qq.com/sns/jscode2session?appid="+appid+"&secret="+secret+"&grant_type=authorization_code&js_code=";
 
     //生成25位随机字符串
     private static final String allChar = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";

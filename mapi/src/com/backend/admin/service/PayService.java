@@ -161,6 +161,7 @@ public class PayService {
             inStream.close();
             if (!PayCommonUtil.isTenpaySign(params)) {
                 // 支付失败
+                LOGGER.info("微信支付回调TenpaySign错误");
                 return_data.put("return_code", "FAIL");
                 return_data.put("return_msg", "return_code不正确");
                 return GetMapToXML(return_data);
@@ -186,6 +187,7 @@ public class PayService {
                             payOrder.setOrder_no(out_trade_no);
                             payOrder.setState(1);
                             accountV2Service.editeState(payOrder);
+                            LOGGER.info("微信支付回调正常处理");
                         }else {
                             LOGGER.error("支付宝回调返回订单号为空,params:" + params);
                         }
@@ -197,6 +199,7 @@ public class PayService {
             });
             executorService.shutdown();
         }catch (Exception e){
+            LOGGER.info("微信支付回调异常: "+e.getMessage());
             return_data.put("return_code", "FAIL");
             return_data.put("return_msg", "SYSTEM ERROR");
             return GetMapToXML(return_data);

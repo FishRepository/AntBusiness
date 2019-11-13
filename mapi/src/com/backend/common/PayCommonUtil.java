@@ -11,12 +11,10 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
 import org.dom4j.Document;
-import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import javax.net.ssl.SSLContext;
-import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
@@ -118,7 +116,7 @@ public class PayCommonUtil {
                 sb.append(k + "=" + v + "&");
             }
         }
-        sb.append("key=" + API_KEY);
+        sb.append("key=" + WxPayUtil.secret);
 
         //将API返回的数据根据用签名算法进行计算新的签名，用来跟API返回的签名进行比较
         //算出签名
