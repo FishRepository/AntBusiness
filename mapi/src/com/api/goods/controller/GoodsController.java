@@ -286,4 +286,10 @@ public class GoodsController {
 	public Object queryAllHotBrand(Integer account_id){
 		return goodsService.queryAllHotBrand(account_id);
 	}
+
+	@ResponseBody
+	@RequestMapping(value = "/setBrandStockRemain")
+	public Object setBrandStockRemain(Brand brand){
+		return goodsService.setBrandStockRemain(brand);
+	}
 }

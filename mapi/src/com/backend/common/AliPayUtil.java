@@ -75,16 +75,17 @@ public class AliPayUtil {
     //    }
     //请求支付宝支付统一下单接口 返回payResponse
     public static PayResponse doPay(PayRequest payRequest){
-        PayResponse payResponse = new PayResponse();
+        PayResponse payResponse = null;
+        try {
+        payResponse= new PayResponse();
         double orderAmount = new BigDecimal((float)payRequest.getOrder_money()/100).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
         AlipayTradeAppPayResponse tradeAppPayResponse = getsign(String.valueOf(orderAmount), payRequest.getOrderNo());
         if(tradeAppPayResponse==null){
             return null;
         }
-        try {
 //            if("10000".equals(tradeAppPayResponse.getCode())){
-                payResponse.setResult(true);
-                payResponse.setSign(tradeAppPayResponse.getBody());
+        payResponse.setResult(true);
+        payResponse.setSign(tradeAppPayResponse.getBody());
 //            }else {
 //                payResponse.setResult(false);
 //                payResponse.setErr_code(tradeAppPayResponse.getSubCode());

@@ -201,6 +201,10 @@ public class GoodsService {
 							&& StringUtils.isNotBlank(brandImagesResults.get(0).getBrandimages_url())){
 						brandAndAgentLevel.setBrandimages_url(brandImagesResults.get(0).getBrandimages_url());
 					}
+					BrandGoodsInfo brandGoodsInfo = goodsMapper.queryBrandGoods(brand);
+					if(brandGoodsInfo!=null){
+						brandAndAgentLevel.setBrandGoodsInfo(brandGoodsInfo);
+					}
 				}
 			}
 			result.setCode(0);
@@ -1469,6 +1473,23 @@ public class GoodsService {
 		}else{
 			result.setCode(1);
 			result.setMsg("查询失败");
+		}
+		return result;
+	}
+
+	public Result setBrandStockRemain(Brand brand) {
+		Result result = new Result();
+		if(brand.getBrand_id()==null || brand.getStockRemind()==null){
+			result.setCode(1);
+			result.setMsg("必填参数为空");
+			return result;
+		}
+		if(goodsMapper.setBrandStockRemain(brand) > 0 ){
+			result.setMsg("设置成功");
+			result.setCode(0);
+		} else{
+			result.setMsg("设置失败");
+			result.setCode(1);
 		}
 		return result;
 	}

@@ -13,6 +13,7 @@ public class Brand{
 	private Date create_time;
 	private Date update_time;
 	private Integer state;
+	private Integer stockRemind;//库存提醒数量
 	
 	public Integer getBrand_id() {
 		return brand_id;
@@ -67,5 +68,13 @@ public class Brand{
 	}
 	public void setState(Integer state) {
 		this.state = state;
+	}
+
+	public Integer getStockRemind() {
+		return stockRemind;
+	}
+
+	public void setStockRemind(Integer stockRemind) {
+		this.stockRemind = stockRemind;
 	}
 }

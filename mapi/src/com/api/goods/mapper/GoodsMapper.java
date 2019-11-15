@@ -183,4 +183,6 @@ public interface GoodsMapper {
 	public String queryNowdate();
 
 	public BrandGoodsInfo queryBrandGoods(Brand brand);
+
+	public int setBrandStockRemain(Brand brand);
 }
