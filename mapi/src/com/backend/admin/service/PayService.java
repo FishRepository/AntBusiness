@@ -129,9 +129,30 @@ public class PayService {
         }
         //交易列表包含当前交易，则认为交易成功
         if (transactionIds.contains(iosPayVerifyRequest.getTransaction_id())) {
-            //TODO 处理业务逻辑
-            LOGGER.info("交易成功，新增并处理订单：{}",iosPayVerifyRequest.getTransaction_id());
-        //"充值成功"
+            //"充值成功"
+            //异步处理本地订单状态
+            executorService.execute(new Runnable() {
+                @Override
+                public void run() {
+                    LOGGER.info("交易成功，新增并处理订单：{}",iosPayVerifyRequest.getTransaction_id());
+                    PayOrder payOrder = new PayOrder();
+                    String orderNo = UUID.randomUUID().toString().replaceAll("-", "");
+                    payOrder.setAccount_id(iosPayVerifyRequest.getAccount_id());
+                    payOrder.setOrder_amount(iosPayVerifyRequest.getOrder_money());
+                    payOrder.setOrder_no(orderNo);
+                    payOrder.setState(0);
+                    payOrder.setOrder_type(iosPayVerifyRequest.getOrder_type());
+                    int insert = payOrderService.insert(payOrder);
+                    if(insert>0){
+                        payOrder = new PayOrder();
+                        payOrder.setOrder_no(orderNo);
+                        payOrder.setState(1);
+                        accountV2Service.editeState(payOrder);
+                    }else{
+                        LOGGER.error("IOS插入订单失败,单号: "+iosPayVerifyRequest.getTransaction_id());
+                    }
+                }
+            });
             return true;
         }
         return false;
@@ -221,19 +242,4 @@ public class PayService {
         sb.append("</xml>");
         return sb.toString();
     }
-
-    public static void main(String[] args) {
-        ExecutorService ex = Executors.newFixedThreadPool(20);
-        ex.execute(new Runnable() {
-            @Override
-            public void run() {
-                System.out.printf("1111111");
-                Thread.interrupted();
-                System.out.printf("222222");
-            }
-        });
-        ex.shutdown();
-    }
-
-
 }
