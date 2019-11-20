@@ -424,8 +424,8 @@
 			   b.stock_remind as stockRemind
 		from goods g join brand b
 		on g.brand_id = b.brand_id
-		where state = 1
-		and account_id = #{account_id} and brand_id = #{brand_id}
+		where b.state = 1
+		and b.account_id = #{account_id} and b.brand_id = #{brand_id}
 		order by goods_index,goods_id
 	</select>
 
