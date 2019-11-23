@@ -292,4 +292,14 @@ public class GoodsController {
 	public Object setBrandStockRemain(Brand brand){
 		return goodsService.setBrandStockRemain(brand);
 	}
+
+	/**
+	 * 查询推荐品牌  bran   is_hot在后台设置
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/selectHotBrand")
+	public Object selectHotBrand(){
+		return goodsService.selectHotBrand();
+	}
 }

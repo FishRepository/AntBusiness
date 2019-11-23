@@ -432,4 +432,9 @@
 	<update id="setBrandStockRemain" parameterType="com.api.goods.entity.Brand">
 		update brand set stock_remind = #{stock_remind} where brand_id = #{brand_id}
 	</update>
+
+	<select id="selectHotBrand" resultType="com.api.goods.entity.Brand">
+		select * from brand where state = 1 and  brand_downloadcode is not null and is_hot = 1
+	</select>
+
 </mapper>

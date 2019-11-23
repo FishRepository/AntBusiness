@@ -8,6 +8,8 @@ import java.util.TreeMap;
 
 import com.api.goods.entity.*;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +27,8 @@ import org.springframework.util.CollectionUtils;
 public class GoodsService {
 	@Autowired
     private GoodsMapper goodsMapper;
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(GoodsService.class);
 	
 	public InsertBrandResult insertBrand(InsertBrand insertbrand){
 		InsertBrandResult result = new InsertBrandResult();
@@ -1479,7 +1483,7 @@ public class GoodsService {
 
 	public Result setBrandStockRemain(Brand brand) {
 		Result result = new Result();
-		if(brand.getBrand_id()==null || brand.getStockRemind()==null){
+		if(brand.getBrand_id()==null || brand.getStock_remind()==null){
 			result.setCode(1);
 			result.setMsg("必填参数为空");
 			return result;
@@ -1490,6 +1494,37 @@ public class GoodsService {
 		} else{
 			result.setMsg("设置失败");
 			result.setCode(1);
+		}
+		return result;
+	}
+
+	public Object selectHotBrand() {
+		Result result = new Result();
+		try {
+			List<Brand> brands = goodsMapper.selectHotBrand();
+			List<HotBrandResult> hotBrandResults = new ArrayList<>();
+			HotBrandResult hotBrandResult;
+			for (Brand brand:brands) {
+				hotBrandResult = new HotBrandResult();
+				hotBrandResult.setBrand(brand);
+				List<BrandImagesResult> brandImagesResults = goodsMapper.queryBrandImages(brand);
+				hotBrandResult.setBrandImagesResults(brandImagesResults);
+				List<AgentLevel> agentLevels = goodsMapper.queryAgentLevel(brand);
+				hotBrandResult.setAgentLevels(agentLevels);
+				hotBrandResults.add(hotBrandResult);
+			}
+			if(!CollectionUtils.isEmpty(hotBrandResults)){
+				result.setCode(0);
+				result.setMsg("success");
+				result.setData(hotBrandResults);
+			}else{
+				result.setCode(1);
+				result.setMsg("fail");
+			}
+		} catch (Exception e) {
+			LOGGER.error("GoodsService selectHotBrand error: "+e.getMessage());
+			result.setCode(1);
+			result.setMsg("fail");
 		}
 		return result;
 	}

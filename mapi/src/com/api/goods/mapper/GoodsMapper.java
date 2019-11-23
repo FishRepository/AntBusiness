@@ -185,4 +185,6 @@ public interface GoodsMapper {
 	public BrandGoodsInfo queryBrandGoods(Brand brand);
 
 	public int setBrandStockRemain(Brand brand);
+
+	public List<Brand> selectHotBrand();
 }

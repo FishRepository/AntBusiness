@@ -13,7 +13,10 @@ public class Brand{
 	private Date create_time;
 	private Date update_time;
 	private Integer state;
-	private Integer stockRemind;//库存提醒数量
+	private Integer stock_remind;//库存提醒数量
+	private Integer is_hot;
+	private Integer brand_info;
+
 	
 	public Integer getBrand_id() {
 		return brand_id;
@@ -70,11 +73,27 @@ public class Brand{
 		this.state = state;
 	}
 
-	public Integer getStockRemind() {
-		return stockRemind;
+	public Integer getStock_remind() {
+		return stock_remind;
 	}
 
-	public void setStockRemind(Integer stockRemind) {
-		this.stockRemind = stockRemind;
+	public void setStock_remind(Integer stock_remind) {
+		this.stock_remind = stock_remind;
+	}
+
+	public Integer getIs_hot() {
+		return is_hot;
+	}
+
+	public void setIs_hot(Integer is_hot) {
+		this.is_hot = is_hot;
+	}
+
+	public Integer getBrand_info() {
+		return brand_info;
+	}
+
+	public void setBrand_info(Integer brand_info) {
+		this.brand_info = brand_info;
 	}
 }
