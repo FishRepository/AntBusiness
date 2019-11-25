@@ -11,7 +11,7 @@ public class BrandRecommend{
 
 	private Integer stock_remind;//库存提醒数量
 	private Integer is_hot;
-	private Integer brand_info;
+	private String brand_info;
 	private String logo_url;
 	private String title;
 
@@ -62,11 +62,11 @@ public class BrandRecommend{
 		this.is_hot = is_hot;
 	}
 
-	public Integer getBrand_info() {
+	public String getBrand_info() {
 		return brand_info;
 	}
 
-	public void setBrand_info(Integer brand_info) {
+	public void setBrand_info(String brand_info) {
 		this.brand_info = brand_info;
 	}
 
