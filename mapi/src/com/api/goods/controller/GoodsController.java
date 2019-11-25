@@ -1,26 +1,13 @@
 package com.api.goods.controller;
 
+import com.api.common.entity.Result;
+import com.api.goods.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.api.goods.entity.AgentLevel;
-import com.api.goods.entity.Brand;
-import com.api.goods.entity.BrandImages;
-import com.api.goods.entity.Goods;
-import com.api.goods.entity.GoodsPrice;
-import com.api.goods.entity.GoodsPriceQuery;
-import com.api.goods.entity.IndexAgentLevelList;
-import com.api.goods.entity.IndexBrandList;
-import com.api.goods.entity.IndexGoodsList;
-import com.api.goods.entity.InsertBrand;
-import com.api.goods.entity.InsertGoods;
-import com.api.goods.entity.ListPageRecommendBrand;
-import com.api.goods.entity.ShareCreate;
-import com.api.goods.entity.ShareDownload;
-import com.api.goods.entity.UpdateGoods;
 import com.api.goods.service.GoodsService;
 
 @Controller
@@ -301,5 +288,15 @@ public class GoodsController {
 	@RequestMapping(value = "/selectHotBrand")
 	public Object selectHotBrand(){
 		return goodsService.selectHotBrand();
+	}
+
+	/**
+	 * 查询品牌详情
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/getBrandInfo")
+	public Result getBrandInfo(Integer brand_id){
+		return goodsService.getBrandInfo(brand_id);
 	}
 }

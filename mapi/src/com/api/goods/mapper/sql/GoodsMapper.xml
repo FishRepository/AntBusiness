@@ -73,7 +73,10 @@
 	</select>
 	
 	<select id="queryRecommendBrand" parameterType="com.api.goods.entity.Brand" resultType="com.api.goods.entity.BrandRecommend">
-		select b.brand_id,b.brand_name,b.goods_count,bp.brand_price,(select count(*) from brand br where br.brand_from = b.brand_id and br.state = 1 and br.account_id = #{account_id}) isdownload from brand b,brandprice bp where b.brand_id = bp.brand_id and b.account_id = 0 and b.state = 1 and bp.state = 1 and b.brand_id = #{brand_id} 
+		select b.brand_id,b.brand_name,b.goods_count,bp.brand_price,b.stock_remind,b.is_hot,b.brand_info,b.logo_url,b.title,
+		(select count(*) from brand br where br.brand_from = b.brand_id and br.state = 1 and br.account_id = #{account_id})
+		isdownload from brand b,brandprice bp
+		where b.brand_id = bp.brand_id and b.account_id = 0 and b.state = 1 and bp.state = 1 and b.brand_id = #{brand_id}
 	</select>
 	
 	<select id="checkRecommendBrand" parameterType="com.api.goods.entity.Brand" resultType="int">
@@ -203,7 +206,9 @@
 	</select>
 	
 	<select id="queryGoodsList" parameterType="com.api.goods.entity.Brand" resultType="com.api.goods.entity.Goods">
-		select goods_id,goods_name,goods_price,goods_stock,goods_threshold,goods_scale,goods_index from goods where state = 1 and account_id = #{account_id} and brand_id = #{brand_id} order by goods_index,goods_id
+		select goods_id,goods_name,goods_price,goods_stock,goods_threshold,goods_scale,goods_index,
+		 goods_setstock,img_url,download_price,goods_unit
+		 from goods where state = 1 and account_id = #{account_id} and brand_id = #{brand_id} order by goods_index,goods_id
 	</select>
 	
 	<select id="queryGoodsStockList" parameterType="Integer" resultType="com.api.goods.entity.GoodsAndGoodsStock">
@@ -435,6 +440,10 @@
 
 	<select id="selectHotBrand" resultType="com.api.goods.entity.Brand">
 		select * from brand where state = 1 and  brand_downloadcode is not null and is_hot = 1
+	</select>
+
+	<select id="getBrandInfo" parameterType="java.lang.Integer" resultType="com.api.goods.entity.Brand">
+		SELECT * FROM brand WHERE state = 1 AND brand_id = #{id}
 	</select>
 
 </mapper>

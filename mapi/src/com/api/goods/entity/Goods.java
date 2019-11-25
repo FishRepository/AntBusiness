@@ -16,7 +16,12 @@ public class Goods{
 	private Date create_time;
 	private Date update_time;
 	private Integer state;
-	
+
+	private Integer goods_setstock;//是否设置过库存 0未设置 1已设置
+	private String img_url;
+	private Double download_price;
+	private String goods_unit;
+
 	public Integer getGoods_id() {
 		return goods_id;
 	}
@@ -88,5 +93,37 @@ public class Goods{
 	}
 	public void setState(Integer state) {
 		this.state = state;
+	}
+
+	public String getImg_url() {
+		return img_url;
+	}
+
+	public void setImg_url(String img_url) {
+		this.img_url = img_url;
+	}
+
+	public Double getDownload_price() {
+		return download_price;
+	}
+
+	public void setDownload_price(Double download_price) {
+		this.download_price = download_price;
+	}
+
+	public String getGoods_unit() {
+		return goods_unit;
+	}
+
+	public void setGoods_unit(String goods_unit) {
+		this.goods_unit = goods_unit;
+	}
+
+	public Integer getGoods_setstock() {
+		return goods_setstock;
+	}
+
+	public void setGoods_setstock(Integer goods_setstock) {
+		this.goods_setstock = goods_setstock;
 	}
 }

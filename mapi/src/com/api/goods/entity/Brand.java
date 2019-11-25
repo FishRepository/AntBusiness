@@ -13,10 +13,15 @@ public class Brand{
 	private Date create_time;
 	private Date update_time;
 	private Integer state;
+
 	private Integer stock_remind;//库存提醒数量
 	private Integer is_hot;
 	private Integer brand_info;
+	private String logo_url;
+	private String title;
 
+	private String phone;
+	private String wechat;
 	
 	public Integer getBrand_id() {
 		return brand_id;
@@ -95,5 +100,37 @@ public class Brand{
 
 	public void setBrand_info(Integer brand_info) {
 		this.brand_info = brand_info;
+	}
+
+	public String getLogo_url() {
+		return logo_url;
+	}
+
+	public void setLogo_url(String logo_url) {
+		this.logo_url = logo_url;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getWechat() {
+		return wechat;
+	}
+
+	public void setWechat(String wechat) {
+		this.wechat = wechat;
 	}
 }

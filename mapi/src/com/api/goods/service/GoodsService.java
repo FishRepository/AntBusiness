@@ -1528,4 +1528,27 @@ public class GoodsService {
 		}
 		return result;
 	}
+
+    public BrandInfo getBrandInfo(Integer brand_id) {
+		BrandInfo brandInfo = new BrandInfo();
+		if(brand_id==null){
+			brandInfo.setMsg("查询失败");
+			brandInfo.setCode(1);
+			return brandInfo;
+		}
+		try {
+			brandInfo.setBrand(goodsMapper.getBrandInfo(brand_id));
+			Brand brand = new Brand();
+			brand.setAccount_id(0);
+			brand.setBrand_id(brand_id);
+			brandInfo.setBrandAndImages(goodsMapper.queryBrandImages(brand));
+			brandInfo.setMsg("查询成功");
+			brandInfo.setCode(0);
+		} catch (Exception e) {
+			LOGGER.error("GoodsService getBrandInfo error: "+e.getMessage());
+			brandInfo.setMsg("查询失败");
+			brandInfo.setCode(1);
+		}
+		return brandInfo;
+    }
 }

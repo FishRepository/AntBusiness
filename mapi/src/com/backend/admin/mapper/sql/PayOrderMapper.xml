@@ -16,7 +16,7 @@
     <!--查询单个-->
     <select id="queryById" resultMap="PayOrderMap">
         select
-          order_no, order_type, create_time, order_amount, vip_time, remain_time, state
+          order_no, order_type, create_time, order_amount, vip_time, remain_time, state, account_id
         from fqgj.pay_order
         where order_no = #{order_no}
     </select>
