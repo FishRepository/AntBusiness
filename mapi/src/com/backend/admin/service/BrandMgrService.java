@@ -154,7 +154,7 @@ public class BrandMgrService {
     public Images uploadBrandIcon(MultipartFile file, Integer brand_id, Integer account_id){
         Images images;
         try {
-            if(brand_id==null || file==null || account_id==null){
+            if(file==null || account_id==null){
                 return null;
             }
             images = imagesService.uploadImages(file, "brand", null);
@@ -162,7 +162,7 @@ public class BrandMgrService {
                 return null;
             }
             //保存品牌图片信息
-            if(images.getCode()==0){
+            if(images.getCode()==0 && brand_id!=null){
                 com.api.goods.entity.Brand brand = new com.api.goods.entity.Brand();
                 brand.setAccount_id(account_id);
                 brand.setBrand_id(brand_id);
