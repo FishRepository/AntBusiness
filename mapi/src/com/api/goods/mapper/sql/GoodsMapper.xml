@@ -72,7 +72,6 @@
 		select b.brand_id,b.brand_name,b.goods_count,bp.brand_price,
 		(select count(*) from brand br
 			where br.brand_from = b.brand_id
-			--and br.state = 1  这里注释起来  旧版的已下载逻辑变更
 			and br.account_id = #{account_id}) isdownload
 		from brand b,brandprice bp where b.brand_id = bp.brand_id and b.account_id = 0 and b.state = 1 and bp.state = 1 order by isdownload,b.brand_id
 	</select>
@@ -80,7 +79,6 @@
 	<select id="queryRecommendBrand" parameterType="com.api.goods.entity.Brand" resultType="com.api.goods.entity.BrandRecommend">
 		select b.brand_id,b.brand_name,b.goods_count,bp.brand_price,b.stock_remind,b.is_hot,b.brand_info,b.logo_url,b.title,
 		(select count(*) from brand br where br.brand_from = b.brand_id
- 			--and br.state = 1  这里注释起来  旧版的已下载逻辑变更
 			and br.account_id = #{account_id})
 		isdownload from brand b,brandprice bp
 		where b.brand_id = bp.brand_id and b.account_id = 0 and b.state = 1 and bp.state = 1 and b.brand_id = #{brand_id}
