@@ -189,4 +189,6 @@ public interface GoodsMapper {
 	public List<Brand> selectHotBrand();
 
 	Brand getBrandInfo(Integer id);
+
+	int setBrandHot(Integer is_hot);
 }

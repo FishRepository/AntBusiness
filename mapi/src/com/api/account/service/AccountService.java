@@ -908,7 +908,8 @@ public class AccountService {
 		}
 		return integralvalue;
 	}
-	
+
+	@Transactional(rollbackFor = Exception.class)
 	public DownloadResult downloadbrand(Integer account_id,Integer brand_id){
 		DownloadResult result = new DownloadResult();
 		if(account_id!=null && account_id > 0 && brand_id!=null && brand_id > 0){

@@ -15,10 +15,10 @@ public class Brand{
 	private Integer state;
 
 	private Integer stock_remind;//库存提醒数量
-	private Integer is_hot;
-	private String brand_info;
-	private String logo_url;
-	private String title;
+	private Integer is_hot;//是否推荐品牌
+	private String brand_info;//品牌简介
+	private String logo_url;//品牌logo
+	private String title;//品牌副标题
 
 	private String phone;
 	private String wechat;
