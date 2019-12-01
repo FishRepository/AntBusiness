@@ -144,7 +144,7 @@ public class ApiController extends BaseController{
     }
 
     /**
-     * 获取微信预支付订单号或预支付ID
+     * 获取微信预支付订单号或支付宝预支付ID
      * @param payRequest
      * @return
      * @throws Exception

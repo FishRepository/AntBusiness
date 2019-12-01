@@ -23,8 +23,12 @@ public class PayOrder implements Serializable {
     private Date remain_time;
     //0等待支付;1交易成功;2交易取消
     private Integer state;
+    //支付方式 1 支付宝 2微信  3IOS
+    private Integer pay_type;
     //会员id
     private Integer account_id;
+    //会员联系方式
+    private String user_phone;
 
 
     public String getOrder_no() {
@@ -89,5 +93,21 @@ public class PayOrder implements Serializable {
 
     public void setAccount_id(Integer account_id) {
         this.account_id = account_id;
+    }
+
+    public Integer getPay_type() {
+        return pay_type;
+    }
+
+    public void setPay_type(Integer pay_type) {
+        this.pay_type = pay_type;
+    }
+
+    public String getUser_phone() {
+        return user_phone;
+    }
+
+    public void setUser_phone(String user_phone) {
+        this.user_phone = user_phone;
     }
 }

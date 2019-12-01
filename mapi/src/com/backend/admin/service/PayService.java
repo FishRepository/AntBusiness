@@ -1,7 +1,12 @@
 package com.backend.admin.service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.backend.admin.entity.*;
+import com.api.account.entity.Account;
+import com.api.account.mapper.AccountMapper;
+import com.backend.admin.entity.IOSPayVerifyRequest;
+import com.backend.admin.entity.PayOrder;
+import com.backend.admin.entity.PayRequest;
+import com.backend.admin.entity.PayResponse;
 import com.backend.common.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -26,6 +31,9 @@ public class PayService {
 
     @Autowired
     private AccountV2Service accountV2Service;
+
+    @Autowired
+    private AccountMapper accountMapper;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PayService.class);
 
@@ -74,6 +82,11 @@ public class PayService {
         payOrder.setOrder_type(payRequest.getOrder_type());
         payOrder.setState(0);
         payOrder.setAccount_id(payRequest.getAccount_id());
+        Account accountInfo = accountMapper.getAccountInfo(payRequest.getAccount_id());
+        if(accountInfo!=null){
+            payOrder.setUser_phone(accountInfo.getAccount_userphone());
+        }
+        payOrder.setPay_type(payOrder.getPay_type());
         payOrderService.insert(payOrder);
     }
 
@@ -141,7 +154,12 @@ public class PayService {
                     payOrder.setOrder_amount(iosPayVerifyRequest.getOrder_money());
                     payOrder.setOrder_no(orderNo);
                     payOrder.setState(0);
+                    payOrder.setPay_type(3);
                     payOrder.setOrder_type(iosPayVerifyRequest.getOrder_type());
+                    Account accountInfo = accountMapper.getAccountInfo(iosPayVerifyRequest.getAccount_id());
+                    if(accountInfo!=null){
+                        payOrder.setUser_phone(accountInfo.getAccount_userphone());
+                    }
                     int insert = payOrderService.insert(payOrder);
                     if(insert>0){
                         payOrder = new PayOrder();

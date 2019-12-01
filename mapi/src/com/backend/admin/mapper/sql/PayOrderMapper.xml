@@ -11,12 +11,14 @@
         <result property="remain_time" column="remain_time" jdbcType="TIMESTAMP"/>
         <result property="state" column="state" jdbcType="INTEGER"/>
         <result property="account_id" column="account_id" jdbcType="INTEGER"/>
+        <result property="pay_type" column="pay_type" jdbcType="INTEGER"/>
+        <result property="user_phone" column="user_phone" jdbcType="VARCHAR"/>
     </resultMap>
 
     <!--查询单个-->
     <select id="queryById" resultMap="PayOrderMap">
         select
-          order_no, order_type, create_time, order_amount, vip_time, remain_time, state, account_id
+          order_no, order_type, create_time, order_amount, vip_time, remain_time, state, account_id,pay_type,user_phone
         from fqgj.pay_order
         where order_no = #{order_no}
     </select>
@@ -24,7 +26,7 @@
     <!--查询单个-->
     <select id="queryByAccountId" resultMap="PayOrderMap">
         select
-          order_no, order_type, create_time, order_amount, vip_time, remain_time, state, account_id
+          order_no, order_type, create_time, order_amount, vip_time, remain_time, state, account_id,pay_type,user_phone
         from fqgj.pay_order
         where account_id = #{account_id}
     </select>
@@ -32,7 +34,7 @@
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="PayOrderMap">
         select
-          order_no, order_type, create_time, order_amount, vip_time, remain_time, state
+          order_no, order_type, create_time, order_amount, vip_time, remain_time, state, account_id,pay_type,user_phone
         from fqgj.pay_order
         limit #{offset}, #{limit}
     </select>
@@ -40,7 +42,7 @@
     <!--通过实体作为筛选条件查询-->
     <select id="queryAll" resultMap="PayOrderMap">
         select
-          order_no, order_type, create_time, order_amount, vip_time, remain_time, state
+          order_no, order_type, create_time, order_amount, vip_time, remain_time, state, account_id,pay_type,user_phone
         from fqgj.pay_order
         <where>
             <if test="order_no != null and order_no != ''">
@@ -69,8 +71,8 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="orderNo" useGeneratedKeys="true">
-        insert into fqgj.pay_order(order_no,order_type, create_time, order_amount, vip_time, remain_time, state, account_id)
-        values (#{order_no},#{order_type}, now(), #{order_amount}, #{vip_time}, #{remain_time}, #{state}, #{account_id})
+        insert into fqgj.pay_order(order_no,order_type, create_time, order_amount, vip_time, remain_time, state, account_id,pay_type,user_phone)
+        values (#{order_no},#{order_type}, now(), #{order_amount}, #{vip_time}, #{remain_time}, #{state}, #{account_id}, #{pay_type}, #{user_phone})
     </insert>
 
     <!--通过主键修改数据-->
