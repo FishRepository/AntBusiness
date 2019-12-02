@@ -12,13 +12,14 @@ public class VipPay implements Serializable {
     private static final long serialVersionUID = -21860797062508733L;
     //主键
     private Integer id;
-    //1年费;2连续包月;3月付费
+    //1两年;2一年;3半年
     private Integer type;
     //原价,单位分。19999即为199.99元
     private Integer oriPrice;
     //优惠价,单位分。19999即为199.99元
     private Integer disPrice;
-
+    //设备类型1 安卓 2IOS
+    private Integer osType;
 
     public Integer getId() {
         return id;
@@ -52,4 +53,11 @@ public class VipPay implements Serializable {
         this.disPrice = disPrice;
     }
 
+    public Integer getOsType() {
+        return osType;
+    }
+
+    public void setOsType(Integer osType) {
+        this.osType = osType;
+    }
 }

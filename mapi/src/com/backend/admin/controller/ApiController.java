@@ -291,7 +291,7 @@ public class ApiController extends BaseController{
     @ResponseBody
     @RequestMapping("/getVipPayList")
     public Object getVipPayList(Integer os_type){
-        List<VipPay> vipPayList = accountV2Service.getVipPayList();
+        List<VipPay> vipPayList = accountV2Service.getVipPayList(os_type);
         if(CollectionUtils.isEmpty(vipPayList)){
             return error();
         }

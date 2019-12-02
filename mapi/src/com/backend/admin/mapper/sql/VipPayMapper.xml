@@ -7,6 +7,7 @@
         <result property="type" column="type" jdbcType="INTEGER"/>
         <result property="oriPrice" column="ori_price" jdbcType="INTEGER"/>
         <result property="disPrice" column="dis_price" jdbcType="INTEGER"/>
+        <result property="osType" column="os_type" jdbcType="INTEGER"/>
     </resultMap>
 
     <!--查询单个-->
@@ -20,7 +21,7 @@
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="VipPayMap">
         select
-          id, type, ori_price, dis_price
+          id, type, ori_price, dis_price, os_type
         from fqgj.vip_pay
         limit #{offset}, #{limit}
     </select>
@@ -28,7 +29,7 @@
     <!--通过实体作为筛选条件查询-->
     <select id="queryAll" resultMap="VipPayMap">
         select
-          id, type, ori_price, dis_price
+          id, type, ori_price, dis_price, os_type
         from fqgj.vip_pay
         <where>
             <if test="id != null">
@@ -42,6 +43,9 @@
             </if>
             <if test="disPrice != null">
                 and dis_price = #{disPrice}
+            </if>
+            <if test="osType != null">
+                and os_type = #{osType}
             </if>
         </where>
     </select>

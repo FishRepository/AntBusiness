@@ -48,31 +48,31 @@
             <if test="order_no != null and order_no != ''">
                 and order_no = #{order_no}
             </if>
-            <if test="order_type != null">
+            <if test="order_type != null and order_type != ''">
                 and order_type = #{order_type}
             </if>
-            <if test="create_time != null">
+            <if test="create_time != null and create_time != ''">
                 and create_time = #{create_time}
             </if>
-            <if test="order_amount != null">
+            <if test="order_amount != null and order_amount != ''">
                 and order_amount = #{order_amount}
             </if>
-            <if test="vip_time != null">
+            <if test="vip_time != null and vip_time != ''">
                 and vip_time = #{vip_time}
             </if>
-            <if test="remain_time != null">
+            <if test="remain_time != null and remain_time != ''">
                 and remain_time = #{remain_time}
             </if>
-            <if test="state != null">
+            <if test="state != null and state != ''">
                 and state = #{state}
             </if>
-            <if test="account_id != null">
+            <if test="account_id != null and account_id != ''">
                 and account_id = #{account_id}
             </if>
-            <if test="pay_type != null">
+            <if test="pay_type != null and pay_type != ''">
                 and pay_type = #{pay_type}
             </if>
-            <if test="user_phone != null">
+            <if test="user_phone != null and user_phone != ''">
                 and user_phone = #{user_phone}
             </if>
         </where>

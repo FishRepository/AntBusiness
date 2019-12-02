@@ -69,8 +69,13 @@ public class AccountV2Service {
      * 查询VIP付费信息列表
      * @return
      */
-    public List<VipPay> getVipPayList() {
-        return vipPayMapper.queryAll(new VipPay());
+    public List<VipPay> getVipPayList(Integer os_type) {
+        if(os_type == null){
+            return null;
+        }
+        VipPay vipPay = new VipPay();
+        vipPay.setOsType(os_type);
+        return vipPayMapper.queryAll(vipPay);
     }
 
     /**
