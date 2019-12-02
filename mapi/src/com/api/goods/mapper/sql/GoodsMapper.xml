@@ -52,22 +52,22 @@
 	</select>
 	
 	<select id="queryBrandName" parameterType="Integer" resultType="com.api.goods.entity.BrandAndAgentLevel">
-		select brand_id,brand_name,threshold_count,brand_from,brand_index,account_id from brand where state = 1 and account_id = #{account_id} order by brand_index,brand_id desc
+		select brand_id,brand_name,threshold_count,brand_from,brand_index,account_id,logo_url,brand_info,title from brand where state = 1 and account_id = #{account_id} order by brand_index,brand_id desc
 	</select>
 	
 	<select id="queryBrandNameAndGoodsCount" parameterType="Integer" resultType="com.api.goods.entity.BrandAndAgentLevel">
-		select brand_id,brand_name,goods_count,threshold_count,brand_from,brand_index,account_id from brand where state = 1 and account_id = #{account_id} order by brand_index,brand_id desc
+		select brand_id,brand_name,goods_count,threshold_count,brand_from,brand_index,account_id,logo_url,brand_info,title from brand where state = 1 and account_id = #{account_id} order by brand_index,brand_id desc
 	</select>
 	
 	<select id="queryBrandNameAndImagesCount" parameterType="Integer" resultType="com.api.goods.entity.BrandAndAgentLevel">
-		select brand_id,brand_name,images_count,threshold_count,brand_from,brand_index,account_id from brand where state = 1 and account_id = #{account_id} order by brand_index,brand_id desc
+		select brand_id,brand_name,images_count,threshold_count,brand_from,brand_index,account_id,logo_url,brand_info,title from brand where state = 1 and account_id = #{account_id} order by brand_index,brand_id desc
 	</select>
 	
 	<select id="queryBrandByName" parameterType="com.api.goods.entity.Brand" resultType="com.api.goods.entity.BrandAndAgentLevel">
-		select brand_id,brand_name,goods_count,threshold_count,brand_from,brand_index,account_id from brand 
+		select brand_id,brand_name,goods_count,threshold_count,brand_from,brand_index,account_id from brand
 		where state = 1 and account_id = 0 and brand_shortname like CONCAT('%|',#{brand_name},'|%') and brand_id not in (select brand_from from brand where state = 1 and account_id = #{account_id} and brand_from &gt; 0)
 		union all 
-		select brand_id,brand_name,goods_count,threshold_count,brand_from,brand_index,account_id from brand 
+		select brand_id,brand_name,goods_count,threshold_count,brand_from,brand_index,account_id from brand
 		where state = 1 and account_id = #{account_id} and brand_from in (select brand_id from brand where state = 1 and account_id = 0 and brand_shortname like CONCAT('%|',#{brand_name},'|%'))
 		union all 
 		select brand_id,brand_name,goods_count,threshold_count,brand_from,brand_index,account_id from brand where state = 1 and brand_from &lt;=0 and account_id = #{account_id} and brand_shortname like CONCAT('%',#{brand_name},'%') 

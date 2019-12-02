@@ -16,6 +16,9 @@ public class BrandAndAgentLevel{
 	private BrandGoodsInfo brandGoodsInfo;
 	private String brandimages_url;
 	private Integer stockState;//1、低于预警库存 2、缺货 3、尚未设置库存 4、尚未设置库存提醒 5、盘点提醒 6、累计销售及订单统计结果
+	private String logo_url;
+	private String brand_info;
+	private String title;
 
 	public Integer getBrand_id() {
 		return brand_id;
@@ -94,5 +97,29 @@ public class BrandAndAgentLevel{
 
 	public void setStockState(Integer stockState) {
 		this.stockState = stockState;
+	}
+
+	public String getLogo_url() {
+		return logo_url;
+	}
+
+	public void setLogo_url(String logo_url) {
+		this.logo_url = logo_url;
+	}
+
+	public String getBrand_info() {
+		return brand_info;
+	}
+
+	public void setBrand_info(String brand_info) {
+		this.brand_info = brand_info;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 }
