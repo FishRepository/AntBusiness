@@ -7,6 +7,9 @@ public class InsertBrand extends Result{
 	private String brand_name;
 	private Integer account_id;
 	private String agentlevel_names;
+	private String brand_info;//品牌简介
+	private String logo_url;//品牌logo
+	private String title;//品牌副标题
 	
 	public String getBrand_name() {
 		return brand_name;
@@ -25,5 +28,29 @@ public class InsertBrand extends Result{
 	}
 	public void setAgentlevel_names(String agentlevel_names) {
 		this.agentlevel_names = agentlevel_names;
+	}
+
+	public String getBrand_info() {
+		return brand_info;
+	}
+
+	public void setBrand_info(String brand_info) {
+		this.brand_info = brand_info;
+	}
+
+	public String getLogo_url() {
+		return logo_url;
+	}
+
+	public void setLogo_url(String logo_url) {
+		this.logo_url = logo_url;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 }

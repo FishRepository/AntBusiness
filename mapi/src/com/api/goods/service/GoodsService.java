@@ -36,6 +36,15 @@ public class GoodsService {
 			Brand brand = new Brand();
 			brand.setAccount_id(insertbrand.getAccount_id());
 			brand.setBrand_name(insertbrand.getBrand_name());
+			if(StringUtil.isValid(insertbrand.getLogo_url())){
+				brand.setLogo_url(insertbrand.getLogo_url());
+			}
+			if(StringUtil.isValid(insertbrand.getTitle())){
+				brand.setTitle(insertbrand.getTitle());
+			}
+			if(StringUtil.isValid(insertbrand.getBrand_info())){
+				brand.setBrand_info(insertbrand.getBrand_info());
+			}
 			brand.setBrand_from(0);
 			if(goodsMapper.countBrand(brand) <= 0){
 				if(goodsMapper.insertBrand(brand) > 0){
