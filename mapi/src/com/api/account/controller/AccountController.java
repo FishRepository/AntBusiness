@@ -192,7 +192,13 @@ public class AccountController {
 	public Object downloadbrandByCode(Integer account_id,Integer brand_id,String code){
 		return accountService.downloadbrandByCode(account_id,brand_id,code);
 	}
-	
+
+	@RequestMapping(value = "/checkExchangeCode")
+	@ResponseBody
+	public Object checkExchangeCode(Integer brand_id,String code){
+		return accountService.checkExchangeCode(brand_id,code);
+	}
+
 	@RequestMapping(value = "/queryAccountIntegral")
     @ResponseBody
 	public Object queryAccountIntegral(Integer account_id){

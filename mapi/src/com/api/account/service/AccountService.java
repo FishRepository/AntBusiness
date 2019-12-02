@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.backend.common.DateUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -1059,7 +1060,30 @@ public class AccountService {
 		}
 		return result;
 	}
-	
+
+	public DownloadResult checkExchangeCode(Integer brand_id,String code){
+		DownloadResult result = new DownloadResult();
+		if(brand_id == null || StringUtils.isBlank(code)){
+			result.setCode(1);
+			result.setMsg("兑换码不正确，下载失败");
+			return result;
+		}
+		try{
+			int checkResult = goodsMapper.checkExchangeCode(brand_id, code);
+			if(checkResult > 0){
+				result.setCode(0);
+				result.setMsg("兑换码正确，可以下载");
+			}else {
+				result.setCode(1);
+				result.setMsg("兑换码不正确，下载失败");
+			}
+		}catch (Exception e){
+			result.setCode(1);
+			result.setMsg("兑换码不正确，下载失败");
+		}
+		return result;
+	}
+
 	public DownloadResult downloadbrandByCode(Integer account_id,Integer brand_id,String code){
 		DownloadResult result = new DownloadResult();
 		if(account_id!=null && account_id > 0 && brand_id!=null && brand_id > 0 && StringUtil.isValid(code) && goodsMapper.checkExchangeCode(brand_id,code) > 0){
