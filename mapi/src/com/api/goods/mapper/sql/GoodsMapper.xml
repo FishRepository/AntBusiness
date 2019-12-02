@@ -35,7 +35,7 @@
 				title = #{title},
 			</if>
 		</set>
-		update_time = now() where state = 1 and brand_id = #{brand_id}
+		,update_time = now() where state = 1 and brand_id = #{brand_id}
 	</update>
 	
 	<update id="updateThresholdCount" parameterType="Integer">
