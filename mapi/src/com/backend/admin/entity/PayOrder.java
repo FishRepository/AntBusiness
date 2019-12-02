@@ -1,5 +1,8 @@
 package com.backend.admin.entity;
 
+import com.backend.admin.controller.JsonDateSerializer;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import java.util.Date;
 import java.io.Serializable;
 
@@ -47,6 +50,7 @@ public class PayOrder implements Serializable {
         this.order_type = order_type;
     }
 
+    @JsonSerialize(using = JsonDateSerializer.class)
     public Date getCreate_time() {
         return create_time;
     }

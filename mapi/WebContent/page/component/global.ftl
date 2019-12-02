@@ -39,6 +39,11 @@
     <link href="${ctx}/css/fileinput.css" media="all" rel="stylesheet" type="text/css"/>
     <script src="${ctx}/js/fileinput.js" type="text/javascript"></script>
     <script src="${ctx}/js/local/zh.js" type="text/javascript"></script>
+    <!-- datepicker-->
+    <link href="${ctx}/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css"/>
+    <script src="${ctx}/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
+    <script src="${ctx}/plugins/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js" type="text/javascript" charset="UTF-8"></script>
+
     <#nested>
 </#macro>
 
@@ -195,6 +200,11 @@
         <li>
             <a class="app-menu__item<#if index==4> active</#if>" href="${ctx}/adImg">
                 <i class="app-menu__icon fa fa-list"></i><span class="app-menu__label">广告管理</span>
+            </a>
+        </li>
+        <li>
+            <a class="app-menu__item<#if index==5> active</#if>" href="${ctx}/payorder">
+                <i class="app-menu__icon fa fa-list"></i><span class="app-menu__label">订单管理</span>
             </a>
         </li>
     </ul>

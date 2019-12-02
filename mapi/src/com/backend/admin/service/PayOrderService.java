@@ -28,14 +28,15 @@ public class PayOrderService {
     }
 
     /**
-     * 查询多条数据
-     *
-     * @param offset 查询起始位置
-     * @param limit 查询条数
-     * @return 对象列表
+     * 查询订单列表
+     * @param payOrder
+     * @return
      */
-    public List<PayOrder> queryAllByLimit(int offset, int limit){
-        return null;
+    public List<PayOrder> queryAll(PayOrder payOrder){
+        if(payOrder == null){
+            payOrder = new PayOrder();
+        }
+        return payOrderMapper.queryAll(payOrder);
     }
 
     /**
