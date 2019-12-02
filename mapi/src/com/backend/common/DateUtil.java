@@ -446,15 +446,11 @@ public class DateUtil {
     }
 
     public static void main(String[] args){
-        Date now = new Date();
-
-        Date date = stringtoDate("2019-07-20", LONG_DATE_FORMAT);//取时间
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.add(calendar.DATE,-1);
-        Date yesterday = new Date();
-        long days = startToEnd(yesterday, now);
-        System.out.printf("days: "+days);
+        Date date = stringtoDate("2019-07-20 12:00:00", FORMAT_ONE);//取时间
+        SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_ONE);
+        System.out.println(sdf.format(date));
+        Date date1 = adjustDateByDay(date, 365 * 2, 1);
+        System.out.print(sdf.format(date1));
     }
 
 }

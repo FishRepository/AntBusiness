@@ -119,7 +119,7 @@
 	</select>
 	
 	<select id="queryAccountById" parameterType="Integer" resultType="com.api.account.entity.Account">
-		select account_id,account_userphone,account_username,account_icon from account where state = 1 and account_id = #{account_id}
+		select account_id,account_userphone,account_username,account_icon,account_qq,account_wechat,account_imei,account_integral,last_time,create_time,vip_time,is_vip,vip_type,is_new from account where state = 1 and account_id = #{account_id}
 	</select>
 	
 	<select id="queryAccountByPhone" parameterType="string" resultType="com.api.account.entity.AccountLoginResult">
@@ -279,10 +279,10 @@
 	</select>
 
 	<update id="batchUpdateVipState" parameterType="java.util.List">
-		UPDATE
+		update
 		account
-		SET is_vip = 0
-		WHERE account_id IN
+		set is_vip = 0
+		where account_id in
 		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
 			#{item}
 		</foreach>

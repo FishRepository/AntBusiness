@@ -9,6 +9,7 @@ import com.backend.admin.mapper.PayOrderMapper;
 import com.backend.admin.mapper.ToastSwithMapper;
 import com.backend.admin.mapper.VipPayMapper;
 import com.backend.common.DateUtil;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -141,23 +143,31 @@ public class AccountV2Service {
                 LOGGER.error("editeState error: account==null");
                 return false;
             }
-            //消费类型1年费;2连续包月;3月付费;4兑换下载
+            //消费类型1 2年费;2 1年费; 3半年费;4兑换下载
             //1年费会员2月费会员
             int days = 30;
             int vipType = 2;
             //原本的会员到期
             Date endTime = account.getVip_time();
-            if(endTime==null || endTime.before(new Date())){
+            if(account.getIs_vip().equals(0)){
+                LOGGER.error("is not vip，endTime init");
+                endTime = new Date();
+            }
+            if(endTime.before(new Date())){
+                LOGGER.error("date before, endTime init");
                 endTime = new Date();
             }
             switch (payOrderLast.getOrder_type()){
                 case 1:{
+                    days = 365*2;
+                    vipType = 1;
+                } break;
+                case 2:{
                     days = 365;
                     vipType = 1;
                 } break;
-                case 2:
                 case 3: {
-                    days = 30;
+                    days = 183;
                     vipType = 2;
                 } break;
                 case 4:{
@@ -167,15 +177,18 @@ public class AccountV2Service {
             }
             //设置用户的vip信息
             Date vipTime = DateUtil.adjustDateByDay(endTime ,days,1);
+            LOGGER.error("last endTime: "+ new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(endTime));
+            LOGGER.error("update vipTime: "+ new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(vipTime));
             account.setVip_time(DateUtil.setEnd(vipTime,1));
             account.setIs_vip(1);
             account.setVip_type(vipType);
-            accountMapper.updateAccount(account);
-
+            int updateAccount = accountMapper.updateAccount(account);
+            LOGGER.error("updateAccount: "+updateAccount);
             //设置订单信息
             payOrder.setVip_time(days);
             payOrder.setRemain_time(vipTime);
-            payOrderMapper.update(payOrder);
+            int payOrderUpdate = payOrderMapper.update(payOrder);
+            LOGGER.error("payOrderUpdate: "+payOrderUpdate);
         }catch (Exception e){
             LOGGER.error("editeState error: "+e.getMessage());
         }
