@@ -20,7 +20,22 @@
     </select>
     
     <update id="updateBrand" parameterType="com.api.goods.entity.Brand">
-		update brand set brand_name = #{brand_name},update_time = now() where state = 1 and brand_id = #{brand_id} 
+		update brand
+		<set>
+			<if test="brand_name != null and brand_name != ''">
+				brand_name = #{brand_name},
+			</if>
+			<if test="logo_url != null and logo_url != ''">
+				logo_url = #{logo_url},
+			</if>
+			<if test="brand_info != null and brand_info != ''">
+				brand_info = #{brand_info},
+			</if>
+			<if test="title != null and title != ''">
+				title = #{title},
+			</if>
+		</set>
+		update_time = now() where state = 1 and brand_id = #{brand_id}
 	</update>
 	
 	<update id="updateThresholdCount" parameterType="Integer">
