@@ -14,7 +14,7 @@ public class PayOrder implements Serializable {
     private static final long serialVersionUID = -41015129354486958L;
     //订单编号UUID
     private String order_no;
-    //消费类型1年费;2连续包月;3月付费;4兑换下载
+    //消费类型1 2年费;2 1年费;3 半年费;4兑换下载
     private Integer order_type;
     //交易时间yyyyMMddHHmmss
     private Date create_time;
@@ -26,7 +26,7 @@ public class PayOrder implements Serializable {
     private Date remain_time;
     //0等待支付;1交易成功;2交易取消
     private Integer state;
-    //支付方式 1 支付宝 2微信  3IOS
+    //支付方式 1 支付宝 2微信 3IOS
     private Integer pay_type;
     //会员id
     private Integer account_id;

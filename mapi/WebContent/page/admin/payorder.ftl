@@ -27,7 +27,7 @@
                             <label class="col-form-label">
                                 支付方式:
                             </label>
-                            <select name="pay_type" class="form-control">
+                            <select name="pay_type" id="pay_type" class="form-control">
                                 <option value="">请选择</option>
                                 <option value="1">支付宝</option>
                                 <option value="2">微信</option>
@@ -38,7 +38,7 @@
                             <label class="col-form-label">
                                 交易状态:
                             </label>
-                            <select name="state" class="form-control">
+                            <select name="state" id="state" class="form-control">
                                 <option value="">请选择</option>
                                 <option value="0">等待支付</option>
                                 <option value="1">交易成功;</option>
@@ -248,7 +248,34 @@
         });
     
         $('#export').click(function () {
-
+            var url = '${ctx}/payorder/export.do?';
+            var userPhone = $('#user_phone').val().trim();
+            var payType = $('#pay_type').val().trim();
+            var state = $('#state').val().trim();
+            if(userPhone){
+                url += 'user_phone='+userPhone;
+            }
+            if(payType){
+                url += '&pay_type='+payType;
+            }
+            if(state){
+                url += '&state='+state;
+            }
+            window.location.href = url;
+            <#--$.ajax({-->
+            <#--    url: '${ctx}/payorder/export',-->
+            <#--    type: "post",-->
+            <#--    data: $('#queryForm').serialize(),-->
+            <#--    success: function (res) {-->
+            <#--        if (res) {-->
+            <#--            var a = document.createElement("a");-->
+            <#--            a.download = "订单统计.xls";-->
+            <#--            var blob = new Blob([res]);-->
+            <#--            a.href = window.URL.createObjectURL(blob);-->
+            <#--            a.click();-->
+            <#--        }-->
+            <#--    }-->
+            <#--})-->
         });
         
         $('#addNew').click(function () {
@@ -297,7 +324,6 @@
                     }else {
                         swal("操作失败！");
                     }
-
                 }
             });
         }
@@ -306,6 +332,11 @@
         function reloadDataTable() {
             $('#sampleTable').DataTable().ajax.reload();
         }
+
+        //导出excel
+        $('#export').on('click', function () {
+
+        });
 
         // 弹出框关闭事件
         $('#myModal').on('hidden.bs.modal', function () {
