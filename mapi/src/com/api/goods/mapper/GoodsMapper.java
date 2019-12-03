@@ -191,4 +191,25 @@ public interface GoodsMapper {
 	Brand getBrandInfo(Integer id);
 
 	int setBrandHot(Integer is_hot);
+
+	/**
+	 * 返回库存低于库存预警值的商品
+	 * @param brand
+	 * @return
+	 */
+	List<Goods> selectLowStockGoods(Brand brand);
+
+	/**
+	 * 返回库存低于0的商品
+	 * @param brand
+	 * @return
+	 */
+	List<Goods> selectZeroStockGoods(Brand brand);
+
+	/**
+	 * 返回库存不为0的商品
+	 * @param brand
+	 * @return
+	 */
+	List<Goods> selectNotEmptyStockGoods(Brand brand);
 }

@@ -19,6 +19,7 @@ public class BrandAndAgentLevel{
 	private String logo_url;
 	private String brand_info;
 	private String title;
+	private List<Goods> lowStockGoods;
 
 	public Integer getBrand_id() {
 		return brand_id;
@@ -121,5 +122,13 @@ public class BrandAndAgentLevel{
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public List<Goods> getLowStockGoods() {
+		return lowStockGoods;
+	}
+
+	public void setLowStockGoods(List<Goods> lowStockGoods) {
+		this.lowStockGoods = lowStockGoods;
 	}
 }

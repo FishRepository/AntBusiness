@@ -217,9 +217,39 @@ public class GoodsService {
 						brandAndAgentLevel.setBrandimages_url(brandImagesResults.get(0).getBrandimages_url());
 					}
 					BrandGoodsInfo brandGoodsInfo = goodsMapper.queryBrandGoods(brand);
+					//设置库存提醒
+					int stockState = 0;//1、低于预警库存 2、缺货 3、尚未设置库存 4、尚未设置库存提醒 5、盘点提醒
 					if(brandGoodsInfo!=null){
 						brandAndAgentLevel.setBrandGoodsInfo(brandGoodsInfo);
+						if(brandGoodsInfo.getStockRemind()!=null && ObjectUtil.equal(brandGoodsInfo.getStockRemind(),0)){
+							stockState = 4;
+							brandAndAgentLevel.setStockState(stockState);
+							continue;
+						}
 					}
+					//查询该品牌下库存不为0的商品集合
+					List<Goods> notEmptyStockgoods = goodsMapper.selectNotEmptyStockGoods(brand);
+					if(CollectionUtil.isEmpty(notEmptyStockgoods)){
+						stockState = 3;
+						brandAndAgentLevel.setStockState(stockState);
+						continue;
+					}
+					//查询该品牌下库存<=0的商品集合
+					List<Goods> zeroStockGoods = goodsMapper.selectZeroStockGoods(brand);
+					if(CollectionUtil.isNotEmpty(zeroStockGoods)){
+						stockState = 2;
+						brandAndAgentLevel.setStockState(stockState);
+						brandAndAgentLevel.setLowStockGoods(zeroStockGoods);
+						continue;
+					}
+					//查询库存低于库存预警值的商品集合
+					List<Goods> lowStockGoods = goodsMapper.selectLowStockGoods(brand);
+					if(CollectionUtil.isNotEmpty(lowStockGoods)){
+						stockState = 1;
+						brandAndAgentLevel.setStockState(stockState);
+						brandAndAgentLevel.setLowStockGoods(lowStockGoods);
+					}
+					brandAndAgentLevel.setStockState(stockState);
 				}
 			}
 			result.setCode(0);
