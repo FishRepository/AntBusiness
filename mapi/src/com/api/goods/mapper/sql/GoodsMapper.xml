@@ -34,6 +34,9 @@
 			<if test="title != null and title != ''">
 				title = #{title},
 			</if>
+			<if test="stock_remind != null and stock_remind != ''">
+				stock_remind = #{stock_remind},
+			</if>
 		</set>
 		,update_time = now() where state = 1 and brand_id = #{brand_id}
 	</update>
