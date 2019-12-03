@@ -9,6 +9,7 @@ public class BrandRecommendResult extends Result{
 	private BrandRecommend brand;
 	private List<AgentLevel> agentlevellist;
 	private List<Goods> goodslist;
+	private List<AgentLevel> codeAgentLevelList;
 	
 	public BrandRecommend getBrand() {
 		return brand;
@@ -27,5 +28,13 @@ public class BrandRecommendResult extends Result{
 	}
 	public void setGoodslist(List<Goods> goodslist) {
 		this.goodslist = goodslist;
+	}
+
+	public List<AgentLevel> getCodeAgentLevelList() {
+		return codeAgentLevelList;
+	}
+
+	public void setCodeAgentLevelList(List<AgentLevel> codeAgentLevelList) {
+		this.codeAgentLevelList = codeAgentLevelList;
 	}
 }

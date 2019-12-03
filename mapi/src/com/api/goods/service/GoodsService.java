@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.api.goods.entity.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -268,7 +270,21 @@ public class GoodsService {
 			brand.setBrand_id(brand_id);
 			result.setBrand(goodsMapper.queryRecommendBrand(brand));
 			brand.setAccount_id(0);
-			result.setAgentlevellist(goodsMapper.queryAgentLevel(brand));
+			List<AgentLevel> agentLevels = goodsMapper.queryAgentLevel(brand);
+			if(CollectionUtil.isNotEmpty(agentLevels)){
+				//全部代理层级
+				result.setAgentlevellist(agentLevels);
+				//可用币下载代理层级
+				List<AgentLevel> codeAgentLevels = new ArrayList<>();
+				for (AgentLevel agentLevel: agentLevels) {
+					if(ObjectUtil.equal(agentLevel.getAgentlevel_default(), 1)){
+						codeAgentLevels.add(agentLevel);
+					}
+				}
+				if(CollectionUtil.isNotEmpty(codeAgentLevels)){
+					result.setCodeAgentLevelList(codeAgentLevels);
+				}
+			}
 			result.setGoodslist(goodsMapper.queryGoodsList(brand));
 			result.setCode(0);
 			result.setMsg("查询成功");
