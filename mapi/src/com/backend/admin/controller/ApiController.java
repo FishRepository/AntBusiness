@@ -380,9 +380,12 @@ public class ApiController extends BaseController{
     @ResponseBody
     @RequestMapping("/getDownloadCodePrice")
     public Object getDownloadCodePrice(Integer os_type){
+        JSONObject jsonObject = new JSONObject();
         if (ObjectUtil.equal(os_type, 1)) {
-            return successData(new JSONObject().put("price", Constant.ANDROID_DOWNLOAD_CODE_PRICE));
+            jsonObject.put("price", Constant.ANDROID_DOWNLOAD_CODE_PRICE);
+            return successData(jsonObject);
         }
-        return successData(new JSONObject().put("price", Constant.IOS_DOWNLOAD_CODE_PRICE));
+        jsonObject.put("price", Constant.IOS_DOWNLOAD_CODE_PRICE);
+        return successData(jsonObject);
     }
 }
