@@ -1061,11 +1061,19 @@ public class AccountService {
 		return result;
 	}
 
-	public DownloadResult checkExchangeCode(Integer brand_id,String code){
+	public DownloadResult checkExchangeCode(Integer account_id, Integer brand_id, String code){
 		DownloadResult result = new DownloadResult();
-		if(brand_id == null || StringUtils.isBlank(code)){
+		if(brand_id == null || StringUtils.isBlank(code) ||account_id==null){
 			result.setCode(1);
-			result.setMsg("兑换码不正确，下载失败");
+			result.setMsg("参数错误");
+			return result;
+		}
+		Brand brand = new Brand();
+		brand.setAccount_id(account_id);
+		brand.setBrand_from(brand_id);
+		if(goodsMapper.checkRecommendBrand(brand) > 0){
+			result.setCode(1);
+			result.setMsg("品牌已下载");
 			return result;
 		}
 		try{

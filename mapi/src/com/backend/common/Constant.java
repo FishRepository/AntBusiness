@@ -20,7 +20,12 @@ public class Constant {
     public static final String SYSTEM_ERROR = "系统错误";
 
     /**
-     * 品牌兑换码下载价格
+     * 品牌兑换码下载价格 IOS
      */
-    public static final Integer DOWNLOAD_CODE_PRICE = 6;
+    public static final Integer IOS_DOWNLOAD_CODE_PRICE = 6;
+
+    /**
+     * 品牌兑换码下载价格 ANDROID
+     */
+    public static final Integer ANDROID_DOWNLOAD_CODE_PRICE = 5;
 }

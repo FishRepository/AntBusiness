@@ -1,5 +1,6 @@
 package com.backend.admin.controller;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.api.account.entity.Account;
 import com.api.common.entity.Images;
 import com.api.common.service.ImagesService;
@@ -287,7 +288,7 @@ public class ApiController extends BaseController{
 
     /**
      * 查询vip付费列表
-     * @param os_type
+     * @param os_type 1安卓 2IOS
      * @return
      */
     @ResponseBody
@@ -378,7 +379,10 @@ public class ApiController extends BaseController{
      */
     @ResponseBody
     @RequestMapping("/getDownloadCodePrice")
-    public Object getDownloadCodePrice(){
-        return successData(Constant.DOWNLOAD_CODE_PRICE);
+    public Object getDownloadCodePrice(Integer os_type){
+        if (ObjectUtil.equal(os_type, 1)) {
+            return successData(new JSONObject().put("price", Constant.ANDROID_DOWNLOAD_CODE_PRICE));
+        }
+        return successData(new JSONObject().put("price", Constant.IOS_DOWNLOAD_CODE_PRICE));
     }
 }

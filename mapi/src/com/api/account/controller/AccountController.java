@@ -195,8 +195,8 @@ public class AccountController {
 
 	@RequestMapping(value = "/checkExchangeCode")
 	@ResponseBody
-	public Object checkExchangeCode(Integer brand_id,String code){
-		return accountService.checkExchangeCode(brand_id,code);
+	public Object checkExchangeCode(Integer account_id, Integer brand_id, String code){
+		return accountService.checkExchangeCode(account_id,brand_id,code);
 	}
 
 	@RequestMapping(value = "/queryAccountIntegral")
