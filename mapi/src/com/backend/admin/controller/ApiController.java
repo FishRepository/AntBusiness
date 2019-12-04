@@ -7,6 +7,7 @@ import com.api.order.entity.Order;
 import com.backend.admin.entity.*;
 import com.backend.admin.service.*;
 import com.backend.common.AlipayConfig;
+import com.backend.common.Constant;
 import com.backend.common.IpUtil;
 import com.baomidou.mybatisplus.toolkit.CollectionUtils;
 import net.sf.json.JSONArray;
@@ -24,6 +25,7 @@ import org.springframework.web.multipart.MultipartRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.*;
 
 @Controller
@@ -368,5 +370,15 @@ public class ApiController extends BaseController{
     public Object uploadBrandIcon(MultipartFile file, Integer brand_id, Integer account_id){
         return brandMgrService.uploadBrandIcon(file, brand_id, account_id);
 //        return imagesService.uploadImages(file,"brand",null);
+    }
+
+    /**
+     * 品牌兑换码下载价格  暂定 ￥ 5
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/getDownloadCodePrice")
+    public Object getDownloadCodePrice(){
+        return successData(Constant.DOWNLOAD_CODE_PRICE);
     }
 }

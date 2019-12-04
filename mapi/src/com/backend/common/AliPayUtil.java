@@ -39,7 +39,7 @@ public class AliPayUtil {
         AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
         //SDK已经封装掉了公共参数，这里只需要传入业务参数。以下方法为sdk的model入参方式(model和biz_content同时存在的情况下取biz_content)。
         AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
-        model.setBody("我是测试数据");
+        model.setBody("番茄科技会员服务");
         model.setSubject("番茄科技");
         model.setOutTradeNo(random);  //订单号
         model.setTimeoutExpress("30m");  // 该参数数值不接受小数点， 如 1.5h，可转换为 90m。

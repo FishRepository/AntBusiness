@@ -18,4 +18,9 @@ public class Constant {
      * 系统错误
      */
     public static final String SYSTEM_ERROR = "系统错误";
+
+    /**
+     * 品牌兑换码下载价格
+     */
+    public static final Integer DOWNLOAD_CODE_PRICE = 6;
 }

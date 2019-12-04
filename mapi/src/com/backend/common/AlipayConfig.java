@@ -1,7 +1,7 @@
 package com.backend.common;
 
 public class AlipayConfig {
-    public static final String APPID = "2019062965759225";
+    public static final String APPID = "2019120269610261";
 
     /** 支付宝网关*/
     public static final String GATE = "https://openapi.alipay.com/gateway.do";
@@ -18,6 +18,7 @@ public class AlipayConfig {
     /** 合作伙伴ID（支付宝给定） */
     public static final String SELLERID = "2088721372623632";
 
+
     /** 商户账户 */
     public static final String SELLER = "此处为商户账号";
 
@@ -25,7 +26,7 @@ public class AlipayConfig {
     public static final String CHARSET = "utf-8";
 
     /** sign方式*/
-    public static final String SIGN_TYPE = "RSA";
+    public static final String SIGN_TYPE = "RSA2";
 
     /** 支付结束*/
     public static final String TRADE_FINISHED = "TRADE_FINISHED";
