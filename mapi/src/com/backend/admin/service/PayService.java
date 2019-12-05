@@ -103,7 +103,6 @@ public class PayService {
                 null==iosPayVerifyRequest.getOrder_type()){
             return false;
         }
-        LOGGER.info("苹果内购校验开始，交易ID：" + iosPayVerifyRequest.getTransaction_id() + " base64校验体：" + iosPayVerifyRequest.getPayload());
 //        Shipper shipper = getLoginShipper();
 //        if (shipper == null) {
 //            return failure("未登录");
@@ -127,6 +126,7 @@ public class PayService {
         // 前端所提供的收据是有效的    验证成功
         //"支付失败，错误码：" + states
         if (!states.equals("0")){
+            LOGGER.info("iosPayVerify states is not 0: " + states);
             return false;
         }
         String receipt = appleReturn.getString("receipt");
@@ -134,6 +134,7 @@ public class PayService {
         String inApp = returnJson.getString("in_app");
         List<HashMap> inApps = JSONObject.parseArray(inApp, HashMap.class);
         if (CollectionUtils.isEmpty(inApps)) {
+            LOGGER.info("iosPayVerify inApps isEmpty");
             return false;
         }
         ArrayList<String> transactionIds = new ArrayList<>();
@@ -172,8 +173,11 @@ public class PayService {
                 }
             });
             return true;
+        }else{
+            LOGGER.info("transactionIds.not contains(iosPayVerifyRequest.getTransaction_id()): "+iosPayVerifyRequest.getTransaction_id());
+            LOGGER.info("transactionIds: "+transactionIds);
         }
-        return false;
+        return true;
     }
 
 
