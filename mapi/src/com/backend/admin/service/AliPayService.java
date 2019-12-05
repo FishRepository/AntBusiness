@@ -1,6 +1,7 @@
 package com.backend.admin.service;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.backend.admin.entity.AlipayNotifyParam;
@@ -49,15 +50,16 @@ public class AliPayService {
     public boolean callback(HttpServletRequest request) {
         Map<String, String> params = convertRequestParamsToMap(request); // 将异步通知中收到的待验证所有参数都存放到map中
         String paramsJson = JSON.toJSONString(params);
+        Map paramMap = JSON.parseObject(paramsJson);
         LOGGER.info("支付宝回调，{}", paramsJson);
         try {
             // 调用SDK验证签名
-            boolean signVerified = AlipaySignature.rsaCheckV1(params, AlipayConfig.ALIPAY_PUBLIC_KEY,
+            boolean signVerified = AlipaySignature.rsaCheckV1(paramMap, AlipayConfig.ALIPAY_PUBLIC_KEY,
                     AlipayConfig.CHARSET, AlipayConfig.SIGN_TYPE);
             if (signVerified) {
                 LOGGER.info("支付宝回调签名认证成功");
                 // 按照支付结果异步通知中的描述，对支付结果中的业务内容进行1\2\3\4二次校验，校验成功后在response中返回success，校验失败返回failure
-                this.check(params);
+//                this.check(params);
                 // 另起线程处理业务
                 executorService.execute(new Runnable() {
                     @Override
@@ -120,7 +122,7 @@ public class AliPayService {
         return retMap;
     }
 
-    private AlipayNotifyParam buildAlipayNotifyParam(Map<String, String> params) {
+    private static AlipayNotifyParam buildAlipayNotifyParam(Map<String, String> params) {
         String json = JSON.toJSONString(params);
         return JSON.parseObject(json, AlipayNotifyParam.class);
     }
@@ -158,5 +160,17 @@ public class AliPayService {
         if (!params.get("app_id").equals(AlipayConfig.APPID)) {
             throw new AlipayApiException("app_id不一致");
         }
+    }
+
+    public static void main(String[] args) throws AlipayApiException {
+        String params = "{\"gmt_create\":\"2019-12-04 13:41:31\",\"charset\":\"utf-8\",\"seller_email\":\"myws168@sina.com\",\"subject\":\"番茄科技\",\"sign\":\"AFyVQBJXYY1PTJoijjGLeo4QH1WdQGMkoJj6/pSt+pXuWujuLy6ajf3KbcXKMTGaqS77mHFZU2hc+N6uOuvnPEjWAwbKwc4828BmR6dnRc9PV5z8BjDdL1VQL3h6VzDGvjdbb3pHDQG0j1lJ/tZGg7JMKH9Ee8d3vqxrYFhfIoSZb+KChcY2kV6RptxfBDNdpNJxKUpw12cQK9/DzcTgMV+YW3PEsemNzfpzqmVpqaxeKij6kAyaFHgUYMOUkWYHSUaP/nBr1E5o5kOTgdl0mUsp18tfa0IJJSqLIE0l3eQC/JG9I8alj+N3eQ9m3B00q/46u7JJGkbFDkofzdgFfA==\",\"body\":\"我是测试数据\",\"buyer_id\":\"2088302932745012\",\"invoice_amount\":\"0.01\",\"notify_id\":\"2019120400222134132045010542822586\",\"fund_bill_list\":\"[{\\\"amount\\\":\\\"0.01\\\",\\\"fundChannel\\\":\\\"PCREDIT\\\"}]\",\"notify_type\":\"trade_status_sync\",\"trade_status\":\"TRADE_SUCCESS\",\"receipt_amount\":\"0.01\",\"app_id\":\"2019120269610261\",\"buyer_pay_amount\":\"0.01\",\"sign_type\":\"RSA2\",\"seller_id\":\"2088721372623632\",\"gmt_payment\":\"2019-12-04 13:41:32\",\"notify_time\":\"2019-12-05 14:10:26\",\"version\":\"1.0\",\"out_trade_no\":\"855c34df0d9c4725ac80135b5865a5fe\",\"total_amount\":\"0.01\",\"trade_no\":\"2019120422001445010527493946\",\"auth_app_id\":\"2019120269610261\",\"buyer_logon_id\":\"czm***@163.com\",\"point_amount\":\"0.00\"}";
+        Map paramMap = JSON.parseObject(params);
+        // 调用SDK验证签名
+        boolean signVerified = AlipaySignature.rsaCheckV1(paramMap, AlipayConfig.ALIPAY_PUBLIC_KEY,
+                AlipayConfig.CHARSET, AlipayConfig.SIGN_TYPE);
+        AlipayNotifyParam param = buildAlipayNotifyParam(paramMap);
+        String trade_status = param.getTradeStatus();
+        System.out.println(signVerified);
+        System.out.println(trade_status);
     }
 }
