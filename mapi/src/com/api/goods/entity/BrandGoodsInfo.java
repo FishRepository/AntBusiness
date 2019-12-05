@@ -8,7 +8,7 @@ public class BrandGoodsInfo {
 
     private Integer goodsNum;//库存商品件数
 
-    private Integer stockRemind;//库存提醒数量
+    private Integer goodsThreshold;//库存提醒数量
 
     public Integer getGoodsCates() {
         return goodsCates;
@@ -34,11 +34,11 @@ public class BrandGoodsInfo {
         this.goodsNum = goodsNum;
     }
 
-    public Integer getStockRemind() {
-        return stockRemind;
+    public Integer getGoodsThreshold() {
+        return goodsThreshold;
     }
 
-    public void setStockRemind(Integer stockRemind) {
-        this.stockRemind = stockRemind;
+    public void setGoodsThreshold(Integer goodsThreshold) {
+        this.goodsThreshold = goodsThreshold;
     }
 }

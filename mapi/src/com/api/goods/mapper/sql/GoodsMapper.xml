@@ -454,7 +454,7 @@
 		select count(1) as goodsCates,
   			   sum(goods_price*goods_stock) as stockPrice,
   			   sum(goods_stock) as goodsNum,
-			   b.stock_remind as stockRemind
+			   g.goods_threshold as goodsThreshold
 		from goods g join brand b
 		on g.brand_id = b.brand_id
 		where b.state = 1
@@ -485,7 +485,7 @@
 		where
 			b.brand_id = #{brand_id}
 		and b.account_id = #{account_id}
-		and g.goods_stock &lt; b.stock_remind
+		and g.goods_stock &lt; g.goods_threshold
 	</select>
 
 	<!--返回库存低于0的商品-->

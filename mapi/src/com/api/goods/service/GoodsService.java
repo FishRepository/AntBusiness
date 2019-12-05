@@ -217,11 +217,12 @@ public class GoodsService {
 						brandAndAgentLevel.setBrandimages_url(brandImagesResults.get(0).getBrandimages_url());
 					}
 					BrandGoodsInfo brandGoodsInfo = goodsMapper.queryBrandGoods(brand);
+					Brand brandInfo = goodsMapper.getBrandInfo(brand_id);
 					//设置库存提醒
 					int stockState = 0;//1、低于预警库存 2、缺货 3、尚未设置库存 4、尚未设置库存提醒 5、盘点提醒
 					if(brandGoodsInfo!=null){
 						brandAndAgentLevel.setBrandGoodsInfo(brandGoodsInfo);
-						if(brandGoodsInfo.getStockRemind()!=null && ObjectUtil.equal(brandGoodsInfo.getStockRemind(),0)){
+						if(ObjectUtil.equal(brandGoodsInfo.getGoodsThreshold(),5)){
 							stockState = 4;
 							brandAndAgentLevel.setStockState(stockState);
 							continue;
@@ -248,6 +249,7 @@ public class GoodsService {
 						stockState = 1;
 						brandAndAgentLevel.setStockState(stockState);
 						brandAndAgentLevel.setLowStockGoods(lowStockGoods);
+						continue;
 					}
 					brandAndAgentLevel.setStockState(stockState);
 				}
