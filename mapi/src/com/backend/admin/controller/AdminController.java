@@ -275,4 +275,18 @@ public class AdminController {
     public List<AgentLevel> listAgentLevelByBrandId(int brandId) {
         return agentLevelMapper.listAgentLevelByBrandId(brandId);
     }
+
+    @ResponseBody
+    @RequestMapping("/setBrandHot")
+    public Object setBrandHot(int id, int type){
+        RequestResultVO<String> vo = new RequestResultVO<>();
+        boolean result = brandMgrService.setBrandHot(id, type);
+        if(result){
+            vo.setSuccess(true);
+        }else{
+            vo.setSuccess(false);
+        }
+        return vo;
+    }
+
 }

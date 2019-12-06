@@ -89,6 +89,21 @@ public class Brand extends Model<Brand> {
      * 状态0无效1有效
      */
 	private Integer state;
+	/**
+	 * 否推荐品牌 1是0不是
+	 */
+	@TableField("is_hot")
+	private Integer isHot;
+	@TableField("brand_info")
+	private String brandInfo;
+	@TableField("logo_url")
+	private String logoUrl;
+	@TableField("title")
+	private String title;
+	@TableField("phone")
+	private String phone;
+	@TableField("wechat")
+	private String wechat;
 
 	private List<AgentLevel> agents;
 
@@ -217,6 +232,54 @@ public class Brand extends Model<Brand> {
 	@Override
 	protected Serializable pkVal() {
 		return this.brandId;
+	}
+
+	public Integer getIsHot() {
+		return isHot;
+	}
+
+	public void setIsHot(Integer isHot) {
+		this.isHot = isHot;
+	}
+
+	public String getBrandInfo() {
+		return brandInfo;
+	}
+
+	public void setBrandInfo(String brandInfo) {
+		this.brandInfo = brandInfo;
+	}
+
+	public String getLogoUrl() {
+		return logoUrl;
+	}
+
+	public void setLogoUrl(String logoUrl) {
+		this.logoUrl = logoUrl;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getWechat() {
+		return wechat;
+	}
+
+	public void setWechat(String wechat) {
+		this.wechat = wechat;
 	}
 
 	@Override

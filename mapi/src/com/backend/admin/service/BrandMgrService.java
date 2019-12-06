@@ -188,4 +188,15 @@ public class BrandMgrService {
         }
         return images;
     }
+
+    public boolean setBrandHot(int id,int type){
+        int result;
+        if(type==1){
+            result = brandMgrMapper.setBrandHot(id);
+        }else{
+            result = brandMgrMapper.cancelBrandHot(id);
+        }
+        return result > 0;
+    }
+
 }

@@ -17,6 +17,13 @@
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
         <result column="state" property="state"/>
+
+        <result column="is_hot" property="isHot"/>
+        <result column="brand_info" property="brandInfo"/>
+        <result column="logo_url" property="logoUrl"/>
+        <result column="title" property="state"/>
+        <result column="phone" property="state"/>
+        <result column="wechat" property="state"/>
     </resultMap>
 
     <select id="selectAll" resultMap="BaseResultMap">
@@ -33,8 +40,8 @@
     </select>
 
     <insert id="saveBrand" parameterType="com.backend.admin.entity.Brand" keyProperty="brandId" useGeneratedKeys="true">
-        INSERT INTO brand (brand_name, brand_shortname, brand_downloadcode, create_time, update_time)
-        VALUES (#{brandName}, #{brandShortname}, #{brandDownloadcode}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+        INSERT INTO brand (brand_name, brand_shortname, brand_downloadcode, create_time, update_time, brand_info, title, logo_url)
+        VALUES (#{brandName}, #{brandShortname}, #{brandDownloadcode}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, #{brandInfo}, #{title}, #{logoUrl})
     </insert>
 
     <update id="updateBrand" parameterType="com.backend.admin.entity.Brand">
@@ -44,6 +51,9 @@
             <if test="goodsCount!=null">goods_count = #{goodsCount},</if>
             brand_shortname = #{brandShortname},
             brand_downloadcode = #{brandDownloadcode},
+            brand_info = #{brandInfo},
+            title = #{title},
+            logo_url = #{logoUrl},
             update_time = CURRENT_TIMESTAMP
         </trim>
     </update>
@@ -63,6 +73,18 @@
     <update id="decreaseGoodsCount" parameterType="int">
         UPDATE brand
         SET goods_count = goods_count - 1
+        WHERE brand_id = #{id}
+    </update>
+
+    <update id="setBrandHot" parameterType="int">
+        UPDATE brand
+        SET is_hot = 1
+        WHERE brand_id = #{id}
+    </update>
+
+    <update id="cancelBrandHot" parameterType="int">
+        UPDATE brand
+        SET is_hot = 0
         WHERE brand_id = #{id}
     </update>
 </mapper>

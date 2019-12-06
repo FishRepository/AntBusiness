@@ -34,6 +34,7 @@
                             <th>ID</th>
                             <th>品牌名称</th>
                             <th>下载码</th>
+                            <th>是否推荐</th>
                             <th>操作</th>
                         </tr>
                         </thead>
@@ -43,7 +44,7 @@
         </div>
     </div>
 
-    <div class="modal fade"
+    <div class="modal fade" id="myModal"
          tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -59,6 +60,25 @@
                             <label class="control-label col-md-3">品牌名称&nbsp;：</label>
                             <div class="col-md-8">
                                 <input name="brandName" class="form-control" type="text" placeholder="请输入名称">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">品牌简介&nbsp;：</label>
+                            <div class="col-md-8">
+                                <input name="brandInfo" class="form-control" type="text" placeholder="请输入名称">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">副标题&nbsp;：</label>
+                            <div class="col-md-8">
+                                <input name="title" class="form-control" type="text" placeholder="请输入名称">
+                            </div>
+                        </div>
+                        <input name="logoUrl" type="text" hidden id="logoUrl">
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">上传logo&nbsp;：</label>
+                            <div class="col-md-8">
+                                <input id="uploadImg" name="file" type="file" multiple>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -96,6 +116,46 @@
 
 <@global.script>
 <script type="text/javascript">
+    $(function(){
+        initFileInput("uploadImg", "${ctx}/adImg/uploadImg");
+    });
+
+    //初始化fileinput控件（第一次初始化）
+    function initFileInput(ctrlName, uploadUrl) {
+        var control = $('#' + ctrlName);
+        //初始化上传控件的样式
+        control.fileinput({
+            language: 'zh',                                         //设置语言
+            uploadUrl: uploadUrl,                                   //上传的地址
+            allowedFileExtensions: ['jpg', 'gif', 'png'],    //接收的文件后缀
+            showUpload: true,                                       //是否显示上传按钮
+            showRemove : true,                                      //显示移除按钮
+            showCaption: false,                                     //是否显示标题
+            browseClass: "btn btn-primary",                         //按钮样式
+            uploadAsync: true,                                      //默认异步上传
+            dropZoneEnabled: false,                                 //是否显示拖拽区域
+            //minImageWidth: 50,                                    //图片的最小宽度
+            //minImageHeight: 50,                                   //图片的最小高度
+            //maxImageWidth: 1000,                                  //图片的最大宽度
+            //maxImageHeight: 1000,                                 //图片的最大高度
+            //maxFileSize: 0,                                       //单位为kb，如果为0表示不限制文件大小
+            //minFileCount: 0,
+            maxFileCount: 1,                                       //表示允许同时上传的最大文件个数
+            enctype: 'multipart/form-data',
+            validateInitialCount:true,
+            previewFileIcon: "<i class='glyphicon glyphicon-king'></i>"
+        });
+        //导入文件上传完成之后的事件
+        control.on('fileuploaded', function(event, data){
+            var result = data.response;
+            if(result.code === 0){
+                $('#logoUrl').val(result.data.urlPath);
+            }else {
+                swal("操作失败！");
+            }
+        });
+    }
+
     $(function () {
         $('#sampleTable').dataTable({
             // 开启服务器模式
@@ -123,13 +183,25 @@
                 {'data': 'brandId'},
                 {'data': 'brandName'},
                 {'data': 'brandDownloadcode'},
+                {'data': function (row) {
+                        return row.isHot===1?'是':"否";
+                    }
+                },
                 {
                     'data':
-                            function (row) {
-                                return "<a class=\'btn btn-primary btn-sm\' href=\'javascript:editItem(" + row.brandId + ")\'><i class=\'fa fa-pencil-square-o\'></i>编辑</a>" +
-                                        '&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;' +
-                                        "<a class=\'btn btn-info btn-sm\' href=\'javascript:removeItem(" + row.brandId + ")\'><i class='fa fa-eye\'></i>删除</a>";
+                        function (row) {
+                            var opHtml = "<a class=\'btn btn-primary btn-sm\' href=\'javascript:editItem(" + row.brandId + ")\'><i class=\'fa fa-pencil-square-o\'></i>编辑</a>" +
+                                    '&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;' +
+                                    "<a class=\'btn btn-info btn-sm\' href=\'javascript:removeItem(" + row.brandId + ")\'><i class='fa fa-eye\'></i>删除</a>";
+                            if(row.isHot===0){
+                                opHtml+='&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;' +
+                                "<a class=\'btn btn-info btn-sm\' href=\'javascript:setHot(" + row.brandId+","+1 + ")\'><i class='fa fa-eye\'></i>推荐</a>";
+                            }else{
+                                opHtml+='&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;' +
+                                    "<a class=\'btn btn-info btn-sm\' href=\'javascript:setHot(" + row.brandId+","+2 + ")\'><i class='fa fa-eye\'></i>取消推荐</a>";
                             }
+                            return opHtml;
+                        }
                 }
             ]
         });
@@ -137,8 +209,28 @@
 
     $('#addNew').click(function () {
         addAgent({agentlevel_name: '零售价'});
-        $('.modal').modal('show');
+        $('#myModal').modal('show');
     });
+
+    function setHot(id,type){
+        $.ajax({
+            url: '${ctx}/admin/setBrandHot',
+            type: 'get',
+            data: {
+                id: id,
+                type: type
+            },
+            success: function (result) {
+                if (result.success) {
+                    swal("操作成功");
+                    reloadDataTable();
+                }else{
+                    swal("操作失败",'error');
+                    reloadDataTable();
+                }
+            }
+        });
+    }
 
     // 编辑栏目
     function editItem(id) {
@@ -156,7 +248,7 @@
                     });
                 }
                 $('#form-data').fill(result);
-                $('.modal').modal('show');
+                $('#myModal').modal('show');
             }
         });
     }
@@ -189,7 +281,7 @@
     }
 
     // 弹出框关闭事件
-    $('.modal').on('hidden.bs.modal', function () {
+    $('#myModal').on('hidden.bs.modal', function () {
         var $form = $('#form-data');
         $form.clear();
         clearAgent();
@@ -197,7 +289,7 @@
 
     // 关闭弹出框
     function closePopup() {
-        $('.modal').modal('hide');
+        $('#myModal').modal('hide');
     }
 
     function removeItem(id) {

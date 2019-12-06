@@ -27,4 +27,9 @@ public interface BrandMgrMapper{
     int increaseGoodsCount(int id);
 
     int decreaseGoodsCount(int id);
+
+    int setBrandHot(int id);
+
+    int cancelBrandHot(int id);
+
 }
