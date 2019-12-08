@@ -32,4 +32,6 @@ public interface BrandMgrMapper{
 
     int cancelBrandHot(int id);
 
+    List<String> queryBrandImages(int id);
+
 }

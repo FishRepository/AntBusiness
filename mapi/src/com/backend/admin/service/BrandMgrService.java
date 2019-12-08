@@ -63,6 +63,8 @@ public class BrandMgrService {
         }
         brand.setBrandPrice(brandPriceMapper.getPriceByBrandId(id));
         brand.setAgents(agentLevelMapper.listAgentLevelByBrandId(id));
+        //查询品牌下的图片集合
+        brand.setImageList(brandMgrMapper.queryBrandImages(brand.getBrandId()));
         return brand;
     }
 

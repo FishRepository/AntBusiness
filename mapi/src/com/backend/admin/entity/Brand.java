@@ -1,15 +1,14 @@
 package com.backend.admin.entity;
 
-import java.io.Serializable;
-
 import com.api.goods.entity.AgentLevel;
-import com.baomidou.mybatisplus.enums.IdType;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableField;
+import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.enums.IdType;
+
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -106,6 +105,8 @@ public class Brand extends Model<Brand> {
 	private String wechat;
 
 	private List<AgentLevel> agents;
+
+	private List<String> imageList;
 
 	private Double brandPrice;
 
@@ -280,6 +281,14 @@ public class Brand extends Model<Brand> {
 
 	public void setWechat(String wechat) {
 		this.wechat = wechat;
+	}
+
+	public List<String> getImageList() {
+		return imageList;
+	}
+
+	public void setImageList(List<String> imageList) {
+		this.imageList = imageList;
 	}
 
 	@Override

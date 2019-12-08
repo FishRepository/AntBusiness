@@ -21,9 +21,9 @@
         <result column="is_hot" property="isHot"/>
         <result column="brand_info" property="brandInfo"/>
         <result column="logo_url" property="logoUrl"/>
-        <result column="title" property="state"/>
-        <result column="phone" property="state"/>
-        <result column="wechat" property="state"/>
+        <result column="title" property="title"/>
+        <result column="phone" property="phone"/>
+        <result column="wechat" property="wechat"/>
     </resultMap>
 
     <select id="selectAll" resultMap="BaseResultMap">
@@ -87,4 +87,9 @@
         SET is_hot = 0
         WHERE brand_id = #{id}
     </update>
+
+    <select id="queryBrandImages" resultType="java.lang.String" parameterType="int">
+        select brandimages_url from brandimages where state = 1 and account_id = 0 and brand_id = #{brand_id} order by brandimages_id
+    </select>
+
 </mapper>

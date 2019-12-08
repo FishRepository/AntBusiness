@@ -219,14 +219,14 @@ public class GoodsService {
 					BrandGoodsInfo brandGoodsInfo = goodsMapper.queryBrandGoods(brand);
 					Brand brandInfo = goodsMapper.getBrandInfo(brand_id);
 					//设置库存提醒
-					int stockState = 0;//1、低于预警库存 2、缺货 3、尚未设置库存 4、尚未设置库存提醒 5、盘点提醒
+					int stockState = 0;//1、低于预警库存 2、缺货 3、尚未设置库存 4、尚未设置库存提醒 5、盘点提醒 6、显示订单金额
 					if(brandGoodsInfo!=null){
 						brandAndAgentLevel.setBrandGoodsInfo(brandGoodsInfo);
-						if(ObjectUtil.equal(brandGoodsInfo.getGoodsThreshold(),5)){
-							stockState = 4;
-							brandAndAgentLevel.setStockState(stockState);
-							continue;
-						}
+//						if(ObjectUtil.equal(brandGoodsInfo.getGoodsThreshold(),5)){
+//							stockState = 4;
+//							brandAndAgentLevel.setStockState(stockState);
+//							continue;
+//						}
 					}
 					//查询该品牌下库存不为0的商品集合
 					List<Goods> notEmptyStockgoods = goodsMapper.selectNotEmptyStockGoods(brand);
@@ -251,6 +251,7 @@ public class GoodsService {
 						brandAndAgentLevel.setLowStockGoods(lowStockGoods);
 						continue;
 					}
+					stockState = 6;
 					brandAndAgentLevel.setStockState(stockState);
 				}
 			}

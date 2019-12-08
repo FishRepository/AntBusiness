@@ -74,11 +74,18 @@
                                 <input name="title" class="form-control" type="text" placeholder="请输入名称">
                             </div>
                         </div>
-                        <input name="logoUrl" type="text" hidden id="logoUrl">
-                        <div class="form-group row">
+                        <div class="form-group row" style="" id="uploadLogoImgDiv">
+                            <input name="logoUrl" type="text" hidden id="logoUrl">
                             <label class="control-label col-md-3">上传logo&nbsp;：</label>
                             <div class="col-md-8">
-                                <input id="uploadImg" name="file" type="file" multiple>
+                                <input id="uploadLogoImg" name="file" type="file" multiple>
+                            </div>
+                        </div>
+                        <div class="form-group row" style="" id="uploadImagesDiv">
+                            <input name="images" type="text" hidden id="images">
+                            <label class="control-label col-md-3">上传品牌图&nbsp;：</label>
+                            <div class="col-md-8">
+                                <input id="uploadImages" name="file" type="file" multiple>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -117,11 +124,16 @@
 <@global.script>
 <script type="text/javascript">
     $(function(){
-        initFileInput("uploadImg", "${ctx}/adImg/uploadImg");
+        initFileInput("uploadLogoImg", "${ctx}/adImg/uploadImg", "logo");
+        initFileInput("uploadImages", "${ctx}/adImg/uploadImg", "images");
     });
 
     //初始化fileinput控件（第一次初始化）
-    function initFileInput(ctrlName, uploadUrl) {
+    //path = [
+    // "http://lorempixel.com/800/460/nature/1",
+    // "http://lorempixel.com/800/460/nature/2",
+    // ]
+    function initFileInput(ctrlName, uploadUrl, type, path,config) {
         var control = $('#' + ctrlName);
         //初始化上传控件的样式
         control.fileinput({
@@ -132,24 +144,29 @@
             showRemove : true,                                      //显示移除按钮
             showCaption: false,                                     //是否显示标题
             browseClass: "btn btn-primary",                         //按钮样式
-            uploadAsync: true,                                      //默认异步上传
+            uploadAsync: false,                                      //默认异步上传
             dropZoneEnabled: false,                                 //是否显示拖拽区域
-            //minImageWidth: 50,                                    //图片的最小宽度
-            //minImageHeight: 50,                                   //图片的最小高度
-            //maxImageWidth: 1000,                                  //图片的最大宽度
-            //maxImageHeight: 1000,                                 //图片的最大高度
-            //maxFileSize: 0,                                       //单位为kb，如果为0表示不限制文件大小
-            //minFileCount: 0,
-            maxFileCount: 1,                                       //表示允许同时上传的最大文件个数
+            maxFileCount: 6,                                       //表示允许同时上传的最大文件个数
             enctype: 'multipart/form-data',
-            validateInitialCount:true,
-            previewFileIcon: "<i class='glyphicon glyphicon-king'></i>"
+            previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
+            initialPreview:path,
+            initialPreviewAsData: true, // identify if you are sending preview data only and not the raw markup
+            initialPreviewFileType: 'image', // image is the default and can be overridden in config below
+            initialPreviewConfig:config
         });
         //导入文件上传完成之后的事件
         control.on('fileuploaded', function(event, data){
             var result = data.response;
             if(result.code === 0){
-                $('#logoUrl').val(result.data.urlPath);
+                if(type === 'logo'){
+                    $('#logoUrl').val(result.data.urlPath);
+                }else {
+                    var imgaes = $('#images').value;
+                    if(imgaes){
+                        imgaes += "##"+result.data.urlPath;
+                    }
+                    $('#images').val(imgaes);
+                }
             }else {
                 swal("操作失败！");
             }
@@ -242,12 +259,32 @@
             },
             success: function (result) {
                 var agents = result.agents;
+                var logo = result.logoUrl;
+                var brandImages = result.imageList;
                 if (agents) {
                     $.each(agents, function (i, agent) {
                         addAgent(agent);
                     });
                 }
                 $('#form-data').fill(result);
+                if(logo){
+                    $("#uploadLogoImg").fileinput('destroy');
+                    console.log(result.brandId);
+                    initFileInput("uploadLogoImg", "${ctx}/adImg/uploadImg", "logo", logo);
+                }
+                if(brandImages){
+                    $("#uploadImages").fileinput('destroy');
+                    var path = [];
+                    var config = [];
+                    var configItem = {};
+                    for(var i=0;i<brandImages.length;i++){
+                        path[i] = brandImages[i];
+                        configItem = {};
+                        configItem['key']=i+1;
+                        config[i] = configItem;
+                    }
+                    initFileInput("uploadImages", "${ctx}/adImg/uploadImg", "images", path, config);
+                }
                 $('#myModal').modal('show');
             }
         });
@@ -284,6 +321,11 @@
     $('#myModal').on('hidden.bs.modal', function () {
         var $form = $('#form-data');
         $form.clear();
+        //初始化图片上传
+        $("#uploadLogoImg").fileinput('destroy');
+        $("#uploadImages").fileinput('destroy');
+        initFileInput("uploadLogoImg", "${ctx}/adImg/uploadImg", "logo");
+        initFileInput("uploadImages", "${ctx}/adImg/uploadImg", "images");
         clearAgent();
     });
 
@@ -375,5 +417,38 @@
     }
 </script>
 </@global.script>
+<style>
+    .modal-dialog {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+
+    .modal-content {
+        /*overflow-y: scroll; */
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+    }
+
+    .modal-body {
+        overflow-y: scroll;
+        position: absolute;
+        top: 55px;
+        bottom: 65px;
+        width: 100%;
+    }
+
+    .modal-header .close {margin-right: 15px;}
+
+    .modal-footer {
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+    }
+</style>
 </body>
 </html>
