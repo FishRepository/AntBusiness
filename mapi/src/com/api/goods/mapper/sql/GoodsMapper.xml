@@ -128,6 +128,11 @@
 			and brand_id = #{brand_id} 
 		</if> 
 	</update>
+
+	<update id="deleteBrandImagesByImagesUrl" parameterType="com.api.goods.entity.BrandImages">
+		update brandimages set state = 0,update_time = now() where state = 1 and account_id = 0
+		and brandimages_id = #{brandimages_id}
+	</update>
 	
 	<select id="queryBrandImages" parameterType="com.api.goods.entity.Brand" resultType="com.api.goods.entity.BrandImagesResult">
 		select brandimages_id,brandimages_url from brandimages where state = 1 and account_id = #{account_id} and brand_id = #{brand_id} order by brandimages_id 

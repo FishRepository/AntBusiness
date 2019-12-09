@@ -1,5 +1,6 @@
 package com.backend.admin.mapper;
 
+import com.api.goods.entity.BrandImages;
 import com.backend.admin.entity.Brand;
 
 import java.util.List;
@@ -32,6 +33,6 @@ public interface BrandMgrMapper{
 
     int cancelBrandHot(int id);
 
-    List<String> queryBrandImages(int id);
+    List<BrandImages> queryBrandImages(int id);
 
 }

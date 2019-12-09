@@ -149,6 +149,7 @@
             maxFileCount: 6,                                       //表示允许同时上传的最大文件个数
             enctype: 'multipart/form-data',
             previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
+            overwriteInitial: false,
             initialPreview:path,
             initialPreviewAsData: true, // identify if you are sending preview data only and not the raw markup
             initialPreviewFileType: 'image', // image is the default and can be overridden in config below
@@ -270,7 +271,7 @@
                 if(logo){
                     $("#uploadLogoImg").fileinput('destroy');
                     console.log(result.brandId);
-                    initFileInput("uploadLogoImg", "${ctx}/adImg/uploadImg", "logo", logo);
+                    initFileInput("uploadLogoImg", "${ctx}/brandMgr/uploadLogoImg?brand_id="+id, "logo", logo);
                 }
                 if(brandImages){
                     $("#uploadImages").fileinput('destroy');
@@ -278,12 +279,15 @@
                     var config = [];
                     var configItem = {};
                     for(var i=0;i<brandImages.length;i++){
-                        path[i] = brandImages[i];
+                        path[i] = brandImages[i].brandimages_url;
                         configItem = {};
                         configItem['key']=i+1;
-                        config[i] = configItem;
+                        configItem['caption']='picture-'+(i+1);
+                        configItem['url']="${ctx}/brandMgr/deleteImg.do?brandimages_id="+brandImages[i].brandimages_id;
+                        configItem['size']=12345;
+                        config.push(configItem);
                     }
-                    initFileInput("uploadImages", "${ctx}/adImg/uploadImg", "images", path, config);
+                    initFileInput("uploadImages", "${ctx}/brandMgr/uploadImg.do?brand_id="+id, "images", path, config);
                 }
                 $('#myModal').modal('show');
             }

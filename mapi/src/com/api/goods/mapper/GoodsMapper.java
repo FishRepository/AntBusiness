@@ -45,6 +45,8 @@ public interface GoodsMapper {
 	public int insertBrandImages(BrandImages brandimages);
 	
 	public int deleteBrandImages(BrandImages brandimages);
+
+	public int deleteBrandImagesByImagesUrl(BrandImages brandimages);
 	
 	public List<BrandImagesResult> queryBrandImages(Brand brand);
 	

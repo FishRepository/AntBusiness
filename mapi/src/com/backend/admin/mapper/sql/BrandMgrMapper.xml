@@ -47,13 +47,13 @@
     <update id="updateBrand" parameterType="com.backend.admin.entity.Brand">
         UPDATE brand
         <trim prefix="SET" suffixOverrides="," suffix="WHERE brand_id = #{brandId}">
-            brand_name = #{brandName},
+            <if test="brandName!=null">brand_name = #{brandName},</if>
             <if test="goodsCount!=null">goods_count = #{goodsCount},</if>
-            brand_shortname = #{brandShortname},
-            brand_downloadcode = #{brandDownloadcode},
-            brand_info = #{brandInfo},
-            title = #{title},
-            logo_url = #{logoUrl},
+            <if test="brandShortname!=null">brand_shortname = #{brandShortname},</if>
+            <if test="brandDownloadcode!=null">brand_downloadcode = #{brandDownloadcode},</if>
+            <if test="brandInfo!=null">brand_info = #{brandInfo},</if>
+            <if test="title!=null">title = #{title},</if>
+            <if test="logoUrl!=null">logo_url = #{logoUrl},</if>
             update_time = CURRENT_TIMESTAMP
         </trim>
     </update>
@@ -88,8 +88,15 @@
         WHERE brand_id = #{id}
     </update>
 
-    <select id="queryBrandImages" resultType="java.lang.String" parameterType="int">
-        select brandimages_url from brandimages where state = 1 and account_id = 0 and brand_id = #{brand_id} order by brandimages_id
+    <select id="queryBrandImages" resultType="com.api.goods.entity.BrandImages" parameterType="int">
+        select b.brandimages_id,
+               b.brandimages_url,
+               b.brand_id,
+               b.account_id,
+               b.create_time,
+               b.update_time,
+               b.state
+        from brandimages b where state = 1 and account_id = 0 and brand_id = #{brand_id} order by brandimages_id
     </select>
 
 </mapper>

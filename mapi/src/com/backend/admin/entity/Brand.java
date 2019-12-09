@@ -1,6 +1,7 @@
 package com.backend.admin.entity;
 
 import com.api.goods.entity.AgentLevel;
+import com.api.goods.entity.BrandImages;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
@@ -106,7 +107,7 @@ public class Brand extends Model<Brand> {
 
 	private List<AgentLevel> agents;
 
-	private List<String> imageList;
+	private List<BrandImages> imageList;
 
 	private Double brandPrice;
 
@@ -283,15 +284,15 @@ public class Brand extends Model<Brand> {
 		this.wechat = wechat;
 	}
 
-	public List<String> getImageList() {
-		return imageList;
-	}
+    public List<BrandImages> getImageList() {
+        return imageList;
+    }
 
-	public void setImageList(List<String> imageList) {
-		this.imageList = imageList;
-	}
+    public void setImageList(List<BrandImages> imageList) {
+        this.imageList = imageList;
+    }
 
-	@Override
+    @Override
 	public String toString() {
 		return "Brand{" +
 			"brandId=" + brandId +
