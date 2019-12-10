@@ -2,6 +2,7 @@ package com.backend.admin.controller;
 
 import com.backend.admin.entity.AjaxResult;
 import com.backend.admin.entity.PayOrder;
+import com.backend.admin.service.AccountV2Service;
 import com.backend.admin.service.PayOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,9 @@ public class PayOrderController extends BaseController{
 
     @Autowired
     private PayOrderService payOrderService;
+
+    @Autowired
+    private AccountV2Service accountV2Service;
 
     @RequestMapping
     public ModelAndView index(){
@@ -64,6 +68,21 @@ public class PayOrderController extends BaseController{
     public AjaxResult edit(PayOrder payOrder){
         int update = payOrderService.update(payOrder);
         if(update > 0){
+            return success();
+        }
+        return error();
+    }
+
+    /**
+     * 手动充值会员时间
+     * @param payOrder
+     * @return
+     */
+    @RequestMapping("rechargeVipTime")
+    @ResponseBody
+    public AjaxResult rechargeVipTime(PayOrder payOrder){
+        boolean recharge = accountV2Service.recharge(payOrder);
+        if(recharge){
             return success();
         }
         return error();

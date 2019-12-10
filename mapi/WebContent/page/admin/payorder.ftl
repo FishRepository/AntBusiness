@@ -67,6 +67,11 @@
                                 <i class="fa fa-fw fa-lg fa-check-circle"></i>导出
                             </button>
                         </div>
+                        <div class="form-group col-auto">
+                            <button id="openModal" class="btn btn-primary" type="button"><i
+                                        class="fa fa-fw fa-lg fa-check-circle"></i>手动添加会员时间
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -102,30 +107,22 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">新增条目</h5>
+                    <h5 class="modal-title">手动添加会员时间</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
                                 aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body">
                     <form id="form-data" class="form-horizontal">
-                        <input name="id" type="text" hidden>
-                        <input name="imgUrl" type="text" hidden id="imgUrl">
                         <div class="form-group row">
-                            <label class="control-label col-md-3">上传图片&nbsp;：</label>
+                            <label class="control-label col-md-3">手机号&nbsp;：</label>
                             <div class="col-md-8">
-                                <input id="uploadImg" name="file" type="file" multiple>
+                                <input name="user_phone" class="form-control" type="text" placeholder="请输入需要充值天数的手机号">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="control-label col-md-3">链接地址&nbsp;：</label>
+                            <label class="control-label col-md-3">天数&nbsp;：</label>
                             <div class="col-md-8">
-                                <input name="linkUrl" class="form-control" type="text" placeholder="请输入链接地址">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="control-label col-md-3">描述&nbsp;：</label>
-                            <div class="col-md-8">
-                                <input name="description" class="form-control" type="text" placeholder="描述">
+                                <input name="vip_time" class="form-control" type="text" placeholder="请输入整数天数">
                             </div>
                         </div>
                     </form>
@@ -277,36 +274,15 @@
             <#--    }-->
             <#--})-->
         });
-        
-        $('#addNew').click(function () {
-            // addAgent({agentlevel_name: '零售价'});
+
+        $('#openModal').click(function () {
             $('#myModal').modal('show');
         });
-
-        // 编辑栏目
-        function editItem(id) {
-            $.ajax({
-                url: '${ctx}/adImg/getAdImgById',
-                type: 'get',
-                data: {
-                    id: id
-                },
-                success: function (result) {
-                    if(result.code === 0){
-                        var adImg = result.data;
-                        $('#form-data').fill(adImg);
-                        $('#myModal').modal('show');
-                    }else{
-                        swal("操作失败！");
-                    }
-                }
-            });
-        }
 
         // 保存栏目
         function saveItem() {
             var $form = $('#form-data');
-            var url = '${ctx}/adImg/save';
+            var url = '${ctx}/payorder/rechargeVipTime';
             // 清空disabled属性，防止未提交至后台
             $form.find('[disabled]').prop('disabled', false);
             $form.ajaxSubmit({
@@ -322,7 +298,7 @@
                         closePopup();
                         reloadDataTable();
                     }else {
-                        swal("操作失败！");
+                        swal("操作失败！",'error');
                     }
                 }
             });
@@ -342,58 +318,11 @@
         $('#myModal').on('hidden.bs.modal', function () {
             var $form = $('#form-data');
             $form.clear();
-            clearAgent();
         });
 
         // 关闭弹出框
         function closePopup() {
             $('#myModal').modal('hide');
-        }
-
-        function removeItem(id) {
-            swal({
-                    title: "确定删除该项吗？",
-                    text: "删除将移除此项！",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    closeOnConfirm: false
-                },
-                function () {
-                    $.ajax({
-                        url: '${ctx}/adImg/delete',
-                        type: 'post',
-                        data: {
-                            id: id
-                        },
-                        success: function (res) {
-                            if(res.code === 0){
-                                swal("操作成功！");
-                                reloadDataTable();
-                            }else {
-                                swal("操作失败！");
-                            }
-                        },
-                        error: function () {
-                            swal("操作失败！");
-                        }
-                    });
-                }
-            );
-        }
-
-        function clearAgent() {
-            $('#form-data').find('.js-agent').remove();
-        }
-
-        function formatAgentName() {
-            $('#form-data').find('.js-agent').each(function (i, item) {
-                $(item).find('.js-id').attr('name', 'agents[' + i + '].agentlevel_id');
-                $(item).find('.js-name').attr('name', 'agents[' + i + '].agentlevel_name');
-                $(item).find('.js-default').attr('name', 'agents[' + i + '].agentlevel_default');
-            });
         }
     </script>
 </@global.script>

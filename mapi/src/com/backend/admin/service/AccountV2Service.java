@@ -1,6 +1,7 @@
 package com.backend.admin.service;
 
 import com.api.account.entity.Account;
+import com.api.account.entity.AccountLoginResult;
 import com.api.account.mapper.AccountMapper;
 import com.backend.admin.entity.PayOrder;
 import com.backend.admin.entity.ToastSwith;
@@ -9,16 +10,13 @@ import com.backend.admin.mapper.PayOrderMapper;
 import com.backend.admin.mapper.ToastSwithMapper;
 import com.backend.admin.mapper.VipPayMapper;
 import com.backend.common.DateUtil;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -150,11 +148,11 @@ public class AccountV2Service {
             //原本的会员到期
             Date endTime = account.getVip_time();
             if(account.getIs_vip().equals(0)){
-                LOGGER.error("is not vip，endTime init");
+                LOGGER.info("is not vip，endTime init");
                 endTime = new Date();
             }
             if(endTime.before(new Date())){
-                LOGGER.error("date before, endTime init");
+                LOGGER.info("date before, endTime init");
                 endTime = new Date();
             }
             switch (payOrderLast.getOrder_type()){
@@ -177,18 +175,59 @@ public class AccountV2Service {
             }
             //设置用户的vip信息
             Date vipTime = DateUtil.adjustDateByDay(endTime ,days,1);
-            LOGGER.error("last endTime: "+ new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(endTime));
-            LOGGER.error("update vipTime: "+ new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(vipTime));
             account.setVip_time(DateUtil.setEnd(vipTime,1));
             account.setIs_vip(1);
             account.setVip_type(vipType);
             int updateAccount = accountMapper.updateAccount(account);
-            LOGGER.error("updateAccount: "+updateAccount);
+            LOGGER.info("updateAccount: "+updateAccount);
             //设置订单信息
             payOrder.setVip_time(days);
             payOrder.setRemain_time(vipTime);
             int payOrderUpdate = payOrderMapper.update(payOrder);
-            LOGGER.error("payOrderUpdate: "+payOrderUpdate);
+            LOGGER.info("payOrderUpdate: "+payOrderUpdate);
+        }catch (Exception e){
+            LOGGER.error("editeState error: "+e.getMessage());
+        }
+        return true;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public boolean recharge(PayOrder payOrder){
+        if(payOrder.getVip_time()==null || StringUtils.isBlank(payOrder.getUser_phone())){
+            LOGGER.error("recharge error: require param==null");
+            return false;
+        }
+        try {
+            AccountLoginResult accountLogin = accountMapper.queryAccountByPhone(payOrder.getUser_phone());
+            if(accountLogin==null){
+                LOGGER.error("recharge error: account==null");
+                return false;
+            }
+            int days = payOrder.getVip_time();
+            int vipType = 3;
+            if(days >= 365*2){
+                vipType = 1;
+            }else if(days >= 365){
+                vipType = 2;
+            }
+            //原本的会员到期
+            Date endTime = accountLogin.getVip_time();
+            if(accountLogin.getIs_vip().equals(0)){
+                LOGGER.info("is not vip，endTime init");
+                endTime = new Date();
+            }
+            if(endTime.before(new Date())){
+                LOGGER.info("date before, endTime init");
+                endTime = new Date();
+            }//设置用户的vip信息
+            Date vipTime = DateUtil.adjustDateByDay(endTime ,days,1);
+            Account account = new Account();
+            account.setAccount_id(accountLogin.getAccount_id());
+            account.setVip_time(DateUtil.setEnd(vipTime,1));
+            account.setIs_vip(1);
+            account.setVip_type(vipType);
+            int updateAccount = accountMapper.updateAccount(account);
+            LOGGER.info("updateAccount: "+updateAccount);
         }catch (Exception e){
             LOGGER.error("editeState error: "+e.getMessage());
         }
