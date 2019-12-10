@@ -105,6 +105,8 @@ public class Brand extends Model<Brand> {
 	@TableField("wechat")
 	private String wechat;
 
+	private String images;
+
 	private List<AgentLevel> agents;
 
 	private List<BrandImages> imageList;
@@ -292,7 +294,15 @@ public class Brand extends Model<Brand> {
         this.imageList = imageList;
     }
 
-    @Override
+	public String getImages() {
+		return images;
+	}
+
+	public void setImages(String images) {
+		this.images = images;
+	}
+
+	@Override
 	public String toString() {
 		return "Brand{" +
 			"brandId=" + brandId +

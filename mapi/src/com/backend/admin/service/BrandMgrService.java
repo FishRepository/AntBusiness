@@ -1,5 +1,6 @@
 package com.backend.admin.service;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.api.common.entity.Images;
 import com.api.common.service.ImagesService;
 import com.api.goods.entity.AgentLevel;
@@ -81,6 +82,17 @@ public class BrandMgrService {
         if (brand.getBrandPrice() != null) {
             brandPriceMapper.saveBrandPrice(brand.getBrandId(), brand.getBrandPrice());
         }
+        //保存品牌图
+        if(brand.getBrandId()>0 && StringUtils.isNotBlank(brand.getImages())){
+            String[] imgArr = brand.getImages().split("##");
+            for (String imgUrl:imgArr) {
+                BrandImages brandImages = new BrandImages();
+                brandImages.setAccount_id(0);
+                brandImages.setBrand_id(brand.getBrandId());
+                brandImages.setBrandimages_url(imgUrl);
+                goodsMapper.insertBrandImages(brandImages);
+            }
+        }
         return brand.getBrandId() > 0;
     }
 
@@ -134,6 +146,17 @@ public class BrandMgrService {
             }
         }
         initBrandShortname(brand);
+        //保存品牌图
+        if(StringUtils.isNotBlank(brand.getImages())){
+            String[] imgArr = brand.getImages().split("##");
+            for (String imgUrl:imgArr) {
+                BrandImages brandImages = new BrandImages();
+                brandImages.setAccount_id(0);
+                brandImages.setBrand_id(brand.getBrandId());
+                brandImages.setBrandimages_url(imgUrl);
+                goodsMapper.insertBrandImages(brandImages);
+            }
+        }
         return brandMgrMapper.updateBrand(brand) > 0;
     }
 

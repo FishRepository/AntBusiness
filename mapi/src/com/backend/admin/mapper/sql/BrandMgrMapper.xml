@@ -30,6 +30,7 @@
         SELECT *
         FROM brand
         WHERE state = 1 AND brand_downloadcode IS NOT NULL
+        ORDER BY is_hot DESC, update_time DESC
     </select>
 
     <select id="getBrandById" resultMap="BaseResultMap">
@@ -78,13 +79,13 @@
 
     <update id="setBrandHot" parameterType="int">
         UPDATE brand
-        SET is_hot = 1
+        SET is_hot = 1,update_time = CURRENT_TIMESTAMP
         WHERE brand_id = #{id}
     </update>
 
     <update id="cancelBrandHot" parameterType="int">
         UPDATE brand
-        SET is_hot = 0
+        SET is_hot = 0,update_time = CURRENT_TIMESTAMP
         WHERE brand_id = #{id}
     </update>
 

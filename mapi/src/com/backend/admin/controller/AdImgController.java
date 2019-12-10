@@ -65,6 +65,8 @@ public class AdImgController extends BaseController{
         return errorMsg(StringUtils.isEmpty(images.getMsg()) ?"系统错误":images.getMsg());
     }
 
+
+
     /**
      * 保存广告图
      * @param adImg

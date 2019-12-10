@@ -144,7 +144,7 @@
             showRemove : true,                                      //显示移除按钮
             showCaption: false,                                     //是否显示标题
             browseClass: "btn btn-primary",                         //按钮样式
-            uploadAsync: false,                                      //默认异步上传
+            uploadAsync: true,                                      //默认异步上传
             dropZoneEnabled: false,                                 //是否显示拖拽区域
             maxFileCount: 6,                                       //表示允许同时上传的最大文件个数
             enctype: 'multipart/form-data',
@@ -154,22 +154,30 @@
             initialPreviewAsData: true, // identify if you are sending preview data only and not the raw markup
             initialPreviewFileType: 'image', // image is the default and can be overridden in config below
             initialPreviewConfig:config
-        });
-        //导入文件上传完成之后的事件
-        control.on('fileuploaded', function(event, data){
+        }).on('fileuploaded', function(event, data){
+            //导入文件上传完成之后的事件
             var result = data.response;
             if(result.code === 0){
                 if(type === 'logo'){
                     $('#logoUrl').val(result.data.urlPath);
                 }else {
-                    var imgaes = $('#images').value;
+                    var imgaes = $('#images').val();
                     if(imgaes){
                         imgaes += "##"+result.data.urlPath;
+                    }else{
+                        imgaes = result.data.urlPath;
                     }
                     $('#images').val(imgaes);
                 }
             }else {
-                swal("操作失败！");
+                $(event.target)
+                    .fileinput('clear')
+                    .fileinput('unlock');
+                $(event.target)
+                    .parent()
+                    .siblings('.fileinput-remove')
+                    .hide();
+                swal(result.msg);
             }
         });
     }
@@ -202,7 +210,7 @@
                 {'data': 'brandName'},
                 {'data': 'brandDownloadcode'},
                 {'data': function (row) {
-                        return row.isHot===1?'是':"否";
+                        return row.isHot>0?'是':"否";
                     }
                 },
                 {
@@ -213,10 +221,10 @@
                                     "<a class=\'btn btn-info btn-sm\' href=\'javascript:removeItem(" + row.brandId + ")\'><i class='fa fa-eye\'></i>删除</a>";
                             if(row.isHot===0){
                                 opHtml+='&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;' +
-                                "<a class=\'btn btn-info btn-sm\' href=\'javascript:setHot(" + row.brandId+","+1 + ")\'><i class='fa fa-eye\'></i>推荐</a>";
+                                "<a class=\'btn btn-info btn-sm\' href=\'javascript:setHot(" + row.brandId+","+1 + ")\'><i class='fa fa-eye\'></i>置顶</a>";
                             }else{
                                 opHtml+='&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;' +
-                                    "<a class=\'btn btn-info btn-sm\' href=\'javascript:setHot(" + row.brandId+","+2 + ")\'><i class='fa fa-eye\'></i>取消推荐</a>";
+                                    "<a class=\'btn btn-info btn-sm\' href=\'javascript:setHot(" + row.brandId+","+2 + ")\'><i class='fa fa-eye\'></i>取消置顶</a>";
                             }
                             return opHtml;
                         }
@@ -268,10 +276,11 @@
                     });
                 }
                 $('#form-data').fill(result);
+                $('#images').val('');
                 if(logo){
                     $("#uploadLogoImg").fileinput('destroy');
                     console.log(result.brandId);
-                    initFileInput("uploadLogoImg", "${ctx}/brandMgr/uploadLogoImg?brand_id="+id, "logo", logo);
+                    initFileInput("uploadLogoImg", "${ctx}/adImg/uploadImg", "logo", logo);
                 }
                 if(brandImages){
                     $("#uploadImages").fileinput('destroy');
@@ -287,7 +296,7 @@
                         configItem['size']=12345;
                         config.push(configItem);
                     }
-                    initFileInput("uploadImages", "${ctx}/brandMgr/uploadImg.do?brand_id="+id, "images", path, config);
+                    initFileInput("uploadImages", "${ctx}/adImg/uploadImg", "images", path, config);
                 }
                 $('#myModal').modal('show');
             }

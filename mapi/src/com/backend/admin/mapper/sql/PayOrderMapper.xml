@@ -29,6 +29,7 @@
           order_no, order_type, create_time, order_amount, vip_time, remain_time, state, account_id,pay_type,user_phone
         from fqgj.pay_order
         where account_id = #{account_id}
+        order by create_time desc
     </select>
 
     <!--查询指定行数据-->

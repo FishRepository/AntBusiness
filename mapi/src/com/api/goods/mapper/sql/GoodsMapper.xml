@@ -472,7 +472,7 @@
 	</update>
 
 	<select id="selectHotBrand" resultType="com.api.goods.entity.Brand">
-		select * from brand where state = 1 and  brand_downloadcode is not null and is_hot = 1
+		select * from brand where state = 1 and  brand_downloadcode is not null order by is_hot desc, update_time desc
 	</select>
 
 	<select id="getBrandInfo" parameterType="java.lang.Integer" resultType="com.api.goods.entity.Brand">

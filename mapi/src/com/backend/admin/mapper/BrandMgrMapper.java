@@ -19,7 +19,7 @@ public interface BrandMgrMapper{
 
     Brand getBrandById(int id);
 
-    void saveBrand(Brand brand);
+    int saveBrand(Brand brand);
 
     int updateBrand(Brand brand);
 
