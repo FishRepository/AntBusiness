@@ -22,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class PayService {
@@ -37,7 +38,7 @@ public class PayService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PayService.class);
 
-    private ExecutorService executorService = Executors.newFixedThreadPool(20);
+    private ExecutorService executorService;
 
     /**
      * 处理微信支付宝支付请求
@@ -108,74 +109,83 @@ public class PayService {
 //            return failure("未登录");
 //        }
         //线上环境验证
-        String verifyResult = IosVerifyUtil.buyAppVerify(iosPayVerifyRequest.getPayload(), 1);
-        if (verifyResult == null) {
-            return false;
-        }
-        LOGGER.info("线上，苹果平台返回JSON:" + verifyResult);
-        JSONObject appleReturn = JSONObject.parseObject(verifyResult);
-        String states = appleReturn.getString("status");
-        //无数据则沙箱环境验证
-        if ("21007".equals(states)) {
-            verifyResult = IosVerifyUtil.buyAppVerify(iosPayVerifyRequest.getPayload(), 0);
-            LOGGER.info("沙盒环境，苹果平台返回JSON:" + verifyResult);
-            appleReturn = JSONObject.parseObject(verifyResult);
-            states = appleReturn.getString("status");
-        }
-        LOGGER.info("苹果平台返回值：appleReturn" + appleReturn);
-        // 前端所提供的收据是有效的    验证成功
-        //"支付失败，错误码：" + states
-        if (!states.equals("0")){
-            LOGGER.info("iosPayVerify states is not 0: " + states);
-            return false;
-        }
-        String receipt = appleReturn.getString("receipt");
-        JSONObject returnJson = JSONObject.parseObject(receipt);
-        String inApp = returnJson.getString("in_app");
-        List<HashMap> inApps = JSONObject.parseArray(inApp, HashMap.class);
-        if (CollectionUtils.isEmpty(inApps)) {
-            LOGGER.info("iosPayVerify inApps isEmpty");
-            return false;
-        }
-        ArrayList<String> transactionIds = new ArrayList<>();
-        for (HashMap app : inApps) {
-            transactionIds.add((String) app.get("transaction_id"));
-        }
-        //交易列表包含当前交易，则认为交易成功
-        if (transactionIds.contains(iosPayVerifyRequest.getTransaction_id())) {
-            //"充值成功"
-            //异步处理本地订单状态
-            executorService.execute(new Runnable() {
-                @Override
-                public void run() {
-                    LOGGER.info("交易成功，新增并处理订单：{}",iosPayVerifyRequest.getTransaction_id());
-                    PayOrder payOrder = new PayOrder();
-                    String orderNo = UUID.randomUUID().toString().replaceAll("-", "");
-                    payOrder.setAccount_id(iosPayVerifyRequest.getAccount_id());
-                    payOrder.setOrder_amount(iosPayVerifyRequest.getOrder_money());
-                    payOrder.setOrder_no(orderNo);
-                    payOrder.setState(0);
-                    payOrder.setPay_type(3);
-                    payOrder.setOrder_type(iosPayVerifyRequest.getOrder_type());
-                    Account accountInfo = accountMapper.getAccountInfo(iosPayVerifyRequest.getAccount_id());
-                    if(accountInfo!=null){
-                        payOrder.setUser_phone(accountInfo.getAccount_userphone());
-                    }
-                    int insert = payOrderService.insert(payOrder);
-                    if(insert>0){
-                        payOrder = new PayOrder();
+        try {
+            String verifyResult = IosVerifyUtil.buyAppVerify(iosPayVerifyRequest.getPayload(), 1);
+            if (verifyResult == null) {
+                return false;
+            }
+            LOGGER.info("线上，苹果平台返回JSON:" + verifyResult);
+            JSONObject appleReturn = JSONObject.parseObject(verifyResult);
+            String states = appleReturn.getString("status");
+            //无数据则沙箱环境验证
+            if ("21007".equals(states)) {
+                verifyResult = IosVerifyUtil.buyAppVerify(iosPayVerifyRequest.getPayload(), 0);
+                LOGGER.info("沙盒环境，苹果平台返回JSON:" + verifyResult);
+                appleReturn = JSONObject.parseObject(verifyResult);
+                states = appleReturn.getString("status");
+            }
+            LOGGER.info("苹果平台返回值：appleReturn" + appleReturn);
+            // 前端所提供的收据是有效的    验证成功
+            //"支付失败，错误码：" + states
+            if (!states.equals("0")){
+                LOGGER.info("iosPayVerify states is not 0: " + states);
+                return false;
+            }
+            String receipt = appleReturn.getString("receipt");
+            JSONObject returnJson = JSONObject.parseObject(receipt);
+            String inApp = returnJson.getString("in_app");
+            List<HashMap> inApps = JSONObject.parseArray(inApp, HashMap.class);
+            if (CollectionUtils.isEmpty(inApps)) {
+                LOGGER.info("iosPayVerify inApps isEmpty");
+                return false;
+            }
+            ArrayList<String> transactionIds = new ArrayList<>();
+            for (HashMap app : inApps) {
+                transactionIds.add((String) app.get("transaction_id"));
+            }
+            //交易列表包含当前交易，则认为交易成功
+            if (transactionIds.contains(iosPayVerifyRequest.getTransaction_id())) {
+                //"充值成功"
+                //异步处理本地订单状态
+                executorService = Executors.newFixedThreadPool(20);
+                executorService.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        LOGGER.info("交易成功，新增并处理订单：{}",iosPayVerifyRequest.getTransaction_id());
+                        PayOrder payOrder = new PayOrder();
+                        String orderNo = UUID.randomUUID().toString().replaceAll("-", "");
+                        payOrder.setAccount_id(iosPayVerifyRequest.getAccount_id());
+                        payOrder.setOrder_amount(iosPayVerifyRequest.getOrder_money());
                         payOrder.setOrder_no(orderNo);
-                        payOrder.setState(1);
-                        accountV2Service.editeState(payOrder);
-                    }else{
-                        LOGGER.error("IOS插入订单失败,单号: "+iosPayVerifyRequest.getTransaction_id());
+                        payOrder.setState(0);
+                        payOrder.setPay_type(3);
+                        payOrder.setOrder_type(iosPayVerifyRequest.getOrder_type());
+                        Account accountInfo = accountMapper.getAccountInfo(iosPayVerifyRequest.getAccount_id());
+                        if(accountInfo!=null){
+                            payOrder.setUser_phone(accountInfo.getAccount_userphone());
+                        }
+                        int insert = payOrderService.insert(payOrder);
+                        if(insert>0){
+                            payOrder = new PayOrder();
+                            payOrder.setOrder_no(orderNo);
+                            payOrder.setState(1);
+                            accountV2Service.editeState(payOrder);
+                        }else{
+                            LOGGER.error("IOS插入订单失败,单号: "+iosPayVerifyRequest.getTransaction_id());
+                        }
                     }
+                });
+                executorService.shutdown();
+                while(!executorService.awaitTermination(1, TimeUnit.SECONDS)){
+                    executorService.shutdownNow();
                 }
-            });
-            return true;
-        }else{
-            LOGGER.info("transactionIds.not contains(iosPayVerifyRequest.getTransaction_id()): "+iosPayVerifyRequest.getTransaction_id());
-            LOGGER.info("transactionIds: "+transactionIds);
+                return true;
+            }else{
+                LOGGER.info("transactionIds.not contains(iosPayVerifyRequest.getTransaction_id()): "+iosPayVerifyRequest.getTransaction_id());
+                LOGGER.info("transactionIds: "+transactionIds);
+            }
+        } catch (Exception e) {
+            LOGGER.info("iosPayVerify error: "+e.getMessage());
         }
         return true;
     }
@@ -220,6 +230,7 @@ public class PayService {
             String appId = params.get("appid");
             String tradeNo = params.get("transaction_id");
             // 另起线程处理业务
+            executorService = Executors.newFixedThreadPool(20);
             executorService.execute(new Runnable() {
                 @Override
                 public void run() {
@@ -242,6 +253,9 @@ public class PayService {
                 }
             });
             executorService.shutdown();
+            while(!executorService.awaitTermination(1, TimeUnit.SECONDS)){
+                executorService.shutdownNow();
+            }
         }catch (Exception e){
             LOGGER.info("微信支付回调异常: "+e.getMessage());
             return_data.put("return_code", "FAIL");

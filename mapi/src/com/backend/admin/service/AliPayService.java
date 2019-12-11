@@ -19,13 +19,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class AliPayService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AliPayService.class);
 
-    private ExecutorService executorService = Executors.newFixedThreadPool(20);
+    private ExecutorService executorService;
 
     @Autowired
     private PayOrderService payOrderService;
@@ -61,6 +62,7 @@ public class AliPayService {
                 // 按照支付结果异步通知中的描述，对支付结果中的业务内容进行1\2\3\4二次校验，校验成功后在response中返回success，校验失败返回failure
 //                this.check(params);
                 // 另起线程处理业务
+                executorService = Executors.newFixedThreadPool(20);
                 executorService.execute(new Runnable() {
                     @Override
                     public void run() {
@@ -83,6 +85,10 @@ public class AliPayService {
                         }
                     }
                 });
+                executorService.shutdown();
+                while(!executorService.awaitTermination(1, TimeUnit.SECONDS)){
+                    executorService.shutdownNow();
+                }
                 // 如果签名验证正确，立即返回success，后续业务另起线程单独处理
                 // 业务处理失败，可查看日志进行补偿，跟支付宝已经没多大关系。
                 return true;
@@ -90,7 +96,7 @@ public class AliPayService {
                 LOGGER.info("支付宝回调签名认证失败，signVerified=false, paramsJson:{}", paramsJson);
                 return false;
             }
-        } catch (AlipayApiException e) {
+        } catch (Exception e) {
             LOGGER.error("支付宝回调签名认证失败,paramsJson:{},errorMsg:{}", paramsJson, e.getMessage());
             return false;
         }
