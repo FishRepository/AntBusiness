@@ -214,4 +214,16 @@ public interface GoodsMapper {
 	 * @return
 	 */
 	List<Goods> selectNotEmptyStockGoods(Brand brand);
+
+	/**
+	 * 批量插入商品价格
+	 * @param list
+	 */
+    void insertBatch(List<GoodsPrice> list);
+
+	/**
+	 * 批量插入品牌代理
+	 * @param list
+	 */
+	void insertAgentLevelBatch(List<AgentLevel> list);
 }

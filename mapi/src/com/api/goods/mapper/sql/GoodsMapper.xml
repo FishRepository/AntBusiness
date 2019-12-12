@@ -335,7 +335,7 @@
 	</update>
 	
 	<select id="queryGoodsPriceById" parameterType="com.api.goods.entity.GoodsPrice" resultType="com.api.goods.entity.GoodsPrice">
-		select goodsprice_id,goods_price from goodsprice where state = 1 and goods_id = #{goods_id} and agentlevel_id = #{agentlevel_id} and account_id = #{account_id} 
+		select goodsprice_id,goods_price from goodsprice where goods_id = #{goods_id} and account_id = #{account_id} and state = 1 and agentlevel_id = #{agentlevel_id}
 	</select>
 	
 	<select id="queryGoodsPrice" parameterType="com.api.goods.entity.Goods" resultType="com.api.goods.entity.GoodsPriceResult">
@@ -518,5 +518,21 @@
 		and b.account_id = #{account_id}
 		and g.goods_stock != 0
 	</select>
+
+	<insert id="insertBatch" parameterType="com.api.goods.entity.GoodsPrice">
+		insert into goodsprice (goods_id,account_id, agentlevel_id, goods_price, create_time, update_time)
+		values
+		<foreach collection="list" item="item" separator=",">
+			(#{item.goods_id},#{item.account_id}, #{item.agentlevel_id}, #{item.goods_price}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+		</foreach>
+	</insert>
+
+	<insert id="insertAgentLevelBatch" parameterType="com.api.goods.entity.AgentLevel">
+		insert into agentlevel(agentlevel_name,agentlevel_default,brand_id,account_id,create_time,update_time)
+		values
+		<foreach collection="list" item="item" separator=",">
+			(#{item.agentlevel_name},#{item.agentlevel_default},#{item.brand_id},#{item.account_id},CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)
+		</foreach>
+	</insert>
 
 </mapper>
