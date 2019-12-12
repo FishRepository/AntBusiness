@@ -1,13 +1,13 @@
 package com.api.account.service;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import cn.hutool.core.collection.CollectionUtil;
+import com.api.account.entity.*;
+import com.api.account.mapper.AccountMapper;
+import com.api.common.entity.Result;
+import com.api.common.utils.*;
+import com.api.goods.entity.*;
+import com.api.goods.mapper.GoodsMapper;
 import com.backend.common.DateUtil;
+import com.key.KeyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,53 +15,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.api.account.entity.Account;
-import com.api.account.entity.AccountCode;
-import com.api.account.entity.AccountIconResult;
-import com.api.account.entity.AccountIntegral;
-import com.api.account.entity.AccountLoginResult;
-import com.api.account.entity.AccountQueryResult;
-import com.api.account.entity.AccountRegResult;
-import com.api.account.entity.AccountResetResult;
-import com.api.account.entity.Advise;
-import com.api.account.entity.DownloadResult;
-import com.api.account.entity.InsertAdviseResult;
-import com.api.account.entity.InsertMemorandumResult;
-import com.api.account.entity.Integral;
-import com.api.account.entity.IntegralRule;
-import com.api.account.entity.ListPageAdvise;
-import com.api.account.entity.ListPageAdviseResult;
-import com.api.account.entity.ListPageIntegral;
-import com.api.account.entity.ListPageIntegralResult;
-import com.api.account.entity.ListPageMemorandum;
-import com.api.account.entity.ListPageMemorandumResult;
-import com.api.account.entity.Memorandum;
-import com.api.account.entity.ShareAccount;
-import com.api.account.mapper.AccountMapper;
-import com.api.common.entity.Result;
-import com.api.common.utils.EncryptUtil;
-import com.api.common.utils.PropertiesUtil;
-import com.api.common.utils.RandomNum;
-import com.api.common.utils.SmsUtil;
-import com.api.common.utils.StringUtil;
-import com.api.goods.entity.AgentLevel;
-import com.api.goods.entity.Brand;
-import com.api.goods.entity.BrandPrice;
-import com.api.goods.entity.Goods;
-import com.api.goods.entity.GoodsAgentLevelPrice;
-import com.api.goods.entity.GoodsPrice;
-import com.api.goods.entity.GoodsPriceQuery;
-import com.api.goods.entity.ShareQueryAgentLevel;
-import com.api.goods.entity.ShareQueryBrand;
-import com.api.goods.entity.ShareUse;
-import com.api.goods.mapper.GoodsMapper;
-import com.key.KeyUtils;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Transactional
 public class AccountService {
 
 	private static final Logger logger = LoggerFactory.getLogger(AccountService.class);
+
+	private ExecutorService executorService;
 
 	private DateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 	@Autowired
@@ -1100,105 +1069,113 @@ public class AccountService {
 
 	public DownloadResult downloadbrandByCode(Integer account_id,Integer brand_id,String code){
 		DownloadResult result = new DownloadResult();
-		if(account_id!=null && account_id > 0 && brand_id!=null && brand_id > 0 && StringUtil.isValid(code) && goodsMapper.checkExchangeCode(brand_id,code) > 0){
-			Brand brand = new Brand();
-			brand.setAccount_id(account_id);
-			brand.setBrand_from(brand_id);
-			long checkRecommendBrandBegin = System.currentTimeMillis();
-			if(goodsMapper.checkRecommendBrand(brand) <= 0){
-				brand.setBrand_id(brand_id);
-				brand.setAccount_id(0);
-				List<AgentLevel> alist = goodsMapper.queryAgentLevel(brand);
-				List<Goods> glist = goodsMapper.queryGoodsList(brand);
-				List<Goods> newglist = new ArrayList<Goods>();
-				List<GoodsPrice> gplist = new ArrayList<GoodsPrice>();
-				if(alist!=null && !alist.isEmpty() && glist!=null && !glist.isEmpty()){
-					String brand_name = goodsMapper.queryBrandNameById(brand_id);
-					if(StringUtil.isValid(brand_name)){
-						brand.setBrand_name(brand_name);
-						brand.setAccount_id(account_id);
-						if(goodsMapper.insertBrand(brand) > 0){
-							Integer oldagentlevel = 0;
-							Integer newagentlevel = 0;
-							GoodsPrice goodsprice = null;
-							GoodsPrice oldgoodsprice = null;
-							GoodsPrice newgoodsprice = null;
-							Goods oldgoods = null;
-							Goods newgoods = null;
-							List<Integer> gidlist = new ArrayList<Integer>();
-							int i=0;
-							List<GoodsPrice> goodsPricesList = new ArrayList<>();
-							List<AgentLevel> agentLevelList = new ArrayList<>();
-							for(AgentLevel agentlevel:alist){
-								agentlevel.setAccount_id(account_id);
-								agentlevel.setBrand_id(brand.getBrand_id());
-								if("零售价".equals(agentlevel.getAgentlevel_name())){
-									agentlevel.setAgentlevel_default(1);
-								}else{
-									agentlevel.setAgentlevel_default(0);
-								}
-								oldagentlevel = agentlevel.getAgentlevel_id();
-								agentLevelList.add(agentlevel);
-//								goodsMapper.insertAgentLevel(agentlevel);
-								newagentlevel = agentlevel.getAgentlevel_id();
-								goodsprice = new GoodsPrice();
-								goodsprice.setAccount_id(0);
-								goodsprice.setAgentlevel_id(oldagentlevel);
-								for(int j=0;j<glist.size();j++){
-									oldgoods = glist.get(j);
-									goodsprice.setGoods_id(oldgoods.getGoods_id());
-									long queryGoodsPriceByIdBegin = System.currentTimeMillis();
-									oldgoodsprice = goodsMapper.queryGoodsPriceById(goodsprice);
-									long queryGoodsPriceByIdEnd = System.currentTimeMillis();
-									logger.info("queryGoodsPriceByIdTime: "+ (queryGoodsPriceByIdEnd - queryGoodsPriceByIdBegin));
-									if(i==0){
-										newgoods = new Goods();
-										newgoods.setAccount_id(account_id);
-										newgoods.setBrand_id(brand.getBrand_id());
-//										if("官方".equals(agentlevel.getAgentlevel_name())){
-											if(oldgoodsprice!=null){
-												newgoods.setGoods_price(oldgoodsprice.getGoods_price());
-											}else{
-												newgoods.setGoods_price(0f);
-											}
-//										}else{
-//											newgoods.setGoods_price(0f);
-//										}
-										//newgoods.setGoods_price(oldgoods.getGoods_price());
-										newgoods.setGoods_name(oldgoods.getGoods_name());
-										newgoods.setGoods_scale(oldgoods.getGoods_scale());
-										goodsMapper.insertGoods(newgoods);
-										goodsMapper.incBrandGoodsCount(brand.getBrand_id());
-										gidlist.add(newgoods.getGoods_id());
-										newglist.add(newgoods);
-									}
-									newgoodsprice = new GoodsPrice();
-									if(oldgoodsprice!=null){
-										newgoodsprice.setGoods_price(oldgoodsprice.getGoods_price());
+		try {
+			if(account_id!=null && account_id > 0 && brand_id!=null && brand_id > 0 && StringUtil.isValid(code) && goodsMapper.checkExchangeCode(brand_id,code) > 0){
+				Brand brand = new Brand();
+				brand.setAccount_id(account_id);
+				brand.setBrand_from(brand_id);
+				long checkRecommendBrandBegin = System.currentTimeMillis();
+				if(goodsMapper.checkRecommendBrand(brand) <= 0){
+					brand.setBrand_id(brand_id);
+					brand.setAccount_id(0);
+					List<AgentLevel> alist = goodsMapper.queryAgentLevel(brand);
+					List<Goods> glist = goodsMapper.queryGoodsList(brand);
+					List<Goods> newglist = new ArrayList<>();
+					List<GoodsPrice> gplist = new ArrayList<>();
+					if(alist!=null && !alist.isEmpty() && glist!=null && !glist.isEmpty()){
+						String brand_name = goodsMapper.queryBrandNameById(brand_id);
+						if(StringUtil.isValid(brand_name)){
+							brand.setBrand_name(brand_name);
+							brand.setAccount_id(account_id);
+							if(goodsMapper.insertBrand(brand) > 0){
+								Integer oldagentlevel = 0;
+								Integer newagentlevel = 0;
+								GoodsPrice goodsprice = null;
+								GoodsPrice oldgoodsprice = null;
+								GoodsPrice newgoodsprice = null;
+								Goods oldgoods = null;
+								Goods newgoods = null;
+								List<Integer> gidlist = new ArrayList<>();
+								int i=0;
+								for(AgentLevel agentlevel:alist){
+									agentlevel.setAccount_id(account_id);
+									agentlevel.setBrand_id(brand.getBrand_id());
+									if("零售价".equals(agentlevel.getAgentlevel_name())){
+										agentlevel.setAgentlevel_default(1);
 									}else{
-										newgoodsprice.setGoods_price(0f);
+										agentlevel.setAgentlevel_default(0);
 									}
-									newgoodsprice.setAccount_id(account_id);
-									newgoodsprice.setGoods_id(gidlist.get(j));
-									newgoodsprice.setAgentlevel_id(newagentlevel);
-//									goodsMapper.insertGoodsPrice(newgoodsprice);
-									gplist.add(newgoodsprice);
-									goodsPricesList.add(newgoodsprice);
+									oldagentlevel = agentlevel.getAgentlevel_id();
+									goodsMapper.insertAgentLevel(agentlevel);
+									newagentlevel = agentlevel.getAgentlevel_id();
+									goodsprice = new GoodsPrice();
+									goodsprice.setAccount_id(0);
+									goodsprice.setAgentlevel_id(oldagentlevel);
+									for(int j=0;j<glist.size();j++){
+										oldgoods = glist.get(j);
+										goodsprice.setGoods_id(oldgoods.getGoods_id());
+										oldgoodsprice = goodsMapper.queryGoodsPriceById(goodsprice);
+										if(i==0){
+											newgoods = new Goods();
+											newgoods.setAccount_id(account_id);
+											newgoods.setBrand_id(brand.getBrand_id());
+	//										if("官方".equals(agentlevel.getAgentlevel_name())){
+												if(oldgoodsprice!=null){
+													newgoods.setGoods_price(oldgoodsprice.getGoods_price());
+												}else{
+													newgoods.setGoods_price(0f);
+												}
+	//										}else{
+	//											newgoods.setGoods_price(0f);
+	//										}
+											//newgoods.setGoods_price(oldgoods.getGoods_price());
+											newgoods.setGoods_name(oldgoods.getGoods_name());
+											newgoods.setGoods_scale(oldgoods.getGoods_scale());
+											goodsMapper.insertGoods(newgoods);
+											goodsMapper.incBrandGoodsCount(brand.getBrand_id());
+											gidlist.add(newgoods.getGoods_id());
+											newglist.add(newgoods);
+										}
+										newgoodsprice = new GoodsPrice();
+										if(oldgoodsprice!=null){
+											newgoodsprice.setGoods_price(oldgoodsprice.getGoods_price());
+										}else{
+											newgoodsprice.setGoods_price(0f);
+										}
+										newgoodsprice.setAccount_id(account_id);
+										newgoodsprice.setGoods_id(gidlist.get(j));
+										newgoodsprice.setAgentlevel_id(newagentlevel);
+	//									goodsMapper.insertGoodsPrice(newgoodsprice);
+										gplist.add(newgoodsprice);
+									}
+									i++;
 								}
-								i++;
+								long insertGoodsPriceBegin = System.currentTimeMillis();
+								logger.info("gplist size: "+gplist.size());
+								executorService = Executors.newFixedThreadPool(20);
+								executorService.execute(new Runnable() {
+									@Override
+									public void run() {
+										goodsMapper.insertBatch(gplist);
+										long insertGoodsPriceEnd = System.currentTimeMillis();
+										logger.info("insertBatchGoodsPriceTime: "+ (insertGoodsPriceEnd - insertGoodsPriceBegin));
+										logger.info("downloadbrandByCodeTime: "+ (insertGoodsPriceEnd- checkRecommendBrandBegin));
+									}
+								});
+								executorService.shutdown();
+								while(!executorService.awaitTermination(1, TimeUnit.SECONDS)){
+									executorService.shutdownNow();
+								}
+								result.setCode(0);
+								result.setMsg("下载成功");
+								result.setBrand(brand);
+								result.setAgentlevellist(alist);
+								result.setGoodslist(newglist);
+								result.setGoodspricelist(gplist);
+							}else{
+								result.setCode(1);
+								result.setMsg("推荐品牌不存在");
 							}
-							long insertGoodsPriceBegin = System.currentTimeMillis();
-							goodsMapper.insertBatch(goodsPricesList);
-							goodsMapper.insertAgentLevelBatch(agentLevelList);
-							long insertGoodsPriceEnd = System.currentTimeMillis();
-							logger.info("insertBatchGoodsPriceTime: "+ (insertGoodsPriceEnd - insertGoodsPriceBegin));
-							logger.info("downloadbrandByCodeTime: "+ (insertGoodsPriceEnd- checkRecommendBrandBegin));
-							result.setCode(0);
-							result.setMsg("下载成功");
-							result.setBrand(brand);
-							result.setAgentlevellist(alist);
-							result.setGoodslist(newglist);
-							result.setGoodspricelist(gplist);
 						}else{
 							result.setCode(1);
 							result.setMsg("推荐品牌不存在");
@@ -1206,19 +1183,20 @@ public class AccountService {
 					}else{
 						result.setCode(1);
 						result.setMsg("推荐品牌不存在");
+
 					}
 				}else{
 					result.setCode(1);
-					result.setMsg("推荐品牌不存在");
-					
+					result.setMsg("推荐品牌已经下载，不能重复下载");
 				}
 			}else{
 				result.setCode(1);
-				result.setMsg("推荐品牌已经下载，不能重复下载");
+				result.setMsg("兑换码不正确，下载失败");
 			}
-		}else{
+		} catch (Exception e) {
 			result.setCode(1);
-			result.setMsg("兑换码不正确，下载失败");
+			result.setMsg("系统忙");
+			logger.error("downloadbrandByCode error: "+e.getMessage());
 		}
 		return result;
 	}
