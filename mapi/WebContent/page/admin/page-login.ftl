@@ -25,7 +25,7 @@
           <div class="form-group username-div">
             <label class="control-label">用户名</label>
             <input id="username" class="form-control" type="text" placeholder="username" autofocus>
-            <div class="form-control-feedback" style="display: none;color: #e04b59">账号或密码错误 &nbsp;&nbsp;!</div>
+            <div id="errorMsg" class="form-control-feedback" style="display: none;color: #e04b59">账号或密码错误 &nbsp;&nbsp;!</div>
           </div>
 
           <div class="form-group password-div">

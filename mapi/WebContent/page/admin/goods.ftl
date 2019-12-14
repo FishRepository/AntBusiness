@@ -48,7 +48,7 @@
         </div>
     </div>
 
-    <div class="modal fade"
+    <div class="modal fade" id="myModal"
          tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -72,6 +72,13 @@
                             <label class="control-label col-md-3">名称&nbsp;：</label>
                             <div class="col-md-8">
                                 <input name="goodsName" class="form-control" type="text" placeholder="请输入名称">
+                            </div>
+                        </div>
+                        <div class="form-group row" style="" id="uploadImgDiv">
+                            <input name="imgUrl" type="text" hidden id="imgUrl">
+                            <label class="control-label col-md-3">上传logo&nbsp;：</label>
+                            <div class="col-md-8">
+                                <input id="uploadImg" name="file" type="file" multiple>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -100,6 +107,51 @@
 
 <@global.script>
 <script type="text/javascript">
+    $(function(){
+        initFileInput("uploadImg", "${ctx}/adImg/uploadImg", "");
+    });
+
+    function initFileInput(ctrlName, uploadUrl, type, path,config) {
+        var control = $('#' + ctrlName);
+        //初始化上传控件的样式
+        control.fileinput({
+            language: 'zh',                                         //设置语言
+            uploadUrl: uploadUrl,                                   //上传的地址
+            allowedFileExtensions: ['jpg', 'gif', 'png'],    //接收的文件后缀
+            showUpload: true,                                       //是否显示上传按钮
+            showRemove : true,                                      //显示移除按钮
+            showCaption: false,                                     //是否显示标题
+            browseClass: "btn btn-primary",                         //按钮样式
+            uploadAsync: true,                                      //默认异步上传
+            dropZoneEnabled: false,                                 //是否显示拖拽区域
+            maxFileCount: 1,                                       //表示允许同时上传的最大文件个数
+            enctype: 'multipart/form-data',
+            previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
+            overwriteInitial: true,
+            initialPreview:path,
+            initialPreviewAsData: true, // identify if you are sending preview data only and not the raw markup
+            initialPreviewFileType: 'image', // image is the default and can be overridden in config below
+            initialPreviewConfig:config
+        }).on('fileuploaded', function(event, data){
+            //导入文件上传完成之后的事件
+            var result = data.response;
+            if(result.code === 0){
+                $('#images').val(imgaes);
+            }else {
+                $(event.target)
+                    .fileinput('clear')
+                    .fileinput('unlock');
+                $(event.target)
+                    .parent()
+                    .siblings('.fileinput-remove')
+                    .hide();
+                swal(result.msg);
+            }
+        });
+    }
+
+
+
     // 品牌查询筛选
     $('#queryBrandId').change(function () {
         reloadDataTable();
@@ -195,7 +247,7 @@
     });
 
     $('#addNew').click(function () {
-        $('.modal').modal('show');
+        $('#myModal').modal('show');
     });
 
     // 编辑栏目
@@ -209,7 +261,13 @@
             success: function (result) {
                 $('#form-data').fill(result);
                 initGoodsPrice(result.goodsPriceList);
-                $('.modal').modal('show');
+                var imgUrl = result.imgUrl;
+                if(imgUrl){
+                    $("#uploadImg").fileinput('destroy');
+                    console.log(result.brandId);
+                    initFileInput("uploadImg", "${ctx}/adImg/uploadImg", "logo", logo);
+                }
+                $('#myModal').modal('show');
                 $('#form-data').find('[name="brandId"]').prop('disabled', true);
             }
         });
@@ -261,7 +319,7 @@
     }
 
     // 弹出框关闭事件
-    $('.modal').on('hidden.bs.modal', function () {
+    $('#myModal').on('hidden.bs.modal', function () {
         var $form = $('#form-data');
         $form.clear();
         clearGoodsPrice();
@@ -270,7 +328,7 @@
 
     // 关闭弹出框
     function closePopup() {
-        $('.modal').modal('hide');
+        $('#myModal').modal('hide');
     }
 
     function removeItem(id) {

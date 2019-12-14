@@ -86,6 +86,9 @@ public class Goods extends Model<Goods> {
      */
 	@TableField("update_time")
 	private Date updateTime;
+
+	@TableField("img_url")
+	private String imgUrl;
     /**
      * 状态0无效1有效
      */
@@ -209,6 +212,14 @@ public class Goods extends Model<Goods> {
 
 	public void setGoodsPriceList(List<GoodsPrice> goodsPriceList) {
 		this.goodsPriceList = goodsPriceList;
+	}
+
+	public String getImgUrl() {
+		return imgUrl;
+	}
+
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
 	}
 
 	@Override

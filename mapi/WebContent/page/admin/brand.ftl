@@ -107,6 +107,18 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            <label class="control-label col-md-3">联系方式&nbsp;：</label>
+                            <div class="col-md-8">
+                                <input name="phone" class="form-control" type="text" placeholder="请输入手机号码">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">微信&nbsp;：</label>
+                            <div class="col-md-8">
+                                <input name="wechat" class="form-control" type="text" placeholder="请输入微信号">
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <button class="btn btn-primary margin-left" type="button" onclick="addAgent()">新增代理</button>
                         </div>
                     </form>

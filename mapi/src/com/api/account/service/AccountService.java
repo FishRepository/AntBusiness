@@ -1083,10 +1083,12 @@ public class AccountService {
 					List<Goods> newglist = new ArrayList<>();
 					List<GoodsPrice> gplist = new ArrayList<>();
 					if(alist!=null && !alist.isEmpty() && glist!=null && !glist.isEmpty()){
-						String brand_name = goodsMapper.queryBrandNameById(brand_id);
-						if(StringUtil.isValid(brand_name)){
-							brand.setBrand_name(brand_name);
+						Brand brandInfo = goodsMapper.getBrandInfo(brand_id);
+						if(brandInfo!=null && StringUtil.isValid(brandInfo.getBrand_name())){
+							brand.setBrand_name(brandInfo.getBrand_name());
 							brand.setAccount_id(account_id);
+							brand.setLogo_url(brandInfo.getLogo_url());
+							brand.setTitle(brandInfo.getLogo_url());
 							if(goodsMapper.insertBrand(brand) > 0){
 								Integer oldagentlevel = 0;
 								Integer newagentlevel = 0;

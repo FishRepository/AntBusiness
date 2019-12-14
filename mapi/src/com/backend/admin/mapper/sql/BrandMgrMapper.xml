@@ -41,8 +41,8 @@
     </select>
 
     <insert id="saveBrand" parameterType="com.backend.admin.entity.Brand" keyProperty="brandId" useGeneratedKeys="true">
-        INSERT INTO brand (brand_name, brand_shortname, brand_downloadcode, create_time, update_time, brand_info, title, logo_url)
-        VALUES (#{brandName}, #{brandShortname}, #{brandDownloadcode}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, #{brandInfo}, #{title}, #{logoUrl})
+        INSERT INTO brand (brand_name, brand_shortname, brand_downloadcode, create_time, update_time, brand_info, title, logo_url, phone, wechat)
+        VALUES (#{brandName}, #{brandShortname}, #{brandDownloadcode}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, #{brandInfo}, #{title}, #{logoUrl}, #{phone}, #{wechat})
     </insert>
 
     <update id="updateBrand" parameterType="com.backend.admin.entity.Brand">
@@ -55,6 +55,8 @@
             <if test="brandInfo!=null">brand_info = #{brandInfo},</if>
             <if test="title!=null">title = #{title},</if>
             <if test="logoUrl!=null">logo_url = #{logoUrl},</if>
+            <if test="phone!=null">phone = #{phone},</if>
+            <if test="wechat!=null">wechat = #{wechat},</if>
             update_time = CURRENT_TIMESTAMP
         </trim>
     </update>

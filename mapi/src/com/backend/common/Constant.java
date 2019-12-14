@@ -2,7 +2,9 @@ package com.backend.common;
 
 public class Constant {
 
-    static final String SESSION_ATTR_LOGIN_NAME = "username";
+    public static final String SESSION_ATTR_LOGIN_NAME = "username";
+
+    public static final String SESSION_ATTR_ROLE_LIST = "roleList";
 
     /**
      * 公共错误码
