@@ -535,4 +535,16 @@
 		</foreach>
 	</insert>
 
+	<select id="queryBrandOrder" parameterType="com.api.goods.entity.Brand" resultType="com.api.goods.entity.BrandGoodsInfo">
+		select
+			count(1) as totalOrders,
+			sum(ao.order_sales) as totalSales
+		from
+			accountorder ao
+		where
+			ao.account_id = #{account_id}
+		and ao.brand_id = #{brand_id}
+		and ao.state = 1
+		and ao.order_type = 1
+	</select>
 </mapper>

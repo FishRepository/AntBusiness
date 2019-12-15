@@ -20,6 +20,8 @@ public class BrandAndAgentLevel{
 	private String brand_info;
 	private String title;
 	private List<Goods> lowStockGoods;
+	private Integer totalOrders;//该品牌出货订单总订单数
+	private Double totalSales;//该品牌出货订单总销售额
 
 	public Integer getBrand_id() {
 		return brand_id;
@@ -130,5 +132,21 @@ public class BrandAndAgentLevel{
 
 	public void setLowStockGoods(List<Goods> lowStockGoods) {
 		this.lowStockGoods = lowStockGoods;
+	}
+
+	public Integer getTotalOrders() {
+		return totalOrders;
+	}
+
+	public void setTotalOrders(Integer totalOrders) {
+		this.totalOrders = totalOrders;
+	}
+
+	public Double getTotalSales() {
+		return totalSales;
+	}
+
+	public void setTotalSales(Double totalSales) {
+		this.totalSales = totalSales;
 	}
 }

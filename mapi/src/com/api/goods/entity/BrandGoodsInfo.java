@@ -10,6 +10,10 @@ public class BrandGoodsInfo {
 
     private Integer goodsThreshold;//库存提醒数量
 
+    private Integer totalOrders;//该品牌出货订单总订单数
+
+    private Double totalSales;//该品牌出货订单总销售额
+
     public Integer getGoodsCates() {
         return goodsCates;
     }
@@ -40,5 +44,21 @@ public class BrandGoodsInfo {
 
     public void setGoodsThreshold(Integer goodsThreshold) {
         this.goodsThreshold = goodsThreshold;
+    }
+
+    public Integer getTotalOrders() {
+        return totalOrders;
+    }
+
+    public void setTotalOrders(Integer totalOrders) {
+        this.totalOrders = totalOrders;
+    }
+
+    public Double getTotalSales() {
+        return totalSales;
+    }
+
+    public void setTotalSales(Double totalSales) {
+        this.totalSales = totalSales;
     }
 }

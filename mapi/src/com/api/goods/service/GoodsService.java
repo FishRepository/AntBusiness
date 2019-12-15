@@ -251,6 +251,11 @@ public class GoodsService {
 						brandAndAgentLevel.setLowStockGoods(lowStockGoods);
 						continue;
 					}
+					BrandGoodsInfo brandOrder = goodsMapper.queryBrandOrder(brand);
+					if(brandOrder!=null && brandOrder.getTotalOrders()!=null){
+						brandAndAgentLevel.setTotalOrders(brandOrder.getTotalOrders());
+						brandAndAgentLevel.setTotalSales(brandOrder.getTotalSales());
+					}
 					stockState = 6;
 					brandAndAgentLevel.setStockState(stockState);
 				}
