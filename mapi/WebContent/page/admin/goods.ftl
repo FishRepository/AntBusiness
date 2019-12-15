@@ -136,7 +136,7 @@
             //导入文件上传完成之后的事件
             var result = data.response;
             if(result.code === 0){
-                $('#images').val(imgaes);
+                $('#imgUrl').val(result.data.urlPath);
             }else {
                 $(event.target)
                     .fileinput('clear')
@@ -265,7 +265,7 @@
                 if(imgUrl){
                     $("#uploadImg").fileinput('destroy');
                     console.log(result.brandId);
-                    initFileInput("uploadImg", "${ctx}/adImg/uploadImg", "logo", logo);
+                    initFileInput("uploadImg", "${ctx}/adImg/uploadImg", "logo",imgUrl);
                 }
                 $('#myModal').modal('show');
                 $('#form-data').find('[name="brandId"]').prop('disabled', true);
