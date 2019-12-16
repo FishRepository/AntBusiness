@@ -324,6 +324,8 @@
         $form.clear();
         clearGoodsPrice();
         $form.find('[name="brandId"]').prop('disabled', false);
+        $("#uploadImg").fileinput('destroy');
+        initFileInput("uploadImg", "${ctx}/adImg/uploadImg", "");
     });
 
     // 关闭弹出框

@@ -173,8 +173,15 @@
                 if(type === 'logo'){
                     $('#logoUrl').val(result.data.urlPath);
                 }else {
+                    console.log($(event.target));
+                    //初始化两个fileinput组件  fileuploaded会执行两遍
                     var imgaes = $('#images').val();
                     if(imgaes){
+                        //判断末尾图片地址是否相同  相同则返回
+                        var imgArr = imgaes.split("##");
+                        if(imgArr[imgArr.length-1]===result.data.urlPath){
+                            return;
+                        }
                         imgaes += "##"+result.data.urlPath;
                     }else{
                         imgaes = result.data.urlPath;
