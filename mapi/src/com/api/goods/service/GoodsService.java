@@ -251,10 +251,17 @@ public class GoodsService {
 						brandAndAgentLevel.setLowStockGoods(lowStockGoods);
 						continue;
 					}
-					BrandGoodsInfo brandOrder = goodsMapper.queryBrandOrder(brand);
-					if(brandOrder!=null && brandOrder.getTotalOrders()!=null){
-						brandAndAgentLevel.setTotalOrders(brandOrder.getTotalOrders());
-						brandAndAgentLevel.setTotalSales(brandOrder.getTotalSales());
+					List<BrandSales> brandSalesList = goodsMapper.queryBrandOrder(brand);
+					if(CollectionUtil.isNotEmpty(brandSalesList)){
+						brandAndAgentLevel.setTotalOrders(brandSalesList.size());
+						double totalSales = 0.0;
+						for(BrandSales brandSale:brandSalesList){
+							totalSales += brandSale.getSales();
+						}
+						brandAndAgentLevel.setTotalSales(totalSales);
+					}else{
+						brandAndAgentLevel.setTotalOrders(0);
+						brandAndAgentLevel.setTotalSales(0.0);
 					}
 					stockState = 6;
 					brandAndAgentLevel.setStockState(stockState);

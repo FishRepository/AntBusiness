@@ -228,9 +228,9 @@ public interface GoodsMapper {
 	void insertAgentLevelBatch(List<AgentLevel> list);
 
 	/**
-	 * 查询品牌销售额 订单数
+	 * 查询品牌销售额 订单
 	 * @param brand
 	 * @return
 	 */
-    BrandGoodsInfo queryBrandOrder(Brand brand);
+    List<BrandSales> queryBrandOrder(Brand brand);
 }

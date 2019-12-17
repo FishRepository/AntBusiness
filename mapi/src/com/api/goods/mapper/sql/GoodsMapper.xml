@@ -535,16 +535,17 @@
 		</foreach>
 	</insert>
 
-	<select id="queryBrandOrder" parameterType="com.api.goods.entity.Brand" resultType="com.api.goods.entity.BrandGoodsInfo">
+	<select id="queryBrandOrder" parameterType="com.api.goods.entity.Brand" resultType="com.api.goods.entity.BrandSales">
 		select
-			count(1) as totalOrders,
-			sum(ao.order_sales) as totalSales
+			sum(og.ordergoods_sales) as sales,
+			og.order_id as orderId
 		from
-			accountorder ao
+			ordergoods og
 		where
-			ao.account_id = #{account_id}
-		and ao.brand_id = #{brand_id}
-		and ao.state = 1
-		and ao.order_type = 1
+			brand_id = #{brand_id}
+		  and og.account_id = #{account_id}
+		  and og.state = 1
+		group by
+			og.order_id
 	</select>
 </mapper>
