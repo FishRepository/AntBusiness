@@ -1,12 +1,9 @@
 package com.api.goods.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.api.goods.entity.*;
 import org.apache.commons.lang3.StringUtils;
@@ -228,10 +225,22 @@ public class GoodsService {
 //							continue;
 //						}
 					}
-					//查询该品牌下库存不为0的商品集合
-					List<Goods> notEmptyStockgoods = goodsMapper.selectNotEmptyStockGoods(brand);
-					if(CollectionUtil.isEmpty(notEmptyStockgoods)){
+					Date date = goodsMapper.selectStockGoodsTime(brand);
+					if(date==null){
 						stockState = 3;
+						brandAndAgentLevel.setStockState(stockState);
+						continue;
+						//查询该品牌下库存不为0的商品集合
+//						List<Goods> notEmptyStockgoods = goodsMapper.selectNotEmptyStockGoods(brand);
+//						if(CollectionUtil.isEmpty(notEmptyStockgoods)){
+//							stockState = 3;
+//							brandAndAgentLevel.setStockState(stockState);
+//							continue;
+//						}
+					}
+					long day = DateUtil.betweenDay(date, new Date(), true);
+					if(day>30){
+						stockState = 5;
 						brandAndAgentLevel.setStockState(stockState);
 						continue;
 					}
@@ -243,6 +252,7 @@ public class GoodsService {
 						brandAndAgentLevel.setLowStockGoods(zeroStockGoods);
 						continue;
 					}
+
 					//查询库存低于库存预警值的商品集合
 					List<Goods> lowStockGoods = goodsMapper.selectLowStockGoods(brand);
 					if(CollectionUtil.isNotEmpty(lowStockGoods)){
@@ -251,6 +261,7 @@ public class GoodsService {
 						brandAndAgentLevel.setLowStockGoods(lowStockGoods);
 						continue;
 					}
+
 					List<BrandSales> brandSalesList = goodsMapper.queryBrandOrder(brand);
 					if(CollectionUtil.isNotEmpty(brandSalesList)){
 						brandAndAgentLevel.setTotalOrders(brandSalesList.size());

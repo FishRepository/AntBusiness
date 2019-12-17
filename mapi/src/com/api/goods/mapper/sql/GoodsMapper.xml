@@ -548,4 +548,22 @@
 		group by
 			og.order_id
 	</select>
+
+	<select id="selectStockGoodsTime" resultType="java.util.Date" parameterType="com.api.goods.entity.Brand">
+		SELECT
+			max(gs.create_time)
+		FROM
+			goodsstock gs
+		WHERE
+			gs.account_id = #{account_id}
+		  AND gs.goods_id IN (
+			SELECT
+				g.goods_id
+			FROM
+				goods g
+			WHERE
+				g.brand_id = #{brand_id}
+			  AND g.account_id = #{account_id}
+		)
+	</select>
 </mapper>

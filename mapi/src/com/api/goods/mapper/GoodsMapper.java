@@ -1,5 +1,6 @@
 package com.api.goods.mapper;
 
+import java.util.Date;
 import java.util.List;
 
 import com.api.goods.entity.*;
@@ -233,4 +234,11 @@ public interface GoodsMapper {
 	 * @return
 	 */
     List<BrandSales> queryBrandOrder(Brand brand);
+
+	/**
+	 * 查询用户该品牌最新的盘点时间
+	 * @param brand
+	 * @return
+	 */
+	Date selectStockGoodsTime(Brand brand);
 }
