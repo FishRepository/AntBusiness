@@ -218,8 +218,9 @@
                     },
                     {'data':
                         function (row) {
-                            return "<a class=\'btn btn-primary btn-sm\' href=\'javascript:editItem(" + row.order_no + ")\'>" +
-                                   "<i class=\'fa fa-pencil-square-o\'></i>编辑</a>";
+                            return "";
+                            // return "<a class=\'btn btn-primary btn-sm\' href=\'javascript:editItem(" + row.order_no + ")\'>" +
+                            //        "<i class=\'fa fa-pencil-square-o\'></i>编辑</a>";
                         }
                     }
                 ]

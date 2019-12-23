@@ -58,6 +58,18 @@ public class RoleController extends BaseController{
         return successData(user);
     }
 
+    @RequestMapping("deleteUserById")
+    @ResponseBody
+    public AjaxResult deleteUserById(Integer id){
+        boolean result = backendUserService.deleteUserById(id);
+        if(result){
+            return success();
+        }
+        return error();
+    }
+
+
+
     @RequestMapping("saveUser")
     @ResponseBody
     public AjaxResult saveUser(BackendUser user){

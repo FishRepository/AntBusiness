@@ -35,7 +35,7 @@
     </div>
 
     <div class="modal fade"
-         tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+         tabindex="-1" role="dialog" id="mymodal" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -104,7 +104,7 @@
     });
 
     $('#addNew').click(function () {
-        $('.modal').modal('show');
+        $('#mymodal').modal('show');
     });
 
     // 编辑栏目
@@ -117,7 +117,7 @@
             },
             success: function (result) {
                 $('#form-data').fill(result);
-                $('.modal').modal('show');
+                $('#mymodal').modal('show');
             }
         });
     }
@@ -148,14 +148,14 @@
     }
 
     // 弹出框关闭事件
-    $('.modal').on('hidden.bs.modal', function () {
+    $('#mymodal').on('hidden.bs.modal', function () {
         var $form = $('#form-data');
         $form.clear();
     });
 
     // 关闭弹出框
     function closePopup() {
-        $('.modal').modal('hide');
+        $('#mymodal').modal('hide');
     }
 
     function removeItem(id) {

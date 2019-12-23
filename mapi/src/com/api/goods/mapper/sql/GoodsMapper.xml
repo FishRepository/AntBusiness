@@ -239,9 +239,10 @@
 	</select>
 	
 	<select id="queryGoodsList" parameterType="com.api.goods.entity.Brand" resultType="com.api.goods.entity.Goods">
-		select goods_id,goods_name,goods_price,goods_stock,goods_threshold,goods_scale,goods_index,
-		 goods_setstock,img_url,download_price,goods_unit
-		 from goods where state = 1 and account_id = #{account_id} and brand_id = #{brand_id} order by goods_index,goods_id
+		select goods_id,goods_name,
+			   (select max(gp.goods_price) from goodsprice gp where gp.goods_id = g.goods_id and gp.state=1) as goods_price,
+		       goods_stock,goods_threshold,goods_scale,goods_index,goods_setstock,img_url,download_price,goods_unit
+		 from goods g where state = 1 and account_id = #{account_id} and brand_id = #{brand_id} order by goods_index,goods_id
 	</select>
 	
 	<select id="queryGoodsStockList" parameterType="Integer" resultType="com.api.goods.entity.GoodsAndGoodsStock">

@@ -143,4 +143,8 @@ public class BackendUserService {
         int i = roleUserMapper.addRoleUserBatch(roleUsers);
         return i>0;
     }
+
+    public boolean deleteUserById(Integer id) {
+        return backendUserMapper.deleteById(id) > 0;
+    }
 }

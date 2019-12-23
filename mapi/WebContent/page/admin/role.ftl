@@ -176,8 +176,9 @@
                 {'data': 'userName'},
                 {'data':
                         function (row) {
-                            return "<a class=\'btn btn-primary btn-sm\' href=\'javascript:editItem(" + row.id + ")\'>" +
-                                "<i class=\'fa fa-pencil-square-o\'></i>编辑权限</a>";
+                            return "<a class=\'btn btn-primary btn-sm\' href=\'javascript:editItem(" + row.id + ")\'><i class=\'fa fa-pencil-square-o\'></i>编辑权限</a>"+
+                            '&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;' +
+                            "<a class=\'btn btn-info btn-sm\' href=\'javascript:removeItem(" + row.id + ")\'><i class='fa fa-eye\'></i>删除</a>";
                         }
                 }
             ]
@@ -236,6 +237,26 @@
         });
     }
 
+    function removeItem(id) {
+        $.ajax({
+            url: '${ctx}/role/deleteUserById',
+            type: 'post',
+            data: {
+                id: id
+            },
+            success: function (result) {
+                if (result.code === 0) {
+                    swal("操作成功！");
+                    closePopup();
+                    reloadDataTable();
+                }else {
+                    swal("操作失败！",'error');
+                }
+            }
+        });
+
+    }
+
     // 重新加载表格
     function reloadDataTable() {
         $('#sampleTable').DataTable().ajax.reload();
@@ -253,6 +274,7 @@
 
     // 关闭弹出框
     function closePopup() {
+        $('#form-data').clear();
         $('#myModal').modal('hide');
     }
 

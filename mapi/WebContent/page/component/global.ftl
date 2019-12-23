@@ -188,8 +188,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" type="button" onclick="confirm()">确认</button>
-                <button class="btn btn-secondary" type="button" onclick="closePopup()">关闭</button>
+                <button class="btn btn-primary" type="button" onclick="confirmPwd()">确认</button>
+                <button class="btn btn-secondary" type="button" onclick="closePwd()">关闭</button>
             </div>
         </div>
     </div>
@@ -205,7 +205,7 @@
     }
 
     // 保存栏目
-    function confirm() {
+    function confirmPwd() {
         var $form = $('#pwdForm');
         var url = '${ctx}/login/changePwd';
         // 清空disabled属性，防止未提交至后台
@@ -220,7 +220,7 @@
             success: function (result) {
                 if (result.code === 0) {
                     swal("操作成功！");
-                    closePopup();
+                    closePwd();
                 }else {
                     swal(result.msg,'error');
                 }
@@ -229,7 +229,7 @@
     }
 
     // 关闭弹出框
-    function closePopup() {
+    function closePwd() {
         var $form = $('#pwdForm');
         $form.clear();
         $('#pwdModal').modal('hide');
