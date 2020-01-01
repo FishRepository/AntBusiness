@@ -126,18 +126,22 @@ public class PayOrderService {
                     map.put("order_type","充值");
                     break;
             }
-            switch (item.getPay_type()){
-                case 1:
-                    map.put("pay_type","支付宝");
-                    break;
-                case 2:
-                    map.put("pay_type","微信");
-                    break;
-                case 3:
-                    map.put("pay_type","IOS");
-                    break;
-                default:
-                    map.put("pay_type","手机充值");
+            if(null == item.getPay_type()){
+                map.put("pay_type","手机充值");
+            }else{
+                switch (item.getPay_type()){
+                    case 1:
+                        map.put("pay_type","支付宝");
+                        break;
+                    case 2:
+                        map.put("pay_type","微信");
+                        break;
+                    case 3:
+                        map.put("pay_type","IOS");
+                        break;
+                    default:
+                        map.put("pay_type","手机充值");
+                }
             }
             switch (item.getState()){
                 case 0:

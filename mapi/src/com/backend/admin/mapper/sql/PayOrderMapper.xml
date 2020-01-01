@@ -76,8 +76,14 @@
             <if test="user_phone != null and user_phone != ''">
                 and user_phone = #{user_phone}
             </if>
+            <if test="start_time != null and start_time != ''">
+                and date_format(create_time,'%y-%m-%d') &gt;= date(#{start_time})
+            </if>
+            <if test="end_time != null and end_time != ''">
+                and date_format(create_time,'%y-%m-%d') &lt;= date(#{end_time})
+            </if>
         </where>
-        order by state
+        order by create_time desc
     </select>
 
     <!--新增所有列-->

@@ -32,7 +32,10 @@ public class PayOrder implements Serializable {
     private Integer account_id;
     //会员联系方式
     private String user_phone;
-
+    //查询开始时间
+    private String start_time;
+    //查询结束时间
+    private String end_time;
 
     public String getOrder_no() {
         return order_no;
@@ -113,5 +116,21 @@ public class PayOrder implements Serializable {
 
     public void setUser_phone(String user_phone) {
         this.user_phone = user_phone;
+    }
+
+    public String getStart_time() {
+        return start_time;
+    }
+
+    public void setStart_time(String start_time) {
+        this.start_time = start_time;
+    }
+
+    public String getEnd_time() {
+        return end_time;
+    }
+
+    public void setEnd_time(String end_time) {
+        this.end_time = end_time;
     }
 }
