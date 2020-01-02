@@ -11,6 +11,9 @@ public class Customer{
 	private Date create_time;
 	private Date update_time;
 	private Integer state;
+	private Date birthday;//生日
+	private String constellation;//星座
+	private Date period;//经期
 	
 	public Integer getCustomer_id() {
 		return customer_id;
@@ -53,5 +56,29 @@ public class Customer{
 	}
 	public void setState(Integer state) {
 		this.state = state;
+	}
+
+	public Date getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
+	}
+
+	public String getConstellation() {
+		return constellation;
+	}
+
+	public void setConstellation(String constellation) {
+		this.constellation = constellation;
+	}
+
+	public Date getPeriod() {
+		return period;
+	}
+
+	public void setPeriod(Date period) {
+		this.period = period;
 	}
 }

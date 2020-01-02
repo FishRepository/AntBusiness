@@ -1579,10 +1579,10 @@ public class GoodsService {
 		return result;
 	}
 
-	public Object selectHotBrand() {
+	public Object selectHotBrand(String brand_name) {
 		Result result = new Result();
 		try {
-			List<Brand> brands = goodsMapper.selectHotBrand();
+			List<Brand> brands = goodsMapper.selectHotBrand(brand_name);
 			List<HotBrandResult> hotBrandResults = new ArrayList<>();
 			HotBrandResult hotBrandResult;
 			for (Brand brand:brands) {

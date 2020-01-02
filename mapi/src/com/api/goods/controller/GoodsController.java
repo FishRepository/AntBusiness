@@ -286,8 +286,8 @@ public class GoodsController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/selectHotBrand")
-	public Object selectHotBrand(){
-		return goodsService.selectHotBrand();
+	public Object selectHotBrand(String brand_name){
+		return goodsService.selectHotBrand(brand_name);
 	}
 
 	/**

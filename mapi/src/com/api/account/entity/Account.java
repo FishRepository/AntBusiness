@@ -25,7 +25,12 @@ public class Account{
 	private Integer is_new;//是否新用户 1是 2不是
 	private Integer remain_time;//剩余vip天数
 
-	
+	//------------------2020年1月2日新增-------------
+	private Date birthday;//生日
+	private String email;//邮箱
+	private String constellation;//星座
+	private Date period;//经期
+
 	public Integer getAccount_id() {
 		return account_id;
 	}
@@ -161,5 +166,37 @@ public class Account{
 
 	public void setRemain_time(Integer remain_time) {
 		this.remain_time = remain_time;
+	}
+
+	public Date getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getConstellation() {
+		return constellation;
+	}
+
+	public void setConstellation(String constellation) {
+		this.constellation = constellation;
+	}
+
+	public Date getPeriod() {
+		return period;
+	}
+
+	public void setPeriod(Date period) {
+		this.period = period;
 	}
 }

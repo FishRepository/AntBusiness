@@ -473,7 +473,12 @@
 	</update>
 
 	<select id="selectHotBrand" resultType="com.api.goods.entity.Brand">
-		select * from brand where state = 1 and  brand_downloadcode is not null order by is_hot desc, update_time desc
+		select * from brand where state = 1
+		<if test="brand_name != null and brand_name != ''">
+			and brand_name like CONCAT('%|',#{brand_name},'|%')
+		</if>
+		and  brand_downloadcode is not null
+		order by is_hot desc, update_time desc
 	</select>
 
 	<select id="getBrandInfo" parameterType="java.lang.Integer" resultType="com.api.goods.entity.Brand">

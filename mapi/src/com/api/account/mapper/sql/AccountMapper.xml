@@ -15,7 +15,11 @@
 							vip_time,
 							is_vip,
 							vip_type,
-							is_new)
+							is_new,
+							birthday,
+							email,
+							constellation,
+							period)
 	                        values (#{account_userphone},
 	                                #{account_password},
 	                                #{account_qq},
@@ -27,7 +31,11 @@
 	                                #{vip_time},
 	                                #{is_vip},
 	                                #{vip_type},
-	                                #{is_new});
+	                                #{is_new},
+	                                #{birthday},
+	                                #{email},
+	                                #{constellation},
+	                                #{period});
 	</insert>
 		
 	<update id="updateAccount" parameterType="com.api.account.entity.Account">
@@ -69,7 +77,19 @@
 		<if test="is_new != null and is_new !=''">
 			is_new = #{is_new},
 		</if>
-	    update_time = now() 
+		<if test="birthday != null and birthday !=''">
+			birthday = #{birthday},
+		</if>
+		<if test="email != null and email !=''">
+			email = #{email},
+		</if>
+		<if test="constellation != null and constellation !=''">
+			constellation = #{constellation},
+		</if>
+		<if test="period != null and period !=''">
+			period = #{period},
+		</if>
+	    update_time = now()
 		</trim>
 		where state = 1 and account_id = #{account_id}
 	</update>
@@ -119,19 +139,19 @@
 	</select>
 	
 	<select id="queryAccountById" parameterType="Integer" resultType="com.api.account.entity.Account">
-		select account_id,account_userphone,account_username,account_icon,account_qq,account_wechat,account_imei,account_integral,last_time,create_time,vip_time,is_vip,vip_type,is_new from account where state = 1 and account_id = #{account_id}
+		select account_id,account_userphone,account_username,account_icon,account_qq,account_wechat,account_imei,account_integral,last_time,create_time,vip_time,is_vip,vip_type,is_new,birthday,email,constellation,period from account where state = 1 and account_id = #{account_id}
 	</select>
 	
 	<select id="queryAccountByPhone" parameterType="string" resultType="com.api.account.entity.AccountLoginResult">
-		select account_id,account_userphone,account_username,account_address,account_icon,account_qq,account_wechat,account_imei,account_integral,last_time,create_time,vip_time,is_vip,vip_type,is_new from account where state = 1 and account_userphone = #{account_userphone}
+		select account_id,account_userphone,account_username,account_address,account_icon,account_qq,account_wechat,account_imei,account_integral,last_time,create_time,vip_time,is_vip,vip_type,is_new,birthday,email,constellation,period from account where state = 1 and account_userphone = #{account_userphone}
 	</select>
 		
 	<select id="queryAccountByWechat" parameterType="string" resultType="com.api.account.entity.AccountLoginResult">
-		select account_id,account_userphone,account_username,account_address,account_icon,account_qq,account_wechat,account_imei,account_integral,last_time,create_time,vip_time,is_vip,vip_type,is_new from account where state = 1 and account_wechat = #{account_wechat}
+		select account_id,account_userphone,account_username,account_address,account_icon,account_qq,account_wechat,account_imei,account_integral,last_time,create_time,vip_time,is_vip,vip_type,is_new,birthday,email,constellation,period from account where state = 1 and account_wechat = #{account_wechat}
 	</select>
 	
 	<select id="queryAccountByQQ" parameterType="string" resultType="com.api.account.entity.AccountLoginResult">
-		select account_id,account_userphone,account_username,account_address,account_icon,account_qq,account_wechat,account_imei,account_integral,last_time,create_time,vip_time,is_vip,vip_type,is_new from account where state = 1 and account_qq = #{account_qq}
+		select account_id,account_userphone,account_username,account_address,account_icon,account_qq,account_wechat,account_imei,account_integral,last_time,create_time,vip_time,is_vip,vip_type,is_new,birthday,email,constellation,period from account where state = 1 and account_qq = #{account_qq}
 	</select>
 	
 	<select id="queryAccountWechatById" parameterType="Integer" resultType="com.api.account.entity.Account">
@@ -271,7 +291,7 @@
 	</select>
 	
 	<select id="getAccountInfo" parameterType="int" resultType="com.api.account.entity.Account">
-		select account_id,account_userphone,account_username,account_address,account_icon,account_qq,account_wechat,account_imei,account_integral,last_time,create_time,vip_time,is_vip,vip_type,is_new from account where state = 1 and account_id = #{account_id}
+		select account_id,account_userphone,account_username,account_address,account_icon,account_qq,account_wechat,account_imei,account_integral,last_time,create_time,vip_time,is_vip,vip_type,is_new,birthday,email,constellation,period from account where state = 1 and account_id = #{account_id}
 	</select>
 
 	<select id="getAllAccount" resultType="com.api.account.entity.Account">

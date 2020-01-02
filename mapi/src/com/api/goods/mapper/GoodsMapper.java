@@ -189,7 +189,7 @@ public interface GoodsMapper {
 
 	public int setBrandStockRemain(Brand brand);
 
-	public List<Brand> selectHotBrand();
+	public List<Brand> selectHotBrand(String brand_name);
 
 	Brand getBrandInfo(Integer id);
 
