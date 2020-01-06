@@ -56,6 +56,12 @@ public class BrandMgrController extends BaseController{
         }
     }
 
+    @RequestMapping("/deleteLogo")
+    @ResponseBody
+    public AjaxResult deleteLogo(){
+        return success();
+    }
+
     @RequestMapping("/uploadLogoImg")
     @ResponseBody
     public AjaxResult uploadLogoImg(MultipartFile file,Integer brand_id){

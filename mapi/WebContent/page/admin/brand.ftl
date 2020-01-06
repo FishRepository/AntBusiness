@@ -299,7 +299,14 @@
                 if(logo){
                     $("#uploadLogoImg").fileinput('destroy');
                     console.log(result.brandId);
-                    initFileInput("uploadLogoImg", "${ctx}/adImg/uploadImg", "logo", logo);
+                    var config = [];
+                    var configItem = {};
+                    configItem['key']=1;
+                    configItem['caption']='picture-'+(1);
+                    configItem['url']="${ctx}/brandMgr/deleteLogo.do";
+                    configItem['size']=12345;
+                    config.push(configItem);
+                    initFileInput("uploadLogoImg", "${ctx}/adImg/uploadImg", "logo", logo,config);
                 }
                 if(brandImages){
                     $("#uploadImages").fileinput('destroy');
