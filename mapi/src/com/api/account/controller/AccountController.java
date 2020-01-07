@@ -70,7 +70,7 @@ public class AccountController {
 	@RequestMapping(value = "/updateaccount")
     @ResponseBody
 	public Object updateaccount(Account account){
-		return accountService.updateaccount(account.getAccount_id(),account.getAccount_username(),account.getAccount_address(),account.getAccount_icon());
+		return accountService.updateaccount(account);
 	}
 	
 	@RequestMapping(value = "/updateicon")

@@ -3,16 +3,14 @@ package com.api.customer.entity;
 import com.api.common.utils.PropertiesUtil;
 import com.api.common.utils.StringUtil;
 
-import java.util.Date;
-
 public class CustomerResult{
 	
 	private Integer customer_id;
 	private String customer_username;
 	private String customer_icon;
-	private Date birthday;//生日
+	private String birthday;//生日
 	private String constellation;//星座
-	private Date period;//经期
+	private String period;//经期
 	
 	public Integer getCustomer_id() {
 		return customer_id;
@@ -41,14 +39,6 @@ public class CustomerResult{
 		this.customer_icon = customer_icon;
 	}
 
-	public Date getBirthday() {
-		return birthday;
-	}
-
-	public void setBirthday(Date birthday) {
-		this.birthday = birthday;
-	}
-
 	public String getConstellation() {
 		return constellation;
 	}
@@ -57,11 +47,19 @@ public class CustomerResult{
 		this.constellation = constellation;
 	}
 
-	public Date getPeriod() {
+	public String getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(String birthday) {
+		this.birthday = birthday;
+	}
+
+	public String getPeriod() {
 		return period;
 	}
 
-	public void setPeriod(Date period) {
+	public void setPeriod(String period) {
 		this.period = period;
 	}
 }

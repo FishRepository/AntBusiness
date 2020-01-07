@@ -403,15 +403,10 @@ public class AccountService {
 		return accountMapper.queryAccountById(account_id);
 	}
 	
-	public Result updateaccount(Integer account_id,String account_username,String account_address,String account_icon){
+	public Result updateaccount(Account account){
 		Result result = new Result();
 		try{
-			if(account_id!=null && account_id >= 0){
-				Account account = new Account();
-				account.setAccount_id(account_id);
-				account.setAccount_username(account_username);
-				account.setAccount_address(account_address);
-				account.setAccount_icon(account_icon);
+			if(account.getAccount_id()!=null && account.getAccount_id() >= 0){
 				if(accountMapper.updateAccount(account) > 0){
 					result.setCode(0);
 					result.setMsg("更新成功");
