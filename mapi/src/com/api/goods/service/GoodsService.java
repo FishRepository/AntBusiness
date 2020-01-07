@@ -1473,10 +1473,29 @@ public class GoodsService {
 	public GoodsStockResult queryHasStockGoods(Integer account_id,Integer brand_id){
 		GoodsStockResult result = new GoodsStockResult();
 		if(account_id!=null && account_id > 0){
+			List<GoodsAndGoodsStock> goodsAndGoodsStocks;
 			if(brand_id!=null && brand_id > 0){
-				result.setList(goodsMapper.queryGoodsHasStockList(account_id,brand_id));
+				goodsAndGoodsStocks = goodsMapper.queryGoodsHasStockList(account_id, brand_id);
+				result.setList(goodsAndGoodsStocks);
 			}else{
-				result.setList(goodsMapper.queryGoodsAllHasStockList(account_id));
+				goodsAndGoodsStocks = goodsMapper.queryGoodsAllHasStockList(account_id);
+				result.setList(goodsAndGoodsStocks);
+			}
+			//组装库存金额、商品数量、商品种类数
+			if(CollectionUtil.isNotEmpty(goodsAndGoodsStocks)){
+				int goodsCates = 0;
+				int goodsNum = 0;
+				double stockPrice = 0d;
+				for (GoodsAndGoodsStock goodsStock:goodsAndGoodsStocks) {
+					goodsCates++;
+					goodsNum+=goodsStock.getGoods_stock();
+					stockPrice+=(goodsStock.getGoods_price()*goodsStock.getGoods_price());
+				}
+				BrandGoodsInfo brandGoodsInfo = new BrandGoodsInfo();
+				brandGoodsInfo.setGoodsCates(goodsCates);
+				brandGoodsInfo.setGoodsNum(goodsNum);
+				brandGoodsInfo.setStockPrice(stockPrice);
+				result.setBrandGoodsInfo(brandGoodsInfo);
 			}
 			result.setCode(0);
 			result.setMsg("查询成功");
