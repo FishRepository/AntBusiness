@@ -1601,7 +1601,11 @@ public class GoodsService {
 	public Object selectHotBrand(String brand_name) {
 		Result result = new Result();
 		try {
-			List<Brand> brands = goodsMapper.selectHotBrand(brand_name);
+			Brand queryBrand = new Brand();
+			if(StringUtils.isNotBlank(brand_name)){
+				queryBrand.setBrand_name(brand_name);
+			}
+			List<Brand> brands = goodsMapper.selectHotBrand(queryBrand);
 			List<HotBrandResult> hotBrandResults = new ArrayList<>();
 			HotBrandResult hotBrandResult;
 			for (Brand brand:brands) {
