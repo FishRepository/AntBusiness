@@ -26,21 +26,24 @@
 		<if test="period != null and period !=''">
 			period = #{period},
 		</if>
+		<if test="is_star != null and is_star !=''">
+			is_star = #{is_star},
+		</if>
 	    update_time = now()
 		</trim>
 		where state = 1 and customer_id = #{customer_id} and account_id = #{account_id} 
 	</update>
 	
 	<select id="queryCustomerById" parameterType="com.api.customer.entity.Customer" resultType="com.api.customer.entity.Customer">
-		select customer_id,customer_username,customer_icon,birthday,constellation,period from customer where state = 1 and customer_id = #{customer_id} and account_id = #{account_id}
+		select customer_id,customer_username,customer_icon,birthday,constellation,period,is_star,period_state from customer where state = 1 and customer_id = #{customer_id} and account_id = #{account_id}
 	</select>
 	
 	<select id="queryCustomerResultById" parameterType="com.api.customer.entity.Customer" resultType="com.api.customer.entity.CustomerResult">
-		select customer_id,customer_username,customer_icon,birthday,constellation,period from customer where state = 1 and customer_id = #{customer_id} and account_id = #{account_id}
+		select customer_id,customer_username,customer_icon,birthday,constellation,period,is_star,period_state from customer where state = 1 and customer_id = #{customer_id} and account_id = #{account_id}
 	</select>
 	
 	<select id="queryCustomer" parameterType="Integer" resultType="com.api.customer.entity.CustomerDetailResult">
-		select customer_id,customer_username,customer_icon,birthday,constellation,period from customer where state = 1 and account_id = #{account_id}
+		select customer_id,customer_username,customer_icon,birthday,constellation,period,is_star,period_state from customer where state = 1 and account_id = #{account_id}
 	</select>
 	
 	<select id="queryCustomerProfit" parameterType="com.api.customer.entity.Customer" resultType="com.api.customer.entity.CustomerProfit">
@@ -106,5 +109,86 @@
 	
 	<select id="queryMonthTime" resultType="String">
 		select date_format(now(), '%Y%m') as nowtime 
+	</select>
+
+	<select id="getCustomerByPeriod" resultType="com.api.customer.entity.Customer">
+		SELECT
+			c.customer_id,
+			c.customer_username,
+			c.customer_icon,
+			c.account_id,
+			c.create_time,
+			c.update_time,
+			c.state,
+			c.birthday,
+			c.constellation,
+			c.period,
+			c.period_notified,
+			c.period_notify_time,
+			c.is_star
+		FROM
+			customer c
+		WHERE
+			c.state = 1 AND
+			c.period IS NOT NULL
+		ORDER BY
+			c.account_id
+	</select>
+
+	<select id="getCustomerByBirthday" resultType="com.api.customer.entity.Customer">
+		SELECT
+			c.customer_id,
+			c.customer_username,
+			c.customer_icon,
+			c.account_id,
+			c.create_time,
+			c.update_time,
+			c.state,
+			c.birthday,
+			c.constellation,
+			c.period,
+			c.period_notified,
+			c.is_star
+		FROM
+			customer c
+		WHERE
+			c.state = 1 AND
+			c.period IS NOT NULL
+		ORDER BY
+			c.account_id
+	</select>
+
+	<update id="updateNotifyTime" parameterType="java.lang.Integer">
+		UPDATE customer c
+		SET c.period_notified = 1,
+		 	c.period_notify_time = NOW(),
+		 	c.period_state = 1
+		WHERE c.customer_id IN
+		<foreach collection="list" item="item" separator="," open="(" close=")">
+			#{item}
+		</foreach>
+	</update>
+
+	<update id="updatePeriodState" parameterType="java.lang.Integer">
+		UPDATE customer c
+		SET c.period_state = 2
+		WHERE c.customer_id IN
+		<foreach collection="list" item="item" separator="," open="(" close=")">
+			#{item}
+		</foreach>
+	</update>
+
+	<update id="resetNotifyState" parameterType="java.lang.Integer">
+		UPDATE customer c
+		SET c.period_notified = 0,
+			c.period_state = 0
+		WHERE c.customer_id IN
+		<foreach collection="list" item="item" separator="," open="(" close=")">
+			#{item}
+		</foreach>
+	</update>
+
+	<select id="countInPeriod" parameterType="java.lang.Integer">
+		select count(1) from customer where account_id = #{account_id}  and period_state = 2
 	</select>
 </mapper>

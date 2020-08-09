@@ -49,4 +49,16 @@ public interface CustomerMapper{
 	public List<GoodsNumTotal> queryCustomerGoodsTop(CustomerGoodsTop customerGoodsTop);
 	
 	public String queryMonthTime();
+
+	public List<Customer> getCustomerByPeriod();
+
+	public List<Customer> getCustomerByBirthday();
+
+	void updateNotifyTime(List<Integer> notifyList);
+
+	void resetNotifyState(List<Integer> resetNotifiedList);
+
+	void updatePeriodState(List<Integer> resetNotifiedList);
+
+	Integer countInPeriod(Integer account_id);
 }

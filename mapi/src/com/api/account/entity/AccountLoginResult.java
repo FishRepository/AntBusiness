@@ -24,6 +24,7 @@ public class AccountLoginResult extends Result{
 	private Integer is_vip;//是否vip 0不是,1是
 	private Integer vip_type;//1，月费会员2，年费会员
 	private Integer is_new;//是否新用户 1是 2不是
+	private Integer notify_num;//用户提醒小红点数
 	
 	public Integer getAccount_id() {
 		return account_id;
@@ -144,5 +145,13 @@ public class AccountLoginResult extends Result{
 
 	public void setIs_new(Integer is_new) {
 		this.is_new = is_new;
+	}
+
+	public Integer getNotify_num() {
+		return notify_num;
+	}
+
+	public void setNotify_num(Integer notify_num) {
+		this.notify_num = notify_num;
 	}
 }

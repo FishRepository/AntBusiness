@@ -65,4 +65,44 @@ public class JPushUtil {
                         .build())
                 .build();
     }
+
+	private static PushPayload buildCustomerPush(String message,Integer aid,String customerJsonArr) {
+		return PushPayload.newBuilder()
+				.setPlatform(Platform.android_ios())
+				.setAudience(Audience.newBuilder()
+						.addAudienceTarget(AudienceTarget.alias(""+aid))
+						.build())
+				.setNotification(Notification.newBuilder()
+						.setAlert(message)
+						.addPlatformNotification(AndroidNotification.newBuilder()
+								.addExtra("aid", aid)
+								.addExtra("customers", customerJsonArr)
+								.build())
+						.addPlatformNotification(IosNotification.newBuilder()
+								.incrBadge(1)
+								.addExtra("aid", aid)
+								.addExtra("customers", customerJsonArr)
+								.build())
+						.build())
+				.build();
+	}
+
+	public static void sendCustomerPush(String message,Integer aid,String customerJsonArr) {
+		log.error("Push customer message - " + message + " - aid - " + aid);
+		JPushClient jpushClient = new JPushClient(pushSecret, pushKey);
+		PushPayload payload = buildCustomerPush(message,aid,customerJsonArr);
+		try {
+			PushResult result = jpushClient.sendPush(payload);
+			log.error("Push result - " + result);
+		} catch (APIConnectionException e) {
+			log.error("Connection error. Should retry later. ", e);
+		} catch (APIRequestException e) {
+			log.error("Error response from JPush server. Should review and fix it. ", e);
+			log.error("HTTP Status: " + e.getStatus());
+			log.error("Error Code: " + e.getErrorCode());
+			log.error("Error Message: " + e.getErrorMessage());
+			log.error("Msg ID: " + e.getMsgId());
+		}
+	}
+
 }

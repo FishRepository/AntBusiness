@@ -4,6 +4,7 @@ import com.api.account.entity.*;
 import com.api.account.mapper.AccountMapper;
 import com.api.common.entity.Result;
 import com.api.common.utils.*;
+import com.api.customer.mapper.CustomerMapper;
 import com.api.goods.entity.*;
 import com.api.goods.mapper.GoodsMapper;
 import com.backend.common.DateUtil;
@@ -37,6 +38,8 @@ public class AccountService {
     private AccountMapper accountMapper;
 	@Autowired
     private GoodsMapper goodsMapper;
+	@Autowired
+	private CustomerMapper customerMapper;
 	
 	public Result sendcode(String account_userphone,Integer type){
 		Result result = new Result();
@@ -379,6 +382,8 @@ public class AccountService {
 						if(accountMapper.checkAccountIdAndPhone(account) > 0){
 							result.setIsboss(1);
 						}
+						Integer countInPeriod = customerMapper.countInPeriod(result.getAccount_id());
+						result.setNotify_num(countInPeriod);
 						result.setCode(0);
 						result.setMsg("登录成功");
 					}
