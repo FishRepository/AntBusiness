@@ -188,7 +188,7 @@
 		</foreach>
 	</update>
 
-	<select id="countInPeriod" parameterType="java.lang.Integer">
-		select count(1) from customer where account_id = #{account_id}  and period_state = 2
+	<select id="countInPeriod" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		select count(1) from customer where account_id = #{account_id} and state = 1 and period_state = 2
 	</select>
 </mapper>
