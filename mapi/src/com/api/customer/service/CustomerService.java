@@ -3,6 +3,8 @@ package com.api.customer.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.ObjectUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -147,26 +149,33 @@ public class CustomerService {
 	public CustomerListResult queryCustomer(Integer account_id,Integer type){
 		CustomerListResult result = new CustomerListResult();
 		if(account_id!=null && account_id > 0){
-			if(type!=null){
-				if(type == 1){//名称和商品数量
-					List<CustomerDetailResult> list = customerMapper.queryCustomer(account_id);
-					if(list!=null && !list.isEmpty()){
-						Detail detail = new Detail();
-						detail.setAccount_id(account_id);
-						for(CustomerDetailResult c:list){
-							detail.setCustomer_id(c.getCustomer_id());
-							detail.setDetail_type(1);
-							c.setCustomerphone(customerMapper.queryDetailDefault(detail));
-							detail.setDetail_type(2);
-							c.setCustomeraddress(customerMapper.queryDetailDefault(detail));
-						}
+			List<CustomerDetailResult> list = customerMapper.queryCustomer(account_id);
+			if(type!=null && type == 1){//名称和商品数量
+				if(list!=null && !list.isEmpty()){
+					Detail detail = new Detail();
+					detail.setAccount_id(account_id);
+					for(CustomerDetailResult c:list){
+						detail.setCustomer_id(c.getCustomer_id());
+						detail.setDetail_type(1);
+						c.setCustomerphone(customerMapper.queryDetailDefault(detail));
+						detail.setDetail_type(2);
+						c.setCustomeraddress(customerMapper.queryDetailDefault(detail));
 					}
-					result.setList(list);
-				}else{
-					result.setList(customerMapper.queryCustomer(account_id));
 				}
-			}else{
-				result.setList(customerMapper.queryCustomer(account_id));
+			}
+			//在生理期或即将达到生理期的加入关怀客户组
+			if(CollectionUtil.isNotEmpty(list)){
+				List<CustomerDetailResult> normalList = new ArrayList<>();
+				List<CustomerDetailResult> favorList = new ArrayList<>();
+				for (CustomerDetailResult customerDetail : list) {
+					if(!ObjectUtil.equal(customerDetail.getPeriod_state(), 0)){
+						favorList.add(customerDetail);
+					}else{
+						normalList.add(customerDetail);
+					}
+				}
+				result.setList(normalList);
+				result.setFavorList(favorList);
 			}
 			result.setCode(0);
 			result.setMsg("查询成功");
