@@ -30,7 +30,7 @@
                p.message,
                p.create_time,
                p.consume_state,
-               p.update_time,
+               p.update_time
         from push_log p
         where p.account_id = #{account_id}
         order by p.create_time desc
@@ -44,7 +44,7 @@
                p.message,
                p.create_time,
                p.consume_state,
-               p.update_time,
+               p.update_time
         from push_log p
         where p.account_id = #{account_id}
         and p.consume_state = 0
