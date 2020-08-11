@@ -1,34 +1,27 @@
 package com.api.customer.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.api.common.entity.Result;
+import com.api.common.utils.StringUtil;
+import com.api.customer.entity.*;
+import com.api.customer.mapper.CustomerMapper;
+import com.api.customer.mapper.PushLogMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.api.common.entity.Result;
-import com.api.common.utils.StringUtil;
-import com.api.customer.entity.Customer;
-import com.api.customer.entity.CustomerDetailDefaultResult;
-import com.api.customer.entity.CustomerDetailListResult;
-import com.api.customer.entity.CustomerDetailResult;
-import com.api.customer.entity.CustomerGoodsTop;
-import com.api.customer.entity.CustomerListResult;
-import com.api.customer.entity.CustomerTopResult;
-import com.api.customer.entity.Detail;
-import com.api.customer.entity.DetailResult;
-import com.api.customer.entity.InsertCustomerResult;
-import com.api.customer.entity.InsertDetailResult;
-import com.api.customer.mapper.CustomerMapper;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
 public class CustomerService {
 	@Autowired
     private CustomerMapper customerMapper;
+
+	@Autowired
+	private PushLogMapper pushLogMapper;
 	
 	public InsertCustomerResult insertCustomer(Customer customer,String phonelist,String addresslist){
 		InsertCustomerResult result = new InsertCustomerResult();
@@ -340,5 +333,27 @@ public class CustomerService {
 			result.setMsg("查询失败");
 		}
 		return result;
+	}
+
+	public Result<Void> clearNotify(Integer account_id) {
+		Result<Void> result = new Result<>();
+		pushLogMapper.clearNotify(account_id);
+		result.setCode(0);
+		result.setMsg("提醒记录清除成功");
+		return result;
+	}
+
+	public int countNotify(Integer account_id){
+		List<PushLog> pushLogs = pushLogMapper.getUnConsumePushLog(account_id);
+		if(CollectionUtil.isEmpty(pushLogs)){
+			return 0;
+		}
+		int countNotify = 0;
+		for (PushLog pushLog : pushLogs) {
+			if(ObjectUtil.isEmpty(pushLog.getCustomers()))
+				continue;
+			countNotify+=pushLog.getCustomers().split(",").length;
+		}
+		return countNotify;
 	}
 }

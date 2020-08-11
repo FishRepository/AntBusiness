@@ -1,5 +1,7 @@
 package com.api.customer.controller;
 
+import com.api.account.entity.Account;
+import com.api.common.entity.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -91,5 +93,11 @@ public class CustomerController {
     @ResponseBody
 	public Object customergoodstop(CustomerGoodsTop customerGoodsTop){
 		return customerService.queryCustomerGoodsTop(customerGoodsTop);
+	}
+
+	@RequestMapping(value = "/clearNotify")
+	@ResponseBody
+	public Result<Void> clearNotify(Integer account_id){
+		return customerService.clearNotify(account_id);
 	}
 }

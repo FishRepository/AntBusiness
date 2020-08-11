@@ -9,7 +9,9 @@ import com.api.account.entity.Account;
 import com.api.account.mapper.AccountMapper;
 import com.api.common.utils.JPushUtil;
 import com.api.customer.entity.Customer;
+import com.api.customer.entity.PushLog;
 import com.api.customer.mapper.CustomerMapper;
+import com.api.customer.mapper.PushLogMapper;
 import com.baomidou.mybatisplus.toolkit.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +20,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
 
 @Component
 public class Jobs {
@@ -31,6 +34,11 @@ public class Jobs {
 
     @Autowired
     private CustomerMapper customerMapper;
+
+    @Autowired
+    private PushLogMapper pushLogMapper;
+
+    private ExecutorService executorService;
 
 //    @Scheduled(cron = "*/5 * * * * ?")
     @Scheduled(cron = "0 30 0 * * ?")//每天凌晨00:30执行一次  将会员时间到期的会员状态清空
@@ -94,12 +102,27 @@ public class Jobs {
         }
         if(CollectionUtil.isNotEmpty(notifyList)){
             Set<Map.Entry<Integer, List<Customer>>> entries = accountMsgMap.entrySet();
+            //待插入提醒记录
+            List<PushLog> pushLogs = new ArrayList<>();
+            PushLog pushLog;
             for (Map.Entry<Integer, List<Customer>> entry:entries) {
                 Integer accountId = entry.getKey();
                 List<Customer> accountCustomerList = entry.getValue();
                 //List<Customer> 转jsonArray push
                 JPushUtil.sendCustomerPush(NOTIFYCONTENT, accountId, JSONUtil.parseArray(accountCustomerList).toString());
+                StringBuilder builder = new StringBuilder();
+                pushLog = new PushLog();
+                for (Customer item : accountCustomerList) {
+                    builder.append(item.getCustomer_id()).append(",");
+                }
+                pushLog.setAccount_id(accountId);
+                pushLog.setCustomers(builder.toString());
+                pushLog.setType(1);
+                pushLog.setMessage(NOTIFYCONTENT);
+                pushLogs.add(pushLog);
             }
+            //保存用户提醒推送记录
+            pushLogMapper.savePushLogBatch(pushLogs);
             customerMapper.updateNotifyTime(notifyList);
         }
         if(CollectionUtil.isNotEmpty(resetNotifiedList)){
