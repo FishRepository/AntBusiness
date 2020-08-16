@@ -170,6 +170,8 @@ public class CustomerService {
 							filterList.add(customerDetailResult);
 						}
 					}
+				}else {
+					filterList = list;
 				}
 				List<CustomerDetailResult> normalList = new ArrayList<>();
 				List<CustomerDetailResult> favorList = new ArrayList<>();
