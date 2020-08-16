@@ -1,5 +1,9 @@
 package com.api.common.utils;
 
+import cn.jiguang.common.ClientConfig;
+import cn.jiguang.common.ServiceHelper;
+import cn.jiguang.common.connection.NativeHttpClient;
+import cn.jpush.api.push.model.Options;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,12 +88,15 @@ public class JPushUtil {
 								.addExtra("customers", customerJsonArr)
 								.build())
 						.build())
+				.setOptions(Options.newBuilder()
+						.setApnsProduction(true)
+						.build())
 				.build();
 	}
 
 	public static void sendCustomerPush(String message,Integer aid,String customerJsonArr) {
 		log.error("Push customer message - " + message + " - aid - " + aid);
-		JPushClient jpushClient = new JPushClient(pushSecret, pushKey);
+		JPushClient jpushClient = getClient();
 		PushPayload payload = buildCustomerPush(message,aid,customerJsonArr);
 		try {
 			PushResult result = jpushClient.sendPush(payload);
@@ -105,4 +112,16 @@ public class JPushUtil {
 		}
 	}
 
+	private static JPushClient getClient(){
+		ClientConfig clientConfig = ClientConfig.getInstance();
+		final JPushClient jpushClient = new JPushClient(pushSecret, pushKey, null, clientConfig);
+		String authCode = ServiceHelper.getBasicAuthorization(pushKey, pushSecret);
+		// Here you can use NativeHttpClient or NettyHttpClient or ApacheHttpClient.
+		NativeHttpClient httpClient = new NativeHttpClient(authCode, null, clientConfig);
+		// Call setHttpClient to set httpClient,
+		// If you don't invoke this method, default httpClient will use NativeHttpClient.
+//        ApacheHttpClient httpClient = new ApacheHttpClient(authCode, null, clientConfig);
+		jpushClient.getPushClient().setHttpClient(httpClient);
+		return jpushClient;
+	}
 }

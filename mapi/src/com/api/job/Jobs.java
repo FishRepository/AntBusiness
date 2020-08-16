@@ -21,6 +21,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class Jobs {
@@ -72,7 +74,7 @@ public class Jobs {
     }
 
     @Scheduled(cron = "0 0 20 * * ?")//每天20:00执行一次推送
-    public void pushClientJob(){
+    public void pushClientJob() throws Exception{
         List<Customer> customerList = customerMapper.getCustomerByPeriod();
         if(CollectionUtil.isEmpty(customerList)){
             return;
@@ -105,11 +107,17 @@ public class Jobs {
             //待插入提醒记录
             List<PushLog> pushLogs = new ArrayList<>();
             PushLog pushLog;
+            executorService = Executors.newFixedThreadPool(entries.size());
             for (Map.Entry<Integer, List<Customer>> entry:entries) {
                 Integer accountId = entry.getKey();
                 List<Customer> accountCustomerList = entry.getValue();
                 //List<Customer> 转jsonArray push
-                JPushUtil.sendCustomerPush(NOTIFYCONTENT, accountId, JSONUtil.parseArray(accountCustomerList).toString());
+                executorService.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        JPushUtil.sendCustomerPush(NOTIFYCONTENT, accountId, JSONUtil.parseArray(accountCustomerList).toString());
+                    }
+                });
                 StringBuilder builder = new StringBuilder();
                 pushLog = new PushLog();
                 for (Customer item : accountCustomerList) {
@@ -120,6 +128,10 @@ public class Jobs {
                 pushLog.setType(1);
                 pushLog.setMessage(NOTIFYCONTENT);
                 pushLogs.add(pushLog);
+            }
+            executorService.shutdown();
+            while(!executorService.awaitTermination(1, TimeUnit.SECONDS)){
+                executorService.shutdownNow();
             }
             //保存用户提醒推送记录
             pushLogMapper.savePushLogBatch(pushLogs);
@@ -166,14 +178,19 @@ public class Jobs {
     }
 
     public static void main(String[] args) {
-        int i = DateUtil.dayOfMonth(new Date());
-        int i1 = DateUtil.endOfMonth(new Date()).dayOfMonth();
-        System.out.println(i);
-        System.out.println(i1);
-
-        String periodStr = "20号-1号";
-        int periodDay = Integer.parseInt(periodStr.substring(0, periodStr.indexOf("号")));
-        System.out.println(periodDay);
+        String userPhone = "15827277610";
+        List<Customer> accountCustomerList = new ArrayList<>();
+        Customer c = new Customer();
+        c.setAccount_id(60342);
+        c.setCustomer_id(2222);
+        c.setCustomer_username("小张");
+        Customer c1 = new Customer();
+        c1.setAccount_id(60342);
+        c1.setCustomer_id(1111);
+        c1.setCustomer_username("小王");
+        accountCustomerList.add(c);
+        accountCustomerList.add(c1);
+        JPushUtil.sendCustomerPush(NOTIFYCONTENT, 175572, JSONUtil.parseArray(accountCustomerList).toString());
     }
 }
 

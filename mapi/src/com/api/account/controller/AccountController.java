@@ -1,7 +1,15 @@
 package com.api.account.controller;
 
-import java.util.List;
-
+import com.api.account.entity.*;
+import com.api.account.service.AccountService;
+import com.api.common.entity.Images;
+import com.api.common.entity.Result;
+import com.api.common.service.ImagesService;
+import com.api.common.utils.EncryptUtil;
+import com.api.customer.service.CustomerService;
+import com.api.goods.entity.GoodsAgentLevelPrice;
+import com.api.goods.entity.ShareQueryAgentLevel;
+import com.api.goods.entity.ShareQueryBrand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,30 +17,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.api.account.entity.Account;
-import com.api.account.entity.AccountIconResult;
-import com.api.account.entity.AccountLoginResult;
-import com.api.account.entity.AccountRegResult;
-import com.api.account.entity.AccountResetResult;
-import com.api.account.entity.Advise;
-import com.api.account.entity.ListPageAdvise;
-import com.api.account.entity.ListPageIntegral;
-import com.api.account.entity.ListPageMemorandum;
-import com.api.account.entity.Memorandum;
-import com.api.account.service.AccountService;
-import com.api.common.entity.Images;
-import com.api.common.entity.Result;
-import com.api.common.service.ImagesService;
-import com.api.common.utils.EncryptUtil;
-import com.api.goods.entity.GoodsAgentLevelPrice;
-import com.api.goods.entity.ShareQueryAgentLevel;
-import com.api.goods.entity.ShareQueryBrand;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/account")
 public class AccountController {
 	@Autowired
 	private AccountService accountService;
+
+	@Autowired
+	private CustomerService customerService;
 	
 	@Autowired
 	private ImagesService imagesService;
@@ -59,6 +55,18 @@ public class AccountController {
     @ResponseBody
 	public Object insertBrand(Account account){
 		return accountService.login(account);
+	}
+
+	@RequestMapping(value = "/countNotify")
+	@ResponseBody
+	public Object countNotify(Integer account_id){
+		Result<Map<String, Object>> result = new Result<>();
+		Map<String, Object> resultMap = new HashMap<>();
+		int countNotify = customerService.countNotify(account_id);
+		resultMap.put("notify_num", countNotify);
+		result.setCode(0);
+		result.setData(resultMap);
+		return result;
 	}
 
 	@RequestMapping(value = "/stopNewAccount")
