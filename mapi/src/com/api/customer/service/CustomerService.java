@@ -1,7 +1,11 @@
 package com.api.customer.service;
 
+import cn.hutool.Hutool;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.comparator.PinyinComparator;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.pinyin.PinyinUtil;
 import com.api.common.entity.Result;
 import com.api.common.utils.StringUtil;
 import com.api.customer.entity.*;
@@ -139,7 +143,7 @@ public class CustomerService {
 		return result;
 	}
 	
-	public CustomerListResult queryCustomer(Integer account_id,Integer type){
+	public CustomerListResult queryCustomer(Integer account_id,Integer type,String queryString){
 		CustomerListResult result = new CustomerListResult();
 		if(account_id!=null && account_id > 0){
 			List<CustomerDetailResult> list = customerMapper.queryCustomer(account_id);
@@ -158,13 +162,24 @@ public class CustomerService {
 			}
 			//在生理期或即将达到生理期的加入关怀客户组
 			if(CollectionUtil.isNotEmpty(list)){
+				//模糊匹配通讯录
+				List<CustomerDetailResult> filterList = new ArrayList<>();
+				if(StrUtil.isNotBlank(queryString)){
+					for(CustomerDetailResult customerDetailResult : list){
+						if(StringUtil.bookNameEquals(queryString, customerDetailResult.getCustomer_username())){
+							filterList.add(customerDetailResult);
+						}
+					}
+				}
 				List<CustomerDetailResult> normalList = new ArrayList<>();
 				List<CustomerDetailResult> favorList = new ArrayList<>();
-				for (CustomerDetailResult customerDetail : list) {
-					if(!ObjectUtil.equal(customerDetail.getPeriod_state(), 0)){
-						favorList.add(customerDetail);
-					}else{
-						normalList.add(customerDetail);
+				if(CollectionUtil.isNotEmpty(filterList)){
+					for (CustomerDetailResult customerDetail : filterList) {
+						if(!ObjectUtil.equal(customerDetail.getPeriod_state(), 0)){
+							favorList.add(customerDetail);
+						}else{
+							normalList.add(customerDetail);
+						}
 					}
 				}
 				result.setList(normalList);

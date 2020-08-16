@@ -49,8 +49,8 @@ public class CustomerController {
 	
 	@RequestMapping(value = "/queryCustomer")
     @ResponseBody
-	public Object queryCustomer(Integer account_id,Integer type){
-		return customerService.queryCustomer(account_id,type);
+	public Object queryCustomer(Integer account_id,Integer type,String queryString){
+		return customerService.queryCustomer(account_id,type,queryString);
 	}
 	
 	@RequestMapping(value = "/insertDetail")
