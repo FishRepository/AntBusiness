@@ -4,8 +4,8 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.api.customer.mapper.CustomerMapper">
 	<insert id="insertCustomer" useGeneratedKeys="true" keyProperty="customer_id" parameterType="com.api.customer.entity.Customer">
-	    insert into customer(customer_username,customer_icon,account_id,create_time,update_time,birthday,constellation,period)
-	    values (#{customer_username},#{customer_icon},#{account_id},now(),now(),#{birthday},#{constellation},#{period});
+	    insert into customer(customer_username,customer_icon,account_id,create_time,update_time,birthday,constellation,period,period_state)
+	    values (#{customer_username},#{customer_icon},#{account_id},now(),now(),#{birthday},#{constellation},#{period},#{period_state});
 	</insert>
 	
 	<update id="updateCustomer" parameterType="com.api.customer.entity.Customer">
@@ -28,6 +28,9 @@
 		</if>
 		<if test="is_star != null and is_star !=''">
 			is_star = #{is_star},
+		</if>
+		<if test="period_state != null and period_state !=''">
+			period_state = #{period_state},
 		</if>
 	    update_time = now()
 		</trim>

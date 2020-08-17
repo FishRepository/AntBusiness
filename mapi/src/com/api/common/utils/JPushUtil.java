@@ -3,6 +3,7 @@ package com.api.common.utils;
 import cn.jiguang.common.ClientConfig;
 import cn.jiguang.common.ServiceHelper;
 import cn.jiguang.common.connection.NativeHttpClient;
+import cn.jpush.api.push.model.Message;
 import cn.jpush.api.push.model.Options;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,6 +89,7 @@ public class JPushUtil {
 								.addExtra("customers", customerJsonArr)
 								.build())
 						.build())
+				//IOS 线上正式环境设置
 				.setOptions(Options.newBuilder()
 						.setApnsProduction(true)
 						.build())
@@ -111,6 +113,28 @@ public class JPushUtil {
 			log.error("Msg ID: " + e.getMsgId());
 		}
 	}
+
+	public static void sendBroadcastPush(String title,String msg) {
+		JPushClient jpushClient = getClient();
+		PushPayload payload = buildBroadcastMessage(title,msg);
+		try {
+			PushResult result = jpushClient.sendPush(payload);
+			log.error("Push result - " + result);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static PushPayload buildBroadcastMessage(String title,String msg) {
+		return PushPayload.newBuilder().setPlatform(Platform.all())// 设置接受的平台
+				.setAudience(Audience.all())// Audience设置为all，说明采用广播方式推送，所有用户都可以接收到
+				.setMessage(Message.newBuilder()
+						.setTitle(title)
+						.setMsgContent(msg)
+						.build())
+				.build();
+	}
+
 
 	private static JPushClient getClient(){
 		ClientConfig clientConfig = ClientConfig.getInstance();

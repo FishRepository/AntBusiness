@@ -1,11 +1,9 @@
 package com.api.customer.service;
 
-import cn.hutool.Hutool;
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.comparator.PinyinComparator;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.extra.pinyin.PinyinUtil;
 import com.api.common.entity.Result;
 import com.api.common.utils.StringUtil;
 import com.api.customer.entity.*;
@@ -16,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -30,6 +29,7 @@ public class CustomerService {
 	public InsertCustomerResult insertCustomer(Customer customer,String phonelist,String addresslist){
 		InsertCustomerResult result = new InsertCustomerResult();
 		if(customer!=null && customer.getAccount_id()!=null && customer.getAccount_id() > 0 && StringUtil.isValid(customer.getCustomer_username())){
+			setPeriodState(customer);
 			if(customerMapper.insertCustomer(customer) > 0){
 				result.setCode(0);
 				result.setMsg("添加成功");
@@ -104,10 +104,40 @@ public class CustomerService {
 		}
 		return result;
 	}
-	
+
+	//生理期状态 0无状态 1即将到达生理期 2在生理期中
+	private void setPeriodState(Customer customer) {
+		String periodStr = customer.getPeriod();
+		if(StrUtil.isEmpty(customer.getPeriod())){
+			customer.setPeriod_state(0);
+			return;
+		}
+		int today = DateUtil.dayOfMonth(new Date());
+		int endOfMonthDay = DateUtil.endOfMonth(new Date()).dayOfMonth();
+		int periodDay = Integer.parseInt(periodStr.substring(0, periodStr.indexOf("号")));
+		if(periodDay > today && periodDay <= (3 + today)){
+			customer.setPeriod_state(1);
+			return;
+		}
+		if(periodDay < today && (endOfMonthDay - today + periodDay) <= 3){
+			customer.setPeriod_state(1);
+			return;
+		}
+		if(today >= periodDay && today <= (5 + periodDay)){
+			customer.setPeriod_state(2);
+			return;
+		}
+		if(periodDay >= today && (endOfMonthDay - periodDay + periodDay) <= 5){
+			customer.setPeriod_state(2);
+			return;
+		}
+		customer.setPeriod_state(0);
+	}
+
 	public Result updateCustomer(Customer customer){
 		Result result = new Result();
 		if(customer!=null && customer.getCustomer_id()!=null && customer.getCustomer_id() > 0 && customer.getAccount_id()!=null && customer.getAccount_id() > 0){
+			setPeriodState(customer);
 			if(customerMapper.updateCustomer(customer) > 0){
 				result.setCode(0);
 				result.setMsg("修改成功");
