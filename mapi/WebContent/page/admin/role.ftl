@@ -10,7 +10,7 @@
 </@global.head>
 <body class="app sidebar-mini rtl">
 <@global.navbar></@global.navbar>
-<@global.sidebar 6></@global.sidebar>
+<@global.sidebar 7></@global.sidebar>
 <@global.content "权限管理">
     <div class="row">
         <div class="col-md-12">

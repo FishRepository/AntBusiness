@@ -27,8 +27,8 @@
         <result property="userName" column="user_name" jdbcType="VARCHAR"/>
         <result property="password" column="password" jdbcType="VARCHAR"/>
         <result property="userPhone" column="user_phone" jdbcType="VARCHAR"/>
-        <association property="roleList" select="selectRole" column="id" resultMap="RoleMap"/>
-        <association property="roleUserList" select="selectUserRole" column="id" resultMap="RoleUserMap"/>
+        <association property="roleList" select="selectRole" column="id"/>
+        <association property="roleUserList" select="selectUserRole" column="id"/>
     </resultMap>
 
     <select id="selectRole" resultMap="RoleMap">

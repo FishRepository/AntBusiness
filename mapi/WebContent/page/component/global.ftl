@@ -259,7 +259,7 @@
         </#if>
         <#if Session["roleList"]??  && Session["username"]=="admin">
                 <li>
-                    <a class="app-menu__item<#if index==6> active</#if>" href="${ctx}/role">
+                    <a class="app-menu__item<#if index==7> active</#if>" href="${ctx}/role">
                         <i class="app-menu__icon fa fa-list"></i><span class="app-menu__label">权限管理</span>
                     </a>
                 </li>

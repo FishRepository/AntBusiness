@@ -114,23 +114,35 @@ public class JPushUtil {
 		}
 	}
 
-	public static void sendBroadcastPush(String title,String msg) {
+	public static boolean sendBroadcastPush(String title,String msg) {
 		JPushClient jpushClient = getClient();
 		PushPayload payload = buildBroadcastMessage(title,msg);
 		try {
 			PushResult result = jpushClient.sendPush(payload);
 			log.error("Push result - " + result);
+			return result.statusCode == 0;
 		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 
 	public static PushPayload buildBroadcastMessage(String title,String msg) {
-		return PushPayload.newBuilder().setPlatform(Platform.all())// 设置接受的平台
+		return PushPayload.newBuilder()
+				.setPlatform(Platform.android_ios())// 设置接受的平台
 				.setAudience(Audience.all())// Audience设置为all，说明采用广播方式推送，所有用户都可以接收到
-				.setMessage(Message.newBuilder()
-						.setTitle(title)
-						.setMsgContent(msg)
+				.setNotification(Notification.newBuilder()
+						.setAlert(msg)
+						.addPlatformNotification(AndroidNotification.newBuilder()
+								.addExtra("title", title)
+								.build())
+						.addPlatformNotification(IosNotification.newBuilder()
+								.incrBadge(1)
+								.addExtra("title", title)
+								.build())
+						.build())
+				.setOptions(Options.newBuilder()
+						.setApnsProduction(true)
 						.build())
 				.build();
 	}
