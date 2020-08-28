@@ -78,7 +78,7 @@ public class Jobs {
     }
 
 //    @Scheduled(cron = "0 0/1 * * * ?")
-    @Scheduled(cron = "0 0 20 * * ?")//每天20:00执行一次推送
+    @Scheduled(cron = "0 0 9 * * ?")//每天20:00执行一次推送
     public void pushClientJob() throws Exception{
         List<Customer> customerList = customerMapper.getCustomerByPeriod();
         if(CollectionUtil.isEmpty(customerList)){
