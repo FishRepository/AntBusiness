@@ -54,7 +54,7 @@ public interface CustomerMapper{
 
 	public List<Customer> getCustomerByBirthday();
 
-	void updateNotifyTime(List<Integer> notifyList);
+	void updateNotifyTime(List<Customer> notifyList);
 
 	void resetNotifyState(List<Integer> resetNotifiedList);
 

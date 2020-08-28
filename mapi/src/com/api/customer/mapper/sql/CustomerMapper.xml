@@ -128,7 +128,8 @@
 			c.period,
 			c.period_notified,
 			c.period_notify_time,
-			c.is_star
+			c.is_star,
+			c.period_state
 		FROM
 			customer c
 		WHERE
@@ -163,13 +164,16 @@
 
 	<update id="updateNotifyTime" parameterType="java.lang.Integer">
 		UPDATE customer c
-		SET c.period_notified = 1,
-		 	c.period_notify_time = NOW(),
-		 	c.period_state = 1
+			<foreach collection="list" item="item" open="SET c.period_state = CASE c.customer_id" close="END">
+				WHEN #{item.customer_id} THEN #{item.period_state}
+			</foreach>
+			,
+			c.period_notified = 1,
+		 	c.period_notify_time = NOW()
 		WHERE c.customer_id IN
-		<foreach collection="list" item="item" separator="," open="(" close=")">
-			#{item}
-		</foreach>
+			<foreach collection="list" item="item" separator="," open="(" close=")">
+				#{item.customer_id}
+			</foreach>
 	</update>
 
 	<update id="updatePeriodState" parameterType="java.lang.Integer">
