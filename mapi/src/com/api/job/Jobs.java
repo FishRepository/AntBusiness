@@ -22,7 +22,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -33,7 +32,9 @@ public class Jobs {
 
     private final static Logger logger = LoggerFactory.getLogger(Jobs.class);
 
-    private final static String NOTIFYCONTENT = "亲爱的，番茄管家提醒你有客户即将来例假了哦~赶紧去呵护她吧!";
+    private final static String SINGLENOTIFY = "亲爱的，番茄管家提醒你，你的客户name即将来例假了哦~赶紧去呵护她吧！";
+
+    private final static String NOTIFYCONTENT = "亲爱的，番茄管家提醒你，你的客户name等num人即将来例假了哦~赶紧去呵护她吧！";
 
     @Autowired
     private AccountMapper accountMapper;
@@ -77,8 +78,7 @@ public class Jobs {
         logger.info("vipTimeJob done");
     }
 
-//    @Scheduled(cron = "0 0/1 * * * ?")
-    @Scheduled(cron = "0 0 9 * * ?")//每天20:00执行一次推送
+    @Scheduled(cron = "0 0 20 * * ?")//每天20:00执行一次推送
     public void pushClientJob() throws Exception{
         List<Customer> customerList = customerMapper.getCustomerByPeriod();
         if(CollectionUtil.isEmpty(customerList)){
@@ -123,7 +123,14 @@ public class Jobs {
                 executorService.execute(new Runnable() {
                     @Override
                     public void run() {
-                        JPushUtil.sendCustomerPush(NOTIFYCONTENT, accountId, JSONUtil.parseArray(accountCustomerList).toString());
+                        String msg;
+                        if(accountCustomerList.size()==1){
+                            msg = SINGLENOTIFY.replace("name",accountCustomerList.get(0).getCustomer_username());
+                        }else{
+                            msg = NOTIFYCONTENT.replace("name",accountCustomerList.get(0).getCustomer_username())
+                                    .replace("num",accountCustomerList.size()+"");
+                        }
+                        JPushUtil.sendCustomerPush(msg, accountId, JSONUtil.parseArray(accountCustomerList).toString());
                     }
                 });
                 StringBuilder builder = new StringBuilder();

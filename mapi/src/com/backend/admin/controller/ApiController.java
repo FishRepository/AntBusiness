@@ -26,7 +26,6 @@ import org.springframework.web.multipart.MultipartRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.math.BigDecimal;
 import java.util.*;
 
 @Controller
@@ -62,6 +61,9 @@ public class ApiController extends BaseController{
 
     @Autowired
     private BrandMgrService brandMgrService;
+
+    @Autowired
+    private IOSVerifyService iosVerifyService;
 
     @ResponseBody
     @RequestMapping("/upload")
@@ -388,4 +390,20 @@ public class ApiController extends BaseController{
         jsonObject.put("price", Constant.IOS_DOWNLOAD_CODE_PRICE);
         return successData(jsonObject);
     }
+
+    /**
+     * IOS sign in with app  IOS三方登录
+     * @param identityToken
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/iosTokenVerify")
+    public Object iosTokenVerify(String identityToken){
+        boolean result = iosVerifyService.verify(identityToken);
+        if(result){
+            return success();
+        }
+        return error();
+    }
+
 }
