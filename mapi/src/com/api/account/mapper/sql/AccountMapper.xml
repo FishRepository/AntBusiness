@@ -8,6 +8,7 @@
 	                        account_password,
 	                        account_qq,
 	                        account_wechat,
+	                        account_appleid,
 	                        account_imei,
 	                        account_guideid,
 	                        create_time,
@@ -24,6 +25,7 @@
 	                                #{account_password},
 	                                #{account_qq},
 	                                #{account_wechat},
+	                                #{account_appleid},
 	                                #{account_imei},
 	                                #{account_guideid},
 	                                now(),
@@ -56,6 +58,9 @@
 	    <if test="account_wechat != null and account_wechat !=''">
 	 	    account_wechat = #{account_wechat},
 	    </if>
+		<if test="account_appleid != null and account_appleid !=''">
+			account_appleid = #{account_appleid},
+		</if>
 	    <if test="account_password != null and account_password !=''">
 	 	    account_password = #{account_password},
 	    </if>
@@ -103,6 +108,9 @@
 	    <if test="account_wechat != null and account_wechat !=''">
 	 	    account_wechat = #{account_wechat},
 	    </if>
+		<if test="account_appleid != null and account_appleid !=''">
+			account_appleid = #{account_appleid},
+		</if>
 	    <if test="account_imei != null and account_imei !=''">
 	 	    account_imei = #{account_imei},
 	    </if>
@@ -139,19 +147,23 @@
 	</select>
 	
 	<select id="queryAccountById" parameterType="Integer" resultType="com.api.account.entity.Account">
-		select account_id,account_userphone,account_username,account_icon,account_qq,account_wechat,account_imei,account_integral,last_time,create_time,vip_time,is_vip,vip_type,is_new,birthday,email,constellation,period from account where state = 1 and account_id = #{account_id}
+		select account_id,account_userphone,account_username,account_icon,account_qq,account_wechat,account_appleid,account_imei,account_integral,last_time,create_time,vip_time,is_vip,vip_type,is_new,birthday,email,constellation,period from account where state = 1 and account_id = #{account_id}
 	</select>
 	
 	<select id="queryAccountByPhone" parameterType="string" resultType="com.api.account.entity.AccountLoginResult">
-		select account_id,account_userphone,account_username,account_address,account_icon,account_qq,account_wechat,account_imei,account_integral,last_time,create_time,vip_time,is_vip,vip_type,is_new,birthday,email,constellation,period from account where state = 1 and account_userphone = #{account_userphone}
+		select account_id,account_userphone,account_username,account_address,account_icon,account_qq,account_wechat,account_appleid,account_imei,account_integral,last_time,create_time,vip_time,is_vip,vip_type,is_new,birthday,email,constellation,period from account where state = 1 and account_userphone = #{account_userphone}
 	</select>
 		
 	<select id="queryAccountByWechat" parameterType="string" resultType="com.api.account.entity.AccountLoginResult">
-		select account_id,account_userphone,account_username,account_address,account_icon,account_qq,account_wechat,account_imei,account_integral,last_time,create_time,vip_time,is_vip,vip_type,is_new,birthday,email,constellation,period from account where state = 1 and account_wechat = #{account_wechat}
+		select account_id,account_userphone,account_username,account_address,account_icon,account_qq,account_wechat,account_appleid,account_imei,account_integral,last_time,create_time,vip_time,is_vip,vip_type,is_new,birthday,email,constellation,period from account where state = 1 and account_wechat = #{account_wechat}
 	</select>
 	
 	<select id="queryAccountByQQ" parameterType="string" resultType="com.api.account.entity.AccountLoginResult">
-		select account_id,account_userphone,account_username,account_address,account_icon,account_qq,account_wechat,account_imei,account_integral,last_time,create_time,vip_time,is_vip,vip_type,is_new,birthday,email,constellation,period from account where state = 1 and account_qq = #{account_qq}
+		select account_id,account_userphone,account_username,account_address,account_icon,account_qq,account_wechat,account_appleid,account_imei,account_integral,last_time,create_time,vip_time,is_vip,vip_type,is_new,birthday,email,constellation,period from account where state = 1 and account_qq = #{account_qq}
+	</select>
+
+	<select id="queryAccountByAppleId" parameterType="string" resultType="com.api.account.entity.AccountLoginResult">
+		select account_id,account_userphone,account_username,account_address,account_icon,account_qq,account_wechat,account_appleid,account_imei,account_integral,last_time,create_time,vip_time,is_vip,vip_type,is_new,birthday,email,constellation,period from account where state = 1 and account_appleid = #{account_appleid}
 	</select>
 	
 	<select id="queryAccountWechatById" parameterType="Integer" resultType="com.api.account.entity.Account">
@@ -168,6 +180,10 @@
 	
 	<select id="queryAccountQQ" parameterType="string" resultType="com.api.account.entity.Account">
 		select account_id,account_qq,account_imei from account where state = 1 and account_userphone = #{account_userphone} 
+	</select>
+
+	<select id="queryAccountAppleId" parameterType="string" resultType="com.api.account.entity.Account">
+		select account_id,account_appleid,account_imei from account where state = 1 and account_userphone = #{account_userphone}
 	</select>
 	
 	<select id="checkAccountPhone" parameterType="com.api.account.entity.Account" resultType="int">
@@ -190,7 +206,14 @@
 	 	    and account_id != #{account_id} 
 	    </if> 
 	</select>
-	
+
+	<select id="checkAccountAppleId" parameterType="com.api.account.entity.Account" resultType="int">
+		select count(*) from account where state = 1 and account_appleid = #{account_appleid}
+		<if test="account_id != null and account_id !=''">
+			and account_id != #{account_id}
+		</if>
+	</select>
+
 	<select id="checkAccountIdAndPhone" parameterType="com.api.account.entity.Account" resultType="int">
 		select count(*) from account where state = 1 and account_userphone = #{account_userphone} and account_id = #{account_id} 
 	</select>

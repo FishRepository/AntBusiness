@@ -43,6 +43,8 @@ public interface AccountMapper{
 	public AccountLoginResult queryAccountByWechat(String account_wechat);
 	
 	public AccountLoginResult queryAccountByQQ(String account_qq);
+
+	public AccountLoginResult queryAccountByAppleId(String account_appleid);
 	
 	public Account queryAccountWechatById(Integer account_id);
 	
@@ -51,12 +53,16 @@ public interface AccountMapper{
 	public Account queryAccountWechat(String account_userphone);
 	
 	public Account queryAccountQQ(String account_userphone);
+
+	public Account queryAccountAppleId(String account_userphone);
 	
 	public int checkAccountPhone(Account account);
 	
 	public int checkAccountWechat(Account account);
 	
 	public int checkAccountQQ(Account account);
+
+	public int checkAccountAppleId(Account account);
 	
 	public int checkAccountIdAndPhone(Account account);
 	

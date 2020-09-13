@@ -12,6 +12,7 @@ public class Account{
 	private String account_icon;// 管理员头像
 	private String account_qq;// 管理员QQ
 	private String account_wechat;// 管理员微信
+	private String account_appleid;//用户uuid IOS
 	private String account_imei;// 手机终端imei
 	private Integer account_integral;//账号总积分
 	private Integer account_guideid;//引导注册账号
@@ -198,5 +199,13 @@ public class Account{
 
 	public void setPeriod(String period) {
 		this.period = period;
+	}
+
+	public String getAccount_appleid() {
+		return account_appleid;
+	}
+
+	public void setAccount_appleid(String account_appleid) {
+		this.account_appleid = account_appleid;
 	}
 }

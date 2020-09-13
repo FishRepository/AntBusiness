@@ -277,6 +277,57 @@ public class AccountService {
 							result.setCode(3);
 							result.setMsg("QQ已存在，不能重复注册");
 						}
+					}else if(StringUtil.isValid(account.getAccount_appleid())){
+						account.setAccount_appleid(EncryptUtil.base64Decode(account.getAccount_appleid()));
+						if(accountMapper.checkAccountAppleId(account) <= 0){
+							if(StringUtil.isValid(account.getAccount_password())){
+								account.setAccount_password(KeyUtils.encodepwd(EncryptUtil.base64Decode(account.getAccount_password())));
+							}
+							Account qq = accountMapper.queryAccountQQ(account.getAccount_userphone());
+							Account appleId = accountMapper.queryAccountAppleId(account.getAccount_userphone());
+							if(appleId == null){
+								if(accountMapper.insertAccount(account) > 0){
+									result.setCode(0);
+									result.setMsg("注册成功");
+									result.setAccount_id(account.getAccount_id());
+									result.setReg_integral(addAccountIntegral(account.getAccount_id(),2));
+									insertDefaultMemorandum(account.getAccount_id());
+									if(account.getAccount_guideid()!=null && account.getAccount_guideid() > 0){
+										addAccountIntegral(account.getAccount_guideid(),1);
+									}
+									List<Integer> ids = accountMapper.queryShareAccount(account.getAccount_userphone());
+									if(ids!=null && !ids.isEmpty()){
+										for(Integer id:ids){
+											addAccountIntegral(id,1);
+										}
+										accountMapper.deleteShareAccount(account.getAccount_userphone());
+									}
+								}else{
+									result.setCode(1);
+									result.setMsg("注册失败");
+								}
+							}else{
+								if(StringUtil.isEmpty(appleId.getAccount_appleid())){
+									if(!account.getAccount_imei().equalsIgnoreCase(qq.getAccount_imei())){
+										result.setIschange(1);
+									}
+									if(accountMapper.updateAccountByPhone(account) > 0){
+										result.setCode(0);
+										result.setMsg("绑定成功");
+										result.setAccount_id(qq.getAccount_id());
+									}else{
+										result.setCode(1);
+										result.setMsg("绑定失败");
+									}
+								}else{
+									result.setCode(3);
+									result.setMsg("该手机号已经绑定AppleId，不能重复绑定");
+								}
+							}
+						}else{
+							result.setCode(3);
+							result.setMsg("AppleId已存在，不能重复注册");
+						}
 					}else{
 						if(accountMapper.checkAccountPhone(account) <= 0){
 							if(StringUtil.isValid(account.getAccount_password())){
@@ -339,6 +390,9 @@ public class AccountService {
 				}else if(StringUtil.isValid(account.getAccount_qq())){
 					account.setAccount_qq(EncryptUtil.base64Decode(account.getAccount_qq()));
 					result = accountMapper.queryAccountByQQ(account.getAccount_qq());
+				}else if(StringUtil.isValid(account.getAccount_appleid())){
+					account.setAccount_appleid(EncryptUtil.base64Decode(account.getAccount_appleid()));
+					result = accountMapper.queryAccountByAppleId(account.getAccount_appleid());
 				}else{
 					if(StringUtil.isValid(account.getAccount_userphone()) && StringUtil.isValid(account.getAccount_password())){
 						account.setAccount_userphone(EncryptUtil.base64Decode(account.getAccount_userphone()));
