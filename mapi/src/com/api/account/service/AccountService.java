@@ -278,14 +278,13 @@ public class AccountService {
 							result.setMsg("QQ已存在，不能重复注册");
 						}
 					}else if(StringUtil.isValid(account.getAccount_appleid())){
-						account.setAccount_appleid(EncryptUtil.base64Decode(account.getAccount_appleid()));
+						account.setAccount_appleid(account.getAccount_appleid());
 						if(accountMapper.checkAccountAppleId(account) <= 0){
 							if(StringUtil.isValid(account.getAccount_password())){
 								account.setAccount_password(KeyUtils.encodepwd(EncryptUtil.base64Decode(account.getAccount_password())));
 							}
-							Account qq = accountMapper.queryAccountQQ(account.getAccount_userphone());
-							Account appleId = accountMapper.queryAccountAppleId(account.getAccount_userphone());
-							if(appleId == null){
+							Account appleAccount = accountMapper.queryAccountAppleId(account.getAccount_userphone());
+							if(appleAccount == null){
 								if(accountMapper.insertAccount(account) > 0){
 									result.setCode(0);
 									result.setMsg("注册成功");
@@ -307,14 +306,14 @@ public class AccountService {
 									result.setMsg("注册失败");
 								}
 							}else{
-								if(StringUtil.isEmpty(appleId.getAccount_appleid())){
-									if(!account.getAccount_imei().equalsIgnoreCase(qq.getAccount_imei())){
+								if(StringUtil.isEmpty(appleAccount.getAccount_appleid())){
+									if(!account.getAccount_imei().equalsIgnoreCase(appleAccount.getAccount_imei())){
 										result.setIschange(1);
 									}
 									if(accountMapper.updateAccountByPhone(account) > 0){
 										result.setCode(0);
 										result.setMsg("绑定成功");
-										result.setAccount_id(qq.getAccount_id());
+										result.setAccount_id(appleAccount.getAccount_id());
 									}else{
 										result.setCode(1);
 										result.setMsg("绑定失败");
@@ -391,7 +390,7 @@ public class AccountService {
 					account.setAccount_qq(EncryptUtil.base64Decode(account.getAccount_qq()));
 					result = accountMapper.queryAccountByQQ(account.getAccount_qq());
 				}else if(StringUtil.isValid(account.getAccount_appleid())){
-					account.setAccount_appleid(EncryptUtil.base64Decode(account.getAccount_appleid()));
+					account.setAccount_appleid(account.getAccount_appleid());
 					result = accountMapper.queryAccountByAppleId(account.getAccount_appleid());
 				}else{
 					if(StringUtil.isValid(account.getAccount_userphone()) && StringUtil.isValid(account.getAccount_password())){
