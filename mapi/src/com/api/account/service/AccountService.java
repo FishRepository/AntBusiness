@@ -158,7 +158,9 @@ public class AccountService {
 	public AccountRegResult reg(Account account,String account_code){
 		AccountRegResult result = new AccountRegResult();
 		try{
-			if(account!=null && StringUtil.isValid(account.getAccount_userphone()) && StringUtil.isValid(account_code) && StringUtil.isValid(account.getAccount_imei()) && (account.getAccount_id() == null || account.getAccount_id() <= 0)){
+			if(account!=null && StringUtil.isValid(account.getAccount_userphone()) && StringUtil.isValid(account_code)
+//					&& StringUtil.isValid(account.getAccount_imei())
+					&& (account.getAccount_id() == null || account.getAccount_id() <= 0)){
 				if(account.getAccount_guideid()==null){
 					account.setAccount_guideid(0);
 				}
@@ -379,7 +381,7 @@ public class AccountService {
 	public AccountLoginResult login(Account account){
 		AccountLoginResult result = new AccountLoginResult();
 		try{
-			if(account!=null && StringUtil.isValid(account.getAccount_imei())){
+//			if(account!=null && StringUtil.isValid(account.getAccount_imei())){
 				if(StringUtil.isValid(account.getAccount_wechat())){
 					account.setAccount_wechat(EncryptUtil.base64Decode(account.getAccount_wechat()));
 					if(StringUtil.isValid(account.getAccount_qq())){
@@ -446,10 +448,10 @@ public class AccountService {
 					result.setCode(1);
 					result.setMsg("登录失败");
 				}
-			}else{
-				result.setCode(1);
-				result.setMsg("登录失败");
-			}
+//			}else{
+//				result.setCode(1);
+//				result.setMsg("登录失败");
+//			}
 		}catch(Exception e){
 			result = new AccountLoginResult();
 			result.setCode(1);

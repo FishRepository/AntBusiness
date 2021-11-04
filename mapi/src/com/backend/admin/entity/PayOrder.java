@@ -1,7 +1,7 @@
 package com.backend.admin.entity;
 
 import com.backend.admin.controller.JsonDateSerializer;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Date;
 import java.io.Serializable;
